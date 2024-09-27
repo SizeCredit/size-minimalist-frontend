@@ -96,7 +96,7 @@ const Swap = () => {
         </div>
 
         <button className="action-button">
-          {sellAmount && buyAmount ? 'Swap' : 'Enter an amount'}
+          {sellAmount && buyAmount ? 'Swap' : 'Enter amount'}
         </button>
       </div>
     </div>
