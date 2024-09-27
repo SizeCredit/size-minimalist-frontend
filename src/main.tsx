@@ -9,6 +9,7 @@ import { config } from './wagmi.ts'
 
 import './index.css'
 import { ConfigProvider } from './contexts/ConfigContext.tsx'
+import { UserProvider } from './contexts/UserContext.tsx'
 
 globalThis.Buffer = Buffer
 
@@ -19,7 +20,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <ConfigProvider>
-          <App />
+          <UserProvider>
+            <App />
+          </UserProvider>
         </ConfigProvider>
       </QueryClientProvider>
     </WagmiProvider>

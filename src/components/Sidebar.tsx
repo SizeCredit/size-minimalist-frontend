@@ -4,24 +4,14 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useContext, useEffect } from 'react';
 import { ConfigContext } from '../contexts/ConfigContext';
- import { useReadContract } from 'wagmi'
-import { config } from '../wagmi'
-import { UserViewStruct } from '../typechain/Size';
+import { UserContext } from '../contexts/UserContext';
 
 const Sidebar = () => {
   const account = useAccount()
   const { connectors, connect, status, error } = useConnect()
   const { disconnect } = useDisconnect()
   const {chain, deployment} = useContext(ConfigContext)
-
-  const result = useReadContract({
-    abi: deployment.Size.abi,
-    address: deployment.Size.address,
-    functionName: 'getUserView',
-    args: [account.address],
-    config,
-  })
-  const data = result?.data as UserViewStruct | undefined
+  const {user} = useContext(UserContext)
 
   const currencies = [
     { name: 'USD Coin', symbol: 'USDC', amount: 152.72, value: 152.83, change: -0.58 },
@@ -56,10 +46,10 @@ const Sidebar = () => {
         </div>
       </div>
       <div className="balance-info">
-        <h2>${format(data?.borrowATokenBalance)}</h2>
-        {/* <p className="balance-change">
-          {balanceChange >= 0 ? '▲' : '▼'} ${Math.abs(balanceChange).toFixed(2)} ({(balanceChange / totalBalance * 100).toFixed(2)}%)
-        </p> */}
+        <h2>${format(user?.borrowATokenBalance, deployment.BorrowAToken.decimals)}</h2>
+        <p className="balance-change">
+          {1 >= 0 ? '▲' : '▼'} ${12}%
+        </p>
       </div>
       <div>
         {chain.name}

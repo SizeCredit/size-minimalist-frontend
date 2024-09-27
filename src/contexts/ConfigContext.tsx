@@ -17,7 +17,7 @@ type Address = `0x${string}`
 
 interface ConfigContext {
   chain: Chain;
-  deployment: Record<string, {address: Address, abi: Abi}>
+  deployment: Record<string, {address: Address, abi: Abi, decimals?: number}>
   setChain: Dispatch<Chain>;
 }
 
@@ -34,7 +34,7 @@ export function ConfigProvider({ children }: Props) {
     // UnderlyingCollateralToken: ['', erc20Abi],
     // UnderlyingBorrowToken: ['', erc20Abi],
     // CollateralToken: ['', erc20Abi],
-    // BorrowAToken: ['', erc20Abi],
+    BorrowAToken: {abi: erc20Abi, address: '0x' as Address, decimals: 6},
     // DebtToken: ['', erc20Abi],
   }
 
