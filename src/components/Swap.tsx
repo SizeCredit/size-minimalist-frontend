@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { SwapContext, Currency } from '../contexts/SwapContext';
 
 const tabs = [
   'Swap',
@@ -16,16 +17,21 @@ const Swap = () => {
   const [sellCurrency, setSellCurrency] = useState(currencies[0]);
   const [buyCurrency, setBuyCurrency] = useState(currencies[1]);
 
-  const handleSellAmountChange = (e) => {
+  // const {getQuote} = useContext(SwapContext)
+
+  const handleSellAmountChange = async (e: React.ChangeEvent<HTMLInputElement>) =>  {
     setSellAmount(e.target.value);
-    // Simple conversion logic (replace with actual logic)
-    setBuyAmount(e.target.value ? (parseFloat(e.target.value) * 1000).toFixed(2) : '');
+    const quote = Number(e.target.value) * 1.1
+    // const quote = await getQuote(Currency.Credit, parseFloat(e.target.value), 1)
+    console.log({quote})
+    setBuyAmount(quote.toString());
   };
 
-  const handleBuyAmountChange = (e) => {
+  const handleBuyAmountChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setBuyAmount(e.target.value);
-    // Simple conversion logic (replace with actual logic)
-    setSellAmount(e.target.value ? (parseFloat(e.target.value) / 1000).toFixed(6) : '');
+    const quote = Number(e.target.value) / 1.1
+    // const quote = await getQuote(Currency.Cash, parseFloat(e.target.value), 1)
+    setSellAmount(quote.toString());
   };
 
   const swapCurrencies = () => {

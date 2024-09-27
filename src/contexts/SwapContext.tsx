@@ -4,13 +4,13 @@ import {
   useCallback,
 } from "react";
 
-enum Currency {
+export enum Currency {
   'Credit',
   'Cash'
 }
 
 interface SwapContext {
-  getQuote(currency: Currency, amount: number, tenor: number): Promise<number>;
+  getQuote: (currency: Currency, amount: number, tenor: number) => Promise<number>;
 }
 
 export const SwapContext = createContext<SwapContext>({} as SwapContext);
@@ -20,16 +20,15 @@ type Props = {
 };
 
 export function SwapProvider({ children }: Props) {
-  const getQuote = useCallback(
-    async (currency: Currency, amount: number, tenor: number) => {
-      if(currency === Currency.Credit) {
-        return amount / 1.1;
-      }
-      else {
-        return amount * 1.1;
-      }
-    }, []
-  );
+  const getQuote = async (currency: Currency, amount: number, tenor: number) => {
+    if (tenor === 0) return 0;
+    if (currency === Currency.Credit) {
+      return amount / 1.1;
+    }
+    else {
+      return amount * 1.1;
+    }
+  }
 
 
   return (

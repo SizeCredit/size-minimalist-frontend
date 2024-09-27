@@ -10,7 +10,7 @@ const Sidebar = () => {
   const account = useAccount()
   const { connectors, connect, status, error } = useConnect()
   const { disconnect } = useDisconnect()
-  const {chain, deployment} = useContext(ConfigContext)
+  const {chain, tokens} = useContext(ConfigContext)
   const {user} = useContext(UserContext)
 
   const currencies = [
@@ -46,10 +46,9 @@ const Sidebar = () => {
         </div>
       </div>
       <div className="balance-info">
-        <h2>${format(user?.borrowATokenBalance, deployment.BorrowAToken.decimals)}</h2>
-        <p className="balance-change">
-          {1 >= 0 ? '▲' : '▼'} ${12}%
-        </p>
+        <h2>{format(user?.borrowATokenBalance, tokens.BorrowAToken.decimals)} {tokens.BorrowAToken.symbol}</h2>
+        <h2>{format(user?.collateralTokenBalance, tokens.CollateralToken.decimals)} {tokens.CollateralToken.symbol}</h2>
+        <h2>{format(user?.debtBalance, tokens.DebtToken.decimals)} {tokens.DebtToken.symbol}</h2>
       </div>
       <div>
         {chain.name}
