@@ -1,5 +1,4 @@
-import { useContext, useState } from 'react';
-import { SwapContext, Currency } from '../contexts/SwapContext';
+import { useState } from 'react';
 
 const tabs = [
   'Swap',

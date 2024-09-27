@@ -1,7 +1,6 @@
 import {
   ReactNode,
   createContext,
-  useCallback,
 } from "react";
 
 export enum Currency {
