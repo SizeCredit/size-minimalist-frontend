@@ -2,15 +2,26 @@ import { useAccount, useConnect, useDisconnect } from 'wagmi'
 import { format } from '../services/format';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
+import { ConfigContext } from '../contexts/ConfigContext';
+ import { useReadContract } from 'wagmi'
+import { config } from '../wagmi'
+import { UserViewStruct } from '../typechain/Size';
 
 const Sidebar = () => {
   const account = useAccount()
   const { connectors, connect, status, error } = useConnect()
   const { disconnect } = useDisconnect()
+  const {chain, deployment} = useContext(ConfigContext)
 
-  const totalBalance = 294.13;
-  const balanceChange = 0.08;
+  const result = useReadContract({
+    abi: deployment.Size.abi,
+    address: deployment.Size.address,
+    functionName: 'getUserView',
+    args: [account.address],
+    config,
+  })
+  const data = result?.data as UserViewStruct | undefined
 
   const currencies = [
     { name: 'USD Coin', symbol: 'USDC', amount: 152.72, value: 152.83, change: -0.58 },
@@ -39,16 +50,19 @@ const Sidebar = () => {
             <span className="icon">{account.status === 'connected' ? '🟢' : '🟡'}</span>
             &nbsp;
             <code className="address">
-              {format(account.address)}
+              {format(account.address) || 'Connect wallet'}
             </code>
           </button>
         </div>
       </div>
       <div className="balance-info">
-        <h2>${totalBalance.toFixed(2)}</h2>
-        <p className="balance-change">
+        <h2>${format(data?.borrowATokenBalance)}</h2>
+        {/* <p className="balance-change">
           {balanceChange >= 0 ? '▲' : '▼'} ${Math.abs(balanceChange).toFixed(2)} ({(balanceChange / totalBalance * 100).toFixed(2)}%)
-        </p>
+        </p> */}
+      </div>
+      <div>
+        {chain.name}
       </div>
       <div className="tabs">
         <div

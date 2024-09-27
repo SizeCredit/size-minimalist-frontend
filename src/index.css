@@ -1,3 +1,8 @@
+:root {
+  --primary-color: #5090ea;
+  --secondary-color: #f5f5f5;
+}
+
 /* App */
 
 .container {
@@ -6,7 +11,7 @@
   align-items: center;
   height: 100vh;
   max-width: 100vw;
-  background-color: #f5f5f5;
+  background-color: var(--secondary-color);
   font-family: Arial, sans-serif;
 }
 
@@ -92,7 +97,7 @@ select {
   padding: 15px;
   border: none;
   border-radius: 12px;
-  background-color: #5090ea;
+  background-color: var(--primary-color);
   color: white;
   font-size: 18px;
   cursor: pointer;
