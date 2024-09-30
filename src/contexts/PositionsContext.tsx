@@ -50,8 +50,6 @@ export function PositionsProvider({ children }: Props) {
     import.meta.env.VITE_SIMPLE ? [0, 0] :
       (positionsCount || [,])
 
-  console.log(Number(debtPositionsCount), Number(creditPositionsCount))
-
   useEffect(() => {
     ; (async () => {
       const debtPositionsStructs = await Promise.all(
@@ -62,7 +60,6 @@ export function PositionsProvider({ children }: Props) {
           args: [BigInt(i)],
         }) as Promise<DebtPositionStruct>)
       )
-      console.log(debtPositionsStructs)
       const ds = debtPositionsStructs.map((debtPosition, i) => ({
         debtPositionId: i.toString(),
         borrower: debtPosition.borrower,

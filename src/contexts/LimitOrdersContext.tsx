@@ -4,15 +4,20 @@ import { usePublicClient } from 'wagmi';
 import { parseAbiItem } from 'viem';
 import { delayed } from '../services/delayed';
 import { deduplicate } from '../services/deduplicate';
+import { UserViewStruct } from '../typechain/Size';
+import { readContract } from 'wagmi/actions';
+import { config } from '../wagmi';
 
-export interface LimitOrder {
-  user: string;
-  maxDueDate: Date;
-  curveRelativeTime: {
+export interface YieldCurve {
     tenors: number[];
     aprs: number[];
     marketRateMultipliers: number[];
-  }
+}
+
+export interface LimitOrder {
+  user: UserViewStruct;
+  maxDueDate: Date;
+  curveRelativeTime: YieldCurve
 }
 
 interface LimitOrdersContext {
@@ -27,8 +32,10 @@ type Props = {
 };
 
 export function LimitOrdersProvider({ children }: Props) {
-  const [borrowOffers, setBorrowOffers] = useState<LimitOrder[]>([])
-  const [loanOffers, setLoanOffers] = useState<LimitOrder[]>([])
+  const [context, setContext] = useState<LimitOrdersContext>({
+    borrowOffers: [],
+    loanOffers: []
+  })
 
   const { deployment } = useContext(ConfigContext)
 
@@ -57,8 +64,16 @@ export function LimitOrdersProvider({ children }: Props) {
       const txs = await delayed(transactionPromises, 100);
 
       const senders = txs.map((tx) => tx.from)
+      const users = await Promise.all(senders.map(sender => readContract(config, {
+        abi: deployment.Size.abi,
+        address: deployment.Size.address,
+        functionName: 'getUserView',
+        args: [sender],
+      }) as Promise<UserViewStruct>))
+
+
       const sellCreditLimitOffers = sellCreditLimit.map((log, i) => ({
-        user: senders[i],
+        user: users[i],
         maxDueDate: new Date(Number(log.args.maxDueDate!) * 1000),
         curveRelativeTime: {
           tenors: log.args.curveRelativeTimeTenors!.map(e => Number(e)),
@@ -66,9 +81,9 @@ export function LimitOrdersProvider({ children }: Props) {
           marketRateMultipliers: log.args.curveRelativeTimeMarketRateMultipliers!.map(e => Number(e) / 1e18),
         },
       }))
-      const bos = deduplicate(sellCreditLimitOffers, 'user')
+      const borrowOffers = deduplicate(sellCreditLimitOffers, 'user.account')
       const buyCreditLimitOffers = buyCreditLimit.map((log, i) => ({
-        user: senders[sellCreditLimit.length + i],
+        user: users[sellCreditLimit.length + i],
         maxDueDate: new Date(Number(log.args.maxDueDate!) * 1000),
         curveRelativeTime: {
           tenors: log.args.curveRelativeTimeTenors!.map(e => Number(e)),
@@ -76,21 +91,19 @@ export function LimitOrdersProvider({ children }: Props) {
           marketRateMultipliers: log.args.curveRelativeTimeMarketRateMultipliers!.map(e => Number(e) / 1e18),
         },
       }))
-      const los = deduplicate(buyCreditLimitOffers, 'user')
-      setBorrowOffers(bos)
-      setLoanOffers(los)
+      const loanOffers = deduplicate(buyCreditLimitOffers, 'user.account')
+      setContext({
+        borrowOffers,
+        loanOffers
+      })
     })()
   }, [])
 
-  console.log(borrowOffers)
-  console.log(loanOffers)
+  console.log(context)
 
   return (
     <LimitOrdersContext.Provider
-      value={{
-        borrowOffers,
-        loanOffers
-      }}
+      value={context}
     >
       {children}
     </LimitOrdersContext.Provider>

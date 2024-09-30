@@ -11,7 +11,9 @@ import './index.css'
 import { ConfigProvider } from './contexts/ConfigContext.tsx'
 import { UserProvider } from './contexts/UserContext.tsx'
 import { PositionsProvider } from './contexts/PositionsContext.tsx'
-import { LimitOrdersProvider } from './contexts/LimitOrders.tsx'
+import { LimitOrdersProvider } from './contexts/LimitOrdersContext.tsx'
+import { PriceProvider } from './contexts/PriceContext.tsx'
+import { SwapProvider } from './contexts/SwapContext.tsx'
 
 globalThis.Buffer = Buffer
 
@@ -22,13 +24,17 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <ConfigProvider>
-          <PositionsProvider>
-            <LimitOrdersProvider>
-              <UserProvider>
-                <App />
-              </UserProvider>
-            </LimitOrdersProvider>
-          </PositionsProvider>
+          <PriceProvider>
+            <PositionsProvider>
+              <LimitOrdersProvider>
+                <UserProvider>
+                  <SwapProvider>
+                    <App />
+                  </SwapProvider>
+                </UserProvider>
+              </LimitOrdersProvider>
+            </PositionsProvider>
+          </PriceProvider>
         </ConfigProvider>
       </QueryClientProvider>
     </WagmiProvider>
