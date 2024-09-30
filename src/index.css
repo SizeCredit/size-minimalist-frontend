@@ -104,6 +104,15 @@ select {
   margin-top: 10px;
 }
 
+.disclaimers {
+  margin-top: 20px;
+  color: lightcoral;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Sidebar */
+
 .sidebar {
   position: fixed;
   top: 0;

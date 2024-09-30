@@ -18,13 +18,15 @@ export function PriceProvider({ children }: Props) {
   const [price, setPrice] = useState<number>()
 
   useEffect(() => {
-    const p = readContract(config, {
-      abi: deployment.PriceFeed.abi,
-      address: deployment.PriceFeed.address,
-      functionName: 'getPrice',
-    })
+    ; (async () => {
+      const p = await readContract(config, {
+        abi: deployment.PriceFeed.abi,
+        address: deployment.PriceFeed.address,
+        functionName: 'getPrice',
+      })
 
-    setPrice(Number(p) / 1e18)
+      setPrice(Number(p) / 1e18)
+    })()
   }, [])
 
   return (

@@ -31,6 +31,12 @@ const Swap = () => {
     setSellAmount(quote.toString());
   };
 
+  const handleDaysChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDays(Number(e.target.value));
+    const quote = sellCreditQuote(parseFloat(sellAmount), Number(e.target.value) * 24 * 60 * 60)
+    setBuyAmount(quote.toString());
+  }
+
   const swapAction = () => {
     const newAction = action === actions[0] ? actions[1] : actions[0];
     const newSellAmount = buyAmount ;
@@ -64,7 +70,7 @@ const Swap = () => {
         <div className="input-container">
           <div className='maturity'>
             <label>Maturity</label>
-            <input type="text" value={days} onChange={(e) => setDays(Number(e.target.value))}/>
+            <input type="text" value={days} onChange={handleDaysChange}/>
             <label className="days">days</label>
           </div>
         </div>
@@ -103,6 +109,12 @@ const Swap = () => {
         <button className="action-button">
           {sellAmount && buyAmount ? 'Swap' : 'Enter amount'}
         </button>
+
+        <div className="disclaimers">
+          <small>*Swap amounts do not include fees</small>
+          <small>*Unoptimized matching engine</small>
+          <small>*Unnoficial Size application</small>
+        </div>
       </div>
     </div>
   );
