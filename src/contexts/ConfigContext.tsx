@@ -20,7 +20,7 @@ type Address = `0x${string}`
 
 interface ConfigContext {
   chain: Chain;
-  deployment: Record<Contract, { address: Address, abi: Abi }>
+  deployment: Record<Contract, { address: Address, abi: Abi, block: number }>
   tokens: Record<Token, { decimals: number, symbol: string }>;
   setChain: Dispatch<Chain>;
 }
@@ -34,12 +34,12 @@ type Props = {
 export function ConfigProvider({ children }: Props) {
   const [chain, setChain] = useState<Chain>(base);
   const deployment = {
-    Size: { abi: Size.abi as Abi, address: '0xC2a429681CAd7C1ce36442fbf7A4a68B11eFF940' as Address },
-    UnderlyingCollateralToken: { abi: erc20Abi, address: '0x' as Address },
-    UnderlyingBorrowToken: { abi: erc20Abi, address: '0x' as Address },
-    CollateralToken: { abi: erc20Abi, address: '0x' as Address },
-    BorrowAToken: { abi: erc20Abi, address: '0x' as Address },
-    DebtToken: { abi: erc20Abi, address: '0x' as Address },
+    Size: { abi: Size.abi as Abi, address: '0xC2a429681CAd7C1ce36442fbf7A4a68B11eFF940' as Address, block: 17147278 },
+    UnderlyingCollateralToken: { abi: erc20Abi, address: '0x' as Address, block: 0 },
+    UnderlyingBorrowToken: { abi: erc20Abi, address: '0x' as Address, block: 0 },
+    CollateralToken: { abi: erc20Abi, address: '0x' as Address, block: 0 },
+    BorrowAToken: { abi: erc20Abi, address: '0x' as Address, block: 0 },
+    DebtToken: { abi: erc20Abi, address: '0x' as Address, block: 0 },
   }
   const tokens = {
     BorrowAToken: { decimals: 6, symbol: 'szUSDC' },

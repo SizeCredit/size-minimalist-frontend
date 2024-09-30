@@ -3,9 +3,12 @@ import { useAccount, useReadContract } from 'wagmi';
 import { UserViewStruct } from '../typechain/Size';
 import { ConfigContext } from './ConfigContext';
 import { config } from '../wagmi'
+import { CreditPosition, DebtPosition, PositionsContext } from './PositionsContext';
 
 interface UserContext {
   user?: UserViewStruct;
+  debtPositions: DebtPosition[]
+  creditPositions: CreditPosition[]
 }
 
 export const UserContext = createContext<UserContext>({} as UserContext);
@@ -16,20 +19,23 @@ type Props = {
 
 export function UserProvider({ children }: Props) {
   const account = useAccount()
+  const {creditPositions, debtPositions} = useContext(PositionsContext)
   const { deployment } = useContext(ConfigContext)
-  const result = useReadContract({
+  const getUserView = useReadContract({
     abi: deployment.Size.abi,
     address: deployment.Size.address,
     functionName: 'getUserView',
     args: [account.address],
     config,
   })
-  const user = result?.data as UserViewStruct | undefined
+  const user = getUserView?.data as UserViewStruct | undefined
 
   return (
     <UserContext.Provider
       value={{
         user,
+        debtPositions: debtPositions.filter(position => position.borrower === account.address),
+        creditPositions: creditPositions.filter(position => position.lender === account.address)
       }}
     >
       {children}

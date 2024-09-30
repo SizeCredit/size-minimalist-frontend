@@ -10,7 +10,7 @@ export const config = createConfig({
     walletConnect({ projectId: import.meta.env.VITE_WC_PROJECT_ID }),
   ],
   transports: {
-    [base.id]: http(),
+    [base.id]: http(import.meta.env.VITE_BASE_RPC_URL),
     [baseSepolia.id]: http(),
   },
 })

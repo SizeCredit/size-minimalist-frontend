@@ -5,43 +5,50 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useContext, useEffect } from 'react';
 import { ConfigContext } from '../contexts/ConfigContext';
 import { UserContext } from '../contexts/UserContext';
+import Blockies from 'react-blockies';
+import { formatDistance } from 'date-fns/formatDistance'
 
 const Sidebar = () => {
   const account = useAccount()
-  const { connectors, connect, status, error } = useConnect()
+  const { connectors, connect, error } = useConnect()
   const { disconnect } = useDisconnect()
-  const {chain, tokens} = useContext(ConfigContext)
-  const {user} = useContext(UserContext)
-
-  const currencies = [
-    { name: 'USD Coin', symbol: 'USDC', amount: 152.72, value: 152.83, change: -0.58 },
-    { name: 'Ethereum', symbol: 'ETH', amount: 0.044, value: 116.39, change: 0.66 },
-    { name: 'Ethereum', symbol: 'ETH', amount: 0.010, value: 25.91, change: 0.66 },
-  ];
-
-  const history = [
-    { from: '0x1', action: 'BuyCreditMarket', to: '0x2', amount: 100, currency: 'USDC', timestamp: '2021-10-01T12:00:00Z' },
-    { from: '0x2', action: 'SellCreditMarket', to: '0x1', amount: 100, currency: 'USDC', timestamp: '2021-10-01T12:00:00Z' },
-    { from: '0x1', action: 'BuyCreditMarket', to: '0x2', amount: 100, currency: 'USDC', timestamp: '2021-10-01T12:00:00Z' },
-  ]
+  const { chain, tokens } = useContext(ConfigContext)
+  const { user, creditPositions, debtPositions } = useContext(UserContext)
 
   useEffect(() => {
     toast(error?.message)
   }, [error])
 
-  console.log(status, account.status, error)
-
   return (
     <div className="sidebar">
       <div className="wallet-info">
         <div className="wallet-address">
-          <button onClick={
+          <button
+           onClick={
             account.status === 'connected' ? () => disconnect() : () => connect({ connector: connectors[0] })} className="connect-button">
-            <span className="icon">{account.status === 'connected' ? '🟢' : '🟡'}</span>
+            {
+              account.status === 'connected' ?
+                (
+
+                  <Blockies
+                    seed={account.address as string}
+                    size={10}
+                    scale={3}
+                    className="blockies"
+                  />
+
+                ) : (null)
+            }
             &nbsp;
             <code className="address">
               {format(account.address) || 'Connect wallet'}
             </code>
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            <small>
+              {chain.name}
+            </small>
           </button>
         </div>
       </div>
@@ -50,35 +57,36 @@ const Sidebar = () => {
         <h2>{format(user?.collateralTokenBalance, tokens.CollateralToken.decimals)} {tokens.CollateralToken.symbol}</h2>
         <h2>{format(user?.debtBalance, tokens.DebtToken.decimals)} {tokens.DebtToken.symbol}</h2>
       </div>
-      <div>
-        {chain.name}
-      </div>
       <div className="tabs">
         <div
           key="Positions"
-          className={`tab`}
         >
           Positions
         </div>
       </div>
       <div className="currency-list">
-        {currencies.map((currency, index) => (
+        {creditPositions.filter(e => e.credit > 0).map((creditPosition, index) => (
           <div key={index} className="currency-item">
-            <div className="currency-icon">{currency.symbol === 'USDC' ? '💰' : '⟠'}</div>
             <div className="currency-details">
-              <div className="currency-name">{currency.name}</div>
-              <div className="currency-amount">{currency.amount} {currency.symbol}</div>
-            </div>
-            <div className="currency-value">
-              <div>${currency.value.toFixed(2)}</div>
-              <div className={`currency-change ${currency.change >= 0 ? 'positive' : 'negative'}`}>
-                {currency.change >= 0 ? '▲' : '▼'} {Math.abs(currency.change)}%
-              </div>
+              <div className="">Credit {creditPosition.creditPositionId}</div>
+              <div className="currency-amount positive">{format(creditPosition.credit)}</div>
+              <div className="currency-name">Due {formatDistance(creditPosition.debtPosition.dueDate, new Date())}</div>
             </div>
           </div>
         ))}
       </div>
-      <div className="tabs">
+      <div className="currency-list">
+        {debtPositions.filter(e => e.futureValue > 0).map((debtPosition, index) => (
+          <div key={index} className="currency-item">
+            <div className="currency-details">
+              <div className="">Debt {debtPosition.debtPositionId}</div>
+              <div className="currency-amount negative">{format(debtPosition.futureValue)}</div>
+              <div className="currency-name">Due {formatDistance(debtPosition.dueDate, new Date())}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+      {/* <div className="tabs">
         <div
           key="History"
           className={`tab`}
@@ -97,7 +105,7 @@ const Sidebar = () => {
             </div>
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };

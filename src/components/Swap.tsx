@@ -3,26 +3,27 @@ import { useState } from 'react';
 const tabs = [
   'Swap',
   'Limit',
-  'Balance',
-  'Positions'
+  'Deposit',
+  'Withdraw'
 ]
 
-const currencies = ['Credit', 'Cash']
+const actions = ['Buy', 'Sell'];
 
 const Swap = () => {
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [sellAmount, setSellAmount] = useState('');
   const [buyAmount, setBuyAmount] = useState('');
-  const [sellCurrency, setSellCurrency] = useState(currencies[0]);
-  const [buyCurrency, setBuyCurrency] = useState(currencies[1]);
+  const [action, setAction] = useState(actions[0]);
+  const [days, setDays] = useState(30);
+
 
   // const {getQuote} = useContext(SwapContext)
 
-  const handleSellAmountChange = async (e: React.ChangeEvent<HTMLInputElement>) =>  {
+  const handleSellAmountChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setSellAmount(e.target.value);
     const quote = Number(e.target.value) * 1.1
     // const quote = await getQuote(Currency.Credit, parseFloat(e.target.value), 1)
-    console.log({quote})
+    console.log({ quote })
     setBuyAmount(quote.toString());
   };
 
@@ -33,12 +34,19 @@ const Swap = () => {
     setSellAmount(quote.toString());
   };
 
-  const swapCurrencies = () => {
-    const tempCurrency = sellCurrency;
-    setSellCurrency(buyCurrency);
-    setBuyCurrency(tempCurrency);
-    setSellAmount('');
-    setBuyAmount('');
+  const swapAction = () => {
+    const newAction = action === actions[0] ? actions[1] : actions[0];
+    const newSellAmount = buyAmount ;
+    const newBuyAmount = sellAmount ;
+    setAction(
+      newAction 
+    );
+    setSellAmount(
+      newSellAmount
+    );
+    setBuyAmount(
+      newBuyAmount
+    );
   };
 
   return (
@@ -57,7 +65,15 @@ const Swap = () => {
         </div>
 
         <div className="input-container">
-          <label>Sell</label>
+          <div className='maturity'>
+            <label>Maturity</label>
+            <input type="text" value={days} onChange={(e) => setDays(Number(e.target.value))}/>
+            <label className="days">days</label>
+          </div>
+        </div>
+
+        <div className="input-container">
+          <label>{action}</label>
           <div className="input-group">
             <input
               type="number"
@@ -65,23 +81,17 @@ const Swap = () => {
               onChange={handleSellAmountChange}
               placeholder="0"
             />
-            <select
-              value={sellCurrency}
-              onChange={(e) => setSellCurrency(e.target.value)}
-            >
-              <option value="ETH">ETH</option>
-              <option value="USDC">USDC</option>
-            </select>
+            Credit
           </div>
-          <div className="balance">Balance: 0</div>
         </div>
 
-        <button className="swap-button" onClick={swapCurrencies}>
+        <button className="swap-button" onClick={swapAction}>
           ↓
         </button>
 
         <div className="input-container">
-          <label>Buy</label>
+          <label>{action  === actions[0] ? actions[1] : actions[0]}
+          </label>
           <div className="input-group">
             <input
               type="number"
@@ -89,15 +99,8 @@ const Swap = () => {
               onChange={handleBuyAmountChange}
               placeholder="0"
             />
-            <select
-              value={buyCurrency}
-              onChange={(e) => setBuyCurrency(e.target.value)}
-            >
-              <option value="ETH">ETH</option>
-              <option value="USDC">USDC</option>
-            </select>
+            Cash
           </div>
-          <div className="balance">Balance: 0</div>
         </div>
 
         <button className="action-button">

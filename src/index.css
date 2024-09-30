@@ -138,6 +138,7 @@ select {
 
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 .balance-info h2 {
   font-size: 24px;
@@ -216,4 +217,19 @@ select {
   border-radius: 5px;
   cursor: pointer;
   margin-top: 20px;
+}
+.blockies {
+  border: 2px solid transparent;
+  border-radius: 20px;
+}
+.maturity {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  input {
+    margin-left: 10px;
+  }
+  .days {
+    margin-left: -30px;
+  }
 }

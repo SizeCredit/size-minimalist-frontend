@@ -10,6 +10,8 @@ import { config } from './wagmi.ts'
 import './index.css'
 import { ConfigProvider } from './contexts/ConfigContext.tsx'
 import { UserProvider } from './contexts/UserContext.tsx'
+import { PositionsProvider } from './contexts/PositionsContext.tsx'
+import { LimitOrdersProvider } from './contexts/LimitOrders.tsx'
 
 globalThis.Buffer = Buffer
 
@@ -20,9 +22,13 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <ConfigProvider>
-          <UserProvider>
-            <App />
-          </UserProvider>
+          <PositionsProvider>
+            <LimitOrdersProvider>
+              <UserProvider>
+                <App />
+              </UserProvider>
+            </LimitOrdersProvider>
+          </PositionsProvider>
         </ConfigProvider>
       </QueryClientProvider>
     </WagmiProvider>
