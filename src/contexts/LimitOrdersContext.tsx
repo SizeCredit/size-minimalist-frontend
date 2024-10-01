@@ -8,6 +8,8 @@ import { UserViewStruct } from '../typechain/Size';
 import { readContract } from 'wagmi/actions';
 import { config } from '../wagmi';
 
+const RPC_REQUESTS_PER_SECOND = 10;
+
 export interface YieldCurve {
     tenors: number[];
     aprs: number[];
@@ -23,6 +25,7 @@ export interface LimitOrder {
 interface LimitOrdersContext {
   borrowOffers: LimitOrder[]
   loanOffers: LimitOrder[]
+  loaded: boolean;
 }
 
 export const LimitOrdersContext = createContext<LimitOrdersContext>({} as LimitOrdersContext);
@@ -34,7 +37,8 @@ type Props = {
 export function LimitOrdersProvider({ children }: Props) {
   const [context, setContext] = useState<LimitOrdersContext>({
     borrowOffers: [],
-    loanOffers: []
+    loanOffers: [],
+    loaded: false,
   })
 
   const { deployment } = useContext(ConfigContext)
@@ -61,7 +65,7 @@ export function LimitOrdersProvider({ children }: Props) {
       ]
         .map((log) => log.transactionHash)
       const transactionPromises = transactionHashes.map((hash) => () => publicClient.getTransaction({ hash }));
-      const txs = await delayed(transactionPromises, 100);
+      const txs = await delayed(transactionPromises, RPC_REQUESTS_PER_SECOND);
 
       const senders = txs.map((tx) => tx.from)
       const users = await Promise.all(senders.map(sender => readContract(config, {
@@ -94,7 +98,8 @@ export function LimitOrdersProvider({ children }: Props) {
       const loanOffers = deduplicate(buyCreditLimitOffers, 'user.account')
       setContext({
         borrowOffers,
-        loanOffers
+        loanOffers,
+        loaded: true
       })
     })()
   }, [])

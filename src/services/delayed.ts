@@ -1,21 +1,25 @@
-const delay = (ms: number): Promise<void> =>
-  new Promise((resolve) => setTimeout(resolve, ms));
-
 export async function delayed<T>(
   promises: Array<() => Promise<T>>,
   N: number
 ): Promise<T[]> {
   const results: T[] = [];
+  let index = 0;
 
-  for (let i = 0; i < promises.length; i++) {
-    if (i > 0 && i % N === 0) {
-      // Delay for 1 second after every N promises
-      await delay(1000);
+  while (index < promises.length) {
+    // Take N promises at a time
+    const batch = promises.slice(index, index + N).map(promise => promise());
+
+    // Wait for the batch to resolve
+    const batchResults = await Promise.all(batch);
+    results.push(...batchResults);
+
+    // Increment the index to process the next batch
+    index += N;
+
+    // Wait for 1 second before starting the next batch
+    if (index < promises.length) {
+      await new Promise(resolve => setTimeout(resolve, 1000));
     }
-
-    // Await the result of the current promise
-    const result = await promises[i]();
-    results.push(result);
   }
 
   return results;

@@ -1,6 +1,6 @@
 import { YieldCurve } from "../contexts/LimitOrdersContext";
 
-export function getQuote(curve: YieldCurve, amount: number, tenor: number, marketRate = -1): number {
+export function getQuote(curve: YieldCurve, amount: number, tenor: number, marketRate = 0): number {
   for (let i = 0; i < curve.tenors.length - 1; i++) {
     const t1 = curve.tenors[i];
     const r1 = curve.aprs[i];
@@ -19,5 +19,5 @@ export function getQuote(curve: YieldCurve, amount: number, tenor: number, marke
       return amount * (1 + aprInterpolated + mrmInterpolated * marketRate);
     }
   }
-  return -1
+  return NaN
 }

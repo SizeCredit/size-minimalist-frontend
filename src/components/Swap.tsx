@@ -1,5 +1,7 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { SwapContext } from '../contexts/SwapContext';
+import { format } from '../services/format';
+import { LimitOrdersContext } from '../contexts/LimitOrdersContext';
 
 const tabs = [
   'Swap',
@@ -12,29 +14,35 @@ const actions = ['Buy', 'Sell'];
 
 const Swap = () => {
   const [activeTab, setActiveTab] = useState(tabs[0]);
-  const [sellAmount, setSellAmount] = useState('10');
+  const [sellAmount, setSellAmount] = useState('');
   const [buyAmount, setBuyAmount] = useState('');
   const [action, setAction] = useState(actions[0]);
   const [days, setDays] = useState(30);
 
   const {sellCreditQuote, buyCreditQuote} = useContext(SwapContext)
+  const {loaded} = useContext(LimitOrdersContext)
 
-  const handleSellAmountChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSellAmount(e.target.value);
-    const quote = sellCreditQuote(parseFloat(e.target.value), days * 24 * 60 * 60)
-    setBuyAmount(quote.toString());
+  useEffect(() => {
+    if(loaded) {
+      handleSellAmountChange('10')
+    }
+  }, [loaded])
+
+  const handleSellAmountChange = async (value: string) => {
+    setSellAmount(value);
+    const quote = sellCreditQuote(parseFloat(value), days * 24 * 60 * 60)
+    setBuyAmount(format(quote));
   };
 
-  const handleBuyAmountChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    setBuyAmount(e.target.value);
-    const quote = buyCreditQuote(parseFloat(e.target.value), days * 24 * 60 * 60)
-    setSellAmount(quote.toString());
+  const handleBuyAmountChange = async (value: string) => {
+    setBuyAmount(value);
+    const quote = buyCreditQuote(parseFloat(value), days * 24 * 60 * 60)
+    setSellAmount(format(quote));
   };
 
-  const handleDaysChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDays(Number(e.target.value));
-    const quote = sellCreditQuote(parseFloat(sellAmount), Number(e.target.value) * 24 * 60 * 60)
-    setBuyAmount(quote.toString());
+  const handleDaysChange = async (value: string) => {
+    setDays(Number(value));
+    handleSellAmountChange(sellAmount)
   }
 
   const swapAction = () => {
@@ -70,7 +78,7 @@ const Swap = () => {
         <div className="input-container">
           <div className='maturity'>
             <label>Maturity</label>
-            <input type="text" value={days} onChange={handleDaysChange}/>
+            <input type="text" value={days} onChange={e => handleDaysChange(e.target.value)}/>
             <label className="days">days</label>
           </div>
         </div>
@@ -81,7 +89,7 @@ const Swap = () => {
             <input
               type="number"
               value={sellAmount}
-              onChange={handleSellAmountChange}
+              onChange={e => handleSellAmountChange(e.target.value)}
               placeholder="0"
             />
             Credit
@@ -99,7 +107,7 @@ const Swap = () => {
             <input
               type="number"
               value={buyAmount}
-              onChange={handleBuyAmountChange}
+              onChange={e => handleBuyAmountChange(e.target.value)}
               placeholder="0"
             />
             Cash
