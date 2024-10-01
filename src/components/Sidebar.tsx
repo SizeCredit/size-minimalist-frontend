@@ -15,8 +15,12 @@ const Sidebar = () => {
   const { chain, tokens } = useContext(ConfigContext)
   const { user, creditPositions, debtPositions } = useContext(UserContext)
 
+  const repay = async (debtPositionId: string) => {
+    console.log('repay', debtPositionId)
+  }
+
   useEffect(() => {
-    toast(error?.message)
+    toast.error(error?.message)
   }, [error])
 
   return (
@@ -64,48 +68,29 @@ const Sidebar = () => {
           Positions
         </div>
       </div>
-      <div className="currency-list">
+      <div className="position-list">
         {creditPositions.filter(e => e.credit > 0).map((creditPosition, index) => (
-          <div key={index} className="currency-item">
-            <div className="currency-details">
-              <div className="">Credit {creditPosition.creditPositionId}</div>
-              <div className="currency-amount positive">{format(creditPosition.credit)}</div>
-              <div className="currency-name">Due {formatDistance(creditPosition.debtPosition.dueDate, new Date())}</div>
+          <div key={index} className="position-item">
+            <div className="position-details">
+              <div className="position-name">Credit Position #{creditPosition.creditPositionId}</div>
+              <div className="position-amount positive">{format(creditPosition.credit, tokens.BorrowAToken.decimals)} {tokens.UnderlyingBorrowToken.symbol}</div>
+              <div className="">Due {formatDistance(creditPosition.debtPosition.dueDate, new Date())}</div>
             </div>
           </div>
         ))}
       </div>
-      <div className="currency-list">
+      <div className="position-list">
         {debtPositions.filter(e => e.futureValue > 0).map((debtPosition, index) => (
-          <div key={index} className="currency-item">
-            <div className="currency-details">
-              <div className="">Debt {debtPosition.debtPositionId}</div>
-              <div className="currency-amount negative">{format(debtPosition.futureValue)}</div>
-              <div className="currency-name">Due {formatDistance(debtPosition.dueDate, new Date())}</div>
+          <div key={index} className="position-item">
+            <div className="position-details">
+              <div className="position-name">Debt Position #{debtPosition.debtPositionId}</div>
+              <div className="position-amount negative">{format(debtPosition.futureValue, tokens.BorrowAToken.decimals)} {tokens.UnderlyingBorrowToken.symbol}</div>
+              <div className="">Due {formatDistance(debtPosition.dueDate, new Date())}</div>
+              <button className="repay" onClick={() => repay(debtPosition.debtPositionId)}>Repay</button>
             </div>
           </div>
         ))}
       </div>
-      {/* <div className="tabs">
-        <div
-          key="History"
-          className={`tab`}
-        >
-          History
-        </div>
-      </div>
-      <div className="currency-list">
-        {history.map((currency, index) => (
-          <div key={index} className="currency-item">
-            <div className="currency-details">
-              <div className="currency-name">{currency.action}</div>
-            </div>
-            <div className="currency-value">
-              <div>${currency.amount.toFixed(2)}</div>
-            </div>
-          </div>
-        ))}
-      </div> */}
     </div>
   );
 };

@@ -12,7 +12,7 @@ const RPC_REQUESTS_PER_SECOND = 10;
 export interface DebtPosition {
   debtPositionId: string;
   borrower: string;
-  futureValue: number;
+  futureValue: bigint;
   dueDate: Date;
   liquidityIndexAtRepayment: number;
 }
@@ -21,7 +21,7 @@ export interface CreditPosition {
   creditPositionId: string;
   lender: string;
   forSale: boolean;
-  credit: number;
+  credit: bigint;
   debtPosition: DebtPosition
 };
 
@@ -68,7 +68,7 @@ export function PositionsProvider({ children }: Props) {
       const debtPositions = debtPositionsStructs.map((debtPosition, i) => ({
         debtPositionId: i.toString(),
         borrower: debtPosition.borrower,
-        futureValue: Number(debtPosition.futureValue),
+        futureValue: debtPosition.futureValue,
         dueDate: new Date(Number(debtPosition.dueDate) * 1000),
         liquidityIndexAtRepayment: Number(debtPosition.liquidityIndexAtRepayment),
       }) as DebtPosition)
@@ -87,7 +87,7 @@ export function PositionsProvider({ children }: Props) {
         creditPositionId: smallId(ethers.MaxUint256 / BigInt(2) + BigInt(i)),
         lender: creditPosition.lender,
         forSale: creditPosition.forSale,
-        credit: Number(creditPosition.credit),
+        credit: creditPosition.credit,
         debtPosition: debtPositions[Number(creditPosition.debtPositionId)]
       }) as CreditPosition)
 

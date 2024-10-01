@@ -90,6 +90,20 @@ select {
   border: none;
   font-size: 24px;
   cursor: pointer;
+
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+
+  span {
+    margin-left: 100px;
+  }
+
+  small {
+    margin-top: 5px;
+    margin-left: 20px;
+    font-size: 14px;
+  }
 }
 
 .action-button {
@@ -188,32 +202,31 @@ select {
   color: #333;
   border-bottom: 2px solid #333;
 }
-.currency-list {
+.position-list {
   margin-top: 20px;
 }
-.currency-item {
+.position-item {
   display: flex;
   align-items: center;
   margin-bottom: 15px;
 }
-.currency-icon {
+.position-icon {
   font-size: 24px;
   margin-right: 10px;
 }
-.currency-details {
+.position-details {
   flex: 1;
 }
-.currency-name {
+.position-name {
   font-weight: bold;
 }
-.currency-amount {
-  font-size: 12px;
+.position-amount {
   color: #888;
 }
-.currency-value {
+.position-value {
   text-align: right;
 }
-.currency-change {
+.position-change {
   font-size: 12px;
 }
 .positive { color: #4CAF50; }
@@ -241,4 +254,14 @@ select {
   .days {
     margin-left: -30px;
   }
+}
+.repay {
+  padding-left: 10px;
+  padding-right: 10px;
+  border: none;
+  border-radius: 12px;
+  background-color: var(--secondary-color);
+  color: black;
+  font-size: 18px;
+  cursor: pointer;
 }
