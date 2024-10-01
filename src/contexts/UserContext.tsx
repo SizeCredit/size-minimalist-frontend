@@ -4,11 +4,16 @@ import { UserViewStruct } from '../typechain/Size';
 import { ConfigContext } from './ConfigContext';
 import { config } from '../wagmi'
 import { CreditPosition, DebtPosition, PositionsContext } from './PositionsContext';
+import { encodeFunctionData } from 'viem';
+import Size from '../abi/Size.json'
+import { sendTransaction } from 'wagmi/actions';
+import { toast } from 'react-toastify';
 
 interface UserContext {
   user?: UserViewStruct;
   debtPositions: DebtPosition[]
   creditPositions: CreditPosition[]
+  repay: (debtPositionId: string) => Promise<void>
 }
 
 export const UserContext = createContext<UserContext>({} as UserContext);
@@ -30,12 +35,37 @@ export function UserProvider({ children }: Props) {
   })
   const user = getUserView?.data as UserViewStruct | undefined
 
+  const repay = async (debtPositionId: string) => {
+    const borrower= account.address
+    const arg = {
+      debtPositionId,
+      borrower,
+    }
+    console.log(arg)
+    const data = encodeFunctionData({
+      abi: [Size.abi.find(e => e.name === 'repay')],
+      functionName: 'repay',
+      args: [arg]
+    })
+    console.log(data)
+    try {
+      const tx = await sendTransaction(config, {
+        to: deployment.Size.address,
+        data
+      })
+      toast.success(`https://basescan.org/tx/${tx}`)
+    } catch (e: any) {
+      toast.error(e.shortMessage)
+    }
+  }
+
   return (
     <UserContext.Provider
       value={{
         user,
         debtPositions: debtPositions.filter(position => position.borrower === account.address),
-        creditPositions: creditPositions.filter(position => position.lender === account.address)
+        creditPositions: creditPositions.filter(position => position.lender === account.address),
+        repay
       }}
     >
       {children}

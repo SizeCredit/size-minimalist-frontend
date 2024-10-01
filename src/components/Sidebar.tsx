@@ -1,5 +1,5 @@
 import { useAccount, useConnect, useDisconnect } from 'wagmi'
-import { format } from '../services/format';
+import { format, smallId } from '../services/format';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useContext, useEffect } from 'react';
@@ -13,11 +13,7 @@ const Sidebar = () => {
   const { connectors, connect, error } = useConnect()
   const { disconnect } = useDisconnect()
   const { chain, tokens } = useContext(ConfigContext)
-  const { user, creditPositions, debtPositions } = useContext(UserContext)
-
-  const repay = async (debtPositionId: string) => {
-    console.log('repay', debtPositionId)
-  }
+  const { user, creditPositions, debtPositions, repay } = useContext(UserContext)
 
   useEffect(() => {
     toast.error(error?.message)
@@ -72,7 +68,7 @@ const Sidebar = () => {
         {creditPositions.filter(e => e.credit > 0).map((creditPosition, index) => (
           <div key={index} className="position-item">
             <div className="position-details">
-              <div className="position-name">Credit Position #{creditPosition.creditPositionId}</div>
+              <div className="position-name">Credit Position #{smallId(creditPosition.creditPositionId)}</div>
               <div className="position-amount positive">{format(creditPosition.credit, tokens.BorrowAToken.decimals)} {tokens.UnderlyingBorrowToken.symbol}</div>
               <div className="">Due {formatDistance(creditPosition.debtPosition.dueDate, new Date())}</div>
             </div>

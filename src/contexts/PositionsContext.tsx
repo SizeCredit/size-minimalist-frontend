@@ -4,7 +4,6 @@ import { ConfigContext } from './ConfigContext';
 import { config } from '../wagmi'
 import { ethers } from 'ethers'
 import { readContract } from 'wagmi/actions';
-import { smallId } from '../services/format';
 import { delayed } from '../services/delayed';
 
 const RPC_REQUESTS_PER_SECOND = 10;
@@ -84,7 +83,7 @@ export function PositionsProvider({ children }: Props) {
       const creditPositionsStructs = await delayed(getCreditPositionPromises, RPC_REQUESTS_PER_SECOND , (finished) => setProgress((finished + Number(debtPositionsCount) - 1) * 100 / Number(debtPositionsCount + creditPositionsCount)));
 
       const creditPositions = creditPositionsStructs.map((creditPosition, i) => ({
-        creditPositionId: smallId(ethers.MaxUint256 / BigInt(2) + BigInt(i)),
+        creditPositionId: (ethers.MaxUint256 / BigInt(2) + BigInt(i)).toString(),
         lender: creditPosition.lender,
         forSale: creditPosition.forSale,
         credit: creditPosition.credit,

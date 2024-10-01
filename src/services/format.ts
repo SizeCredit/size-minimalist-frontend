@@ -23,7 +23,6 @@ function truncateDecimal(number: string, decimalPlaces = 2): string {
   return number.slice(0, endIndex);
 }
 
-export function smallId(creditPositionId: bigint): string {
-  const creditPositionIdString = creditPositionId.toString();
-  return `...${creditPositionIdString.substring(creditPositionIdString.length - 4)}`;
+export function smallId(creditPositionId: string): string {
+  return `...${creditPositionId.substring(creditPositionId.length - 4)}`;
 }
