@@ -130,6 +130,12 @@ const Swap = () => {
       <button className="action-button" onClick={() => swap()}>
         {sellAmount && buyAmount ? 'Swap' : 'Enter amount'}
       </button>
+
+        <div className="disclaimers">
+          <small>*Swap amounts do not include fees</small>
+          <small>*Unoptimized matching engine</small>
+          <small>*Unofficial Size application</small>
+        </div>
     </>
   );
 };

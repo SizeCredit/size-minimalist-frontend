@@ -52,8 +52,12 @@ const Funding = () => {
       </div>
 
       <button className="action-button" onClick={onClick}>
-        Funding
+        {action}
       </button>
+
+      <div className="disclaimers">
+        <small>*Unofficial Size application</small>
+      </div>
     </>
   );
 };

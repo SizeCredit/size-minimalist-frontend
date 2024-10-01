@@ -76,16 +76,19 @@ export function UserProvider({ children }: Props) {
     })
     console.log(data)
     try {
-      const approve = await writeContract(config, {
-        abi: erc20Abi,
-        functionName: 'approve',
-        args: [deployment.Size.address, amount],
-        address: token as Address
-      })
-      toast.success(`https://basescan.org/tx/${approve}`)
+      if (token !== deployment.WETH.address) {
+        const approve = await writeContract(config, {
+          abi: erc20Abi,
+          functionName: 'approve',
+          args: [deployment.Size.address, amount],
+          address: token as Address
+        })
+        toast.success(`https://basescan.org/tx/${approve}`)
+      }
       const tx = await sendTransaction(config, {
         to: deployment.Size.address,
-        data
+        data,
+        value: token === deployment.WETH.address ? amount : BigInt(0)
       })
       toast.success(`https://basescan.org/tx/${tx}`)
     } catch (e: any) {

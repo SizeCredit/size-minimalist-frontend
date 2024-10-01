@@ -38,11 +38,6 @@ const Tabs = () => {
         {
           activeTab === 'Statistics' ? <Swap /> : null
         }
-        <div className="disclaimers">
-          <small>*Tabs amounts do not include fees</small>
-          <small>*Unoptimized matching engine</small>
-          <small>*Unofficial Size application</small>
-        </div>
       </div>
     </div>
   );
