@@ -1,4 +1,4 @@
-import Swap from './components/Swap'
+import Tabs from './components/Tabs'
 import Sidebar from './components/Sidebar'
 import { ToastContainer } from 'react-toastify';
 import LoadingBar from 'react-top-loading-bar'
@@ -13,7 +13,7 @@ function App() {
   return (
     <>
     <LoadingBar progress={(limitOrdersProgress + positionsProgress) / 2} />
-      <Swap/>
+      <Tabs/>
       <Sidebar/>
       <ToastContainer />
     </>

@@ -265,3 +265,14 @@ select {
   font-size: 18px;
   cursor: pointer;
 }
+.deposit {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  input {
+    margin-left: 10px;
+  }
+}
+.w-80 {
+  width: 80px;
+}

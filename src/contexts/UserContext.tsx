@@ -4,9 +4,9 @@ import { UserViewStruct } from '../typechain/Size';
 import { ConfigContext } from './ConfigContext';
 import { config } from '../wagmi'
 import { CreditPosition, DebtPosition, PositionsContext } from './PositionsContext';
-import { encodeFunctionData } from 'viem';
+import { Address, encodeFunctionData, erc20Abi } from 'viem';
 import Size from '../abi/Size.json'
-import { sendTransaction } from 'wagmi/actions';
+import { sendTransaction, writeContract } from 'wagmi/actions';
 import { toast } from 'react-toastify';
 
 interface UserContext {
@@ -14,6 +14,8 @@ interface UserContext {
   debtPositions: DebtPosition[]
   creditPositions: CreditPosition[]
   repay: (debtPositionId: string) => Promise<void>
+  deposit: (token: string, amount: bigint) => Promise<void>,
+  withdraw: (token: string, amount: bigint) => Promise<void>
 }
 
 export const UserContext = createContext<UserContext>({} as UserContext);
@@ -24,7 +26,7 @@ type Props = {
 
 export function UserProvider({ children }: Props) {
   const account = useAccount()
-  const {creditPositions, debtPositions} = useContext(PositionsContext)
+  const { creditPositions, debtPositions } = useContext(PositionsContext)
   const { deployment } = useContext(ConfigContext)
   const getUserView = useReadContract({
     abi: deployment.Size.abi,
@@ -36,7 +38,7 @@ export function UserProvider({ children }: Props) {
   const user = getUserView?.data as UserViewStruct | undefined
 
   const repay = async (debtPositionId: string) => {
-    const borrower= account.address
+    const borrower = account.address
     const arg = {
       debtPositionId,
       borrower,
@@ -59,13 +61,72 @@ export function UserProvider({ children }: Props) {
     }
   }
 
+  const deposit = async (token: string, amount: bigint) => {
+    const to = account.address
+    const arg = {
+      to,
+      token,
+      amount
+    }
+    console.log(arg)
+    const data = encodeFunctionData({
+      abi: [Size.abi.find(e => e.name === 'deposit')],
+      functionName: 'deposit',
+      args: [arg]
+    })
+    console.log(data)
+    try {
+      const approve = await writeContract(config, {
+        abi: erc20Abi,
+        functionName: 'approve',
+        args: [deployment.Size.address, amount],
+        address: token as Address
+      })
+      toast.success(`https://basescan.org/tx/${approve}`)
+      const tx = await sendTransaction(config, {
+        to: deployment.Size.address,
+        data
+      })
+      toast.success(`https://basescan.org/tx/${tx}`)
+    } catch (e: any) {
+      toast.error(e.shortMessage)
+    }
+  }
+
+  const withdraw = async (token: string, amount: bigint) => {
+    const to = account.address
+    const arg = {
+      to,
+      token,
+      amount
+    }
+    console.log(arg)
+    const data = encodeFunctionData({
+      abi: [Size.abi.find(e => e.name === 'withdraw')],
+      functionName: 'withdraw',
+      args: [arg]
+    })
+    console.log(data)
+    try {
+      const tx = await sendTransaction(config, {
+        to: deployment.Size.address,
+        data
+      })
+      toast.success(`https://basescan.org/tx/${tx}`)
+    } catch (e: any) {
+      toast.error(e.shortMessage)
+    }
+  }
+
   return (
     <UserContext.Provider
       value={{
         user,
         debtPositions: debtPositions.filter(position => position.borrower === account.address),
         creditPositions: creditPositions.filter(position => position.lender === account.address),
-        repay
+        repay,
+        deposit,
+        withdraw
       }}
     >
       {children}

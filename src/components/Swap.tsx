@@ -5,18 +5,10 @@ import { LimitOrdersContext } from '../contexts/LimitOrdersContext';
 import { parseUnits } from 'ethers';
 import { ConfigContext } from '../contexts/ConfigContext';
 
-const tabs = [
-  'Swap',
-  'Limit',
-  'Deposit',
-  'Withdraw'
-]
-
 const actions = ['Buy', 'Sell'];
 
 const Swap = () => {
   const { tokens } = useContext(ConfigContext)
-  const [activeTab, setActiveTab] = useState(tabs[0]);
   const [buyAmount, setBuyAmount] = useState('');
   const [sellAmount, setSellAmount] = useState('');
   const [action, setAction] = useState(actions[0]);
@@ -82,7 +74,7 @@ const Swap = () => {
     setBuyAmount(
       newBuyAmount
     );
-    if(newAction === actions[0]) {
+    if (newAction === actions[0]) {
       handleBuyAmountChange(newBuyAmount)
     }
     else {
@@ -91,73 +83,54 @@ const Swap = () => {
   };
 
   return (
-    <div className="container">
-      <div className="swap-container">
-        <div className="tab-container">
-          {tabs.map((tab) => (
-            <button
-              key={tab}
-              className={`tab-button ${activeTab === tab ? 'active' : ''}`}
-              onClick={() => setActiveTab(tab)}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
+    <>
 
-        <div className="input-container">
-          <div className='maturity'>
-            <label>Maturity</label>
-            <input type="text" value={days} onChange={e => handleDaysChange(e.target.value)} />
-            <label className="days">days</label>
-          </div>
-        </div>
-
-        <div className="input-container">
-          <label>{action}</label>
-          <div className="input-group">
-            <input
-              type="number"
-              value={action === actions[0] ? buyAmount : sellAmount}
-              onChange={e => action === actions[0] ? handleBuyAmountChange(e.target.value) : handleSellAmountChange(e.target.value)}
-              placeholder="0"
-            />
-            Credit
-          </div>
-        </div>
-
-        <button className="swap-button" onClick={swapAction}>
-          <span>
-            ↓
-          </span>
-          <small>{quote.rate !== 0 ? `${(quote.rate * 100).toFixed(2)}% APR` : ''}</small>
-        </button>
-
-        <div className="input-container">
-          <label>{action === actions[0] ? actions[1] : actions[0]}
-          </label>
-          <div className="input-group">
-            <input
-              type="number"
-              value={action === actions[0] ? sellAmount : buyAmount}
-              onChange={e => action === actions[0] ? handleSellAmountChange(e.target.value) : handleBuyAmountChange(e.target.value)}
-              placeholder="0"
-            />
-            Cash
-          </div>
-        </div>
-
-        <button className="action-button" onClick={() => swap()}>
-          {sellAmount && buyAmount ? 'Swap' : 'Enter amount'}
-        </button>
-
-        <div className="disclaimers">
-          <small>*Swap amounts do not include fees</small>
-          <small>*Unoptimized matching engine</small>
-          <small>*Unofficial Size application</small>
+      <div className="input-container">
+        <div className='maturity'>
+          <label>Maturity</label>
+          <input type="text" value={days} onChange={e => handleDaysChange(e.target.value)} />
+          <label className="days">days</label>
         </div>
       </div>
-    </div>
+
+      <div className="input-container">
+        <label>{action}</label>
+        <div className="input-group">
+          <input
+            type="number"
+            value={action === actions[0] ? buyAmount : sellAmount}
+            onChange={e => action === actions[0] ? handleBuyAmountChange(e.target.value) : handleSellAmountChange(e.target.value)}
+            placeholder="0"
+          />
+          Credit
+        </div>
+      </div>
+
+      <button className="swap-button" onClick={swapAction}>
+        <span>
+          ↓
+        </span>
+        <small>{quote.rate !== 0 ? `${(quote.rate * 100).toFixed(2)}% APR` : ''}</small>
+      </button>
+
+      <div className="input-container">
+        <label>{action === actions[0] ? actions[1] : actions[0]}
+        </label>
+        <div className="input-group">
+          <input
+            type="number"
+            value={action === actions[0] ? sellAmount : buyAmount}
+            onChange={e => action === actions[0] ? handleSellAmountChange(e.target.value) : handleBuyAmountChange(e.target.value)}
+            placeholder="0"
+          />
+          Cash
+        </div>
+      </div>
+
+      <button className="action-button" onClick={() => swap()}>
+        {sellAmount && buyAmount ? 'Swap' : 'Enter amount'}
+      </button>
+    </>
   );
 };
 
