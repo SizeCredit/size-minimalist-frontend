@@ -28,7 +28,7 @@ export interface CreditPosition {
 interface PositionsContext {
   debtPositions: DebtPosition[]
   creditPositions: CreditPosition[]
-  loaded: boolean
+  progress: number
 }
 
 export const PositionsContext = createContext<PositionsContext>({} as PositionsContext);
@@ -39,11 +39,11 @@ type Props = {
 
 export function PositionsProvider({ children }: Props) {
   const { deployment } = useContext(ConfigContext)
-  const [context, setContext] = useState<PositionsContext>({
+  const [context, setContext] = useState<Omit<PositionsContext, 'progress'>>({
     debtPositions: [],
     creditPositions: [],
-    loaded: false,
   })
+  const [progress, setProgress] = useState(0)
 
   useEffect(() => {
     ; (async () => {
@@ -63,7 +63,7 @@ export function PositionsProvider({ children }: Props) {
           args: [BigInt(i)],
         }) as Promise<DebtPositionStruct>)
 
-      const debtPositionsStructs = await delayed(getDebtPositionPromises, RPC_REQUESTS_PER_SECOND);
+      const debtPositionsStructs = await delayed(getDebtPositionPromises, RPC_REQUESTS_PER_SECOND, (finished) => setProgress((finished-1) * 100 / Number(debtPositionsCount + creditPositionsCount)));
 
       const debtPositions = debtPositionsStructs.map((debtPosition, i) => ({
         debtPositionId: i.toString(),
@@ -81,7 +81,7 @@ export function PositionsProvider({ children }: Props) {
           args: [ethers.MaxUint256 / BigInt(2) + BigInt(i)],
         }) as Promise<CreditPositionStruct>)
 
-      const creditPositionsStructs = await delayed(getCreditPositionPromises, RPC_REQUESTS_PER_SECOND);
+      const creditPositionsStructs = await delayed(getCreditPositionPromises, RPC_REQUESTS_PER_SECOND , (finished) => setProgress((finished + Number(debtPositionsCount) - 1) * 100 / Number(debtPositionsCount + creditPositionsCount)));
 
       const creditPositions = creditPositionsStructs.map((creditPosition, i) => ({
         creditPositionId: smallId(ethers.MaxUint256 / BigInt(2) + BigInt(i)),
@@ -94,16 +94,15 @@ export function PositionsProvider({ children }: Props) {
       setContext({
         debtPositions,
         creditPositions,
-        loaded: true,
       })
-
+      setProgress(100)
     })()
   }, [])
 
 
   return (
     <PositionsContext.Provider
-      value={context}
+      value={{...context, progress}}
     >
       {children}
     </PositionsContext.Provider>

@@ -25,7 +25,7 @@ export interface LimitOrder {
 interface LimitOrdersContext {
   borrowOffers: LimitOrder[]
   loanOffers: LimitOrder[]
-  loaded: boolean;
+  progress: number;
 }
 
 export const LimitOrdersContext = createContext<LimitOrdersContext>({} as LimitOrdersContext);
@@ -35,11 +35,11 @@ type Props = {
 };
 
 export function LimitOrdersProvider({ children }: Props) {
-  const [context, setContext] = useState<LimitOrdersContext>({
+  const [context, setContext] = useState<Omit<LimitOrdersContext, 'progress'>>({
     borrowOffers: [],
     loanOffers: [],
-    loaded: false,
   })
+  const [progress, setProgress] = useState(0)
 
   const { deployment } = useContext(ConfigContext)
 
@@ -65,7 +65,7 @@ export function LimitOrdersProvider({ children }: Props) {
       ]
         .map((log) => log.transactionHash)
       const transactionPromises = transactionHashes.map((hash) => () => publicClient.getTransaction({ hash }));
-      const txs = await delayed(transactionPromises, RPC_REQUESTS_PER_SECOND);
+      const txs = await delayed(transactionPromises, RPC_REQUESTS_PER_SECOND, (finished) => setProgress((finished - 1) * 100 / transactionHashes.length));
 
       const senders = txs.map((tx) => tx.from)
       const users = await Promise.all(senders.map(sender => readContract(config, {
@@ -99,16 +99,14 @@ export function LimitOrdersProvider({ children }: Props) {
       setContext({
         borrowOffers,
         loanOffers,
-        loaded: true
       })
+      setProgress(100)
     })()
   }, [])
 
-  console.log(context)
-
   return (
     <LimitOrdersContext.Provider
-      value={context}
+      value={{...context, progress}}
     >
       {children}
     </LimitOrdersContext.Provider>

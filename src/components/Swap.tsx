@@ -19,24 +19,25 @@ const Swap = () => {
   const [action, setAction] = useState(actions[0]);
   const [days, setDays] = useState(30);
 
-  const {sellCreditQuote, buyCreditQuote} = useContext(SwapContext)
-  const {loaded} = useContext(LimitOrdersContext)
+  const { sellCreditQuote, buyCreditQuote } = useContext(SwapContext)
+  const { progress } = useContext(LimitOrdersContext)
 
   useEffect(() => {
-    if(loaded) {
+    if (progress === 100) {
       handleSellAmountChange('10')
     }
-  }, [loaded])
+  }, [progress])
 
   const handleSellAmountChange = async (value: string) => {
-    setSellAmount(value);
+    console.log('handleSellAmountChange')
     const quote = sellCreditQuote(parseFloat(value), days * 24 * 60 * 60)
+    setSellAmount(value);
     setBuyAmount(format(quote));
   };
 
   const handleBuyAmountChange = async (value: string) => {
-    setBuyAmount(value);
     const quote = buyCreditQuote(parseFloat(value), days * 24 * 60 * 60)
+    setBuyAmount(value);
     setSellAmount(format(quote));
   };
 
@@ -47,10 +48,10 @@ const Swap = () => {
 
   const swapAction = () => {
     const newAction = action === actions[0] ? actions[1] : actions[0];
-    const newSellAmount = buyAmount ;
-    const newBuyAmount = sellAmount ;
+    const newSellAmount = buyAmount;
+    const newBuyAmount = sellAmount;
     setAction(
-      newAction 
+      newAction
     );
     setSellAmount(
       newSellAmount
@@ -78,7 +79,7 @@ const Swap = () => {
         <div className="input-container">
           <div className='maturity'>
             <label>Maturity</label>
-            <input type="text" value={days} onChange={e => handleDaysChange(e.target.value)}/>
+            <input type="text" value={days} onChange={e => handleDaysChange(e.target.value)} />
             <label className="days">days</label>
           </div>
         </div>
@@ -101,7 +102,7 @@ const Swap = () => {
         </button>
 
         <div className="input-container">
-          <label>{action  === actions[0] ? actions[1] : actions[0]}
+          <label>{action === actions[0] ? actions[1] : actions[0]}
           </label>
           <div className="input-group">
             <input
