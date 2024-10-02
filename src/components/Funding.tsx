@@ -1,8 +1,8 @@
 import { useContext, useState } from 'react';
 import { ConfigContext } from '../contexts/ConfigContext';
-import { UserContext } from '../contexts/UserContext';
 import { merge } from '../services/merge';
 import { parseUnits } from 'ethers';
+import { SizeContext } from '../contexts/SizeContext';
 
 const actions = [
   'Deposit',
@@ -20,7 +20,7 @@ const Funding = () => {
     tokenDeployment.UnderlyingBorrowToken
   ]
 
-  const { deposit, withdraw } = useContext(UserContext)
+  const { deposit, withdraw } = useContext(SizeContext)
   const [token, setToken] = useState<Record<string, any>>(
     depositTokens[0]
   );

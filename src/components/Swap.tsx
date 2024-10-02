@@ -4,6 +4,7 @@ import { format } from '../services/format';
 import { LimitOrdersContext } from '../contexts/LimitOrdersContext';
 import { parseUnits } from 'ethers';
 import { ConfigContext } from '../contexts/ConfigContext';
+import { SizeContext } from '../contexts/SizeContext';
 
 const actions = ['Buy', 'Sell'];
 
@@ -23,7 +24,8 @@ const Swap = () => {
 
   const tenor = days * 24 * 60 * 60
 
-  const { sellCreditQuote, buyCreditQuote, sellCreditMarket, buyCreditMarket } = useContext(SwapContext)
+  const { sellCreditQuote, buyCreditQuote } = useContext(SwapContext)
+  const { sellCreditMarket, buyCreditMarket } = useContext(SizeContext)
   const { progress } = useContext(LimitOrdersContext)
 
   useEffect(() => {
@@ -115,7 +117,7 @@ const Swap = () => {
           ↓
         </span>
         {
-          quote.rate !== 0 && quote.rate !== undefined ? <small>${(quote.rate * 100).toFixed(2)}% APR</small> : null
+          quote.rate !== 0 && quote.rate !== undefined ? <small>{(quote.rate * 100).toFixed(2)}% APR</small> : null
         }
       </button>
 

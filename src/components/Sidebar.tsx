@@ -9,6 +9,7 @@ import Blockies from 'react-blockies';
 import { formatDistance } from 'date-fns/formatDistance'
 import { SidebarContext } from '../contexts/SidebarContext';
 import { isMobile } from '../services/isMobile';
+import { SizeContext } from '../contexts/SizeContext';
 
 const Sidebar = () => {
   const account = useAccount()
@@ -16,7 +17,8 @@ const Sidebar = () => {
   const { disconnect } = useDisconnect()
   const { market, marketNames, marketName, setMarketName } = useContext(ConfigContext)
   const { tokens } = market
-  const { user, creditPositions, debtPositions, repay } = useContext(UserContext)
+  const { user, creditPositions, debtPositions } = useContext(UserContext)
+  const { repay } = useContext(SizeContext)
   const { collapsed, setCollapsed } = useContext(SidebarContext)
 
   const connector = isMobile() ? connectors[1] : connectors[0]

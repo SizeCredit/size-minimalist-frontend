@@ -3,17 +3,11 @@ import {
   createContext,
   useContext,
 } from "react";
-import { toast } from 'react-toastify';
 import { LimitOrdersContext } from "./LimitOrdersContext";
 import { getRate } from "../services/getRate";
 import { ConfigContext } from "./ConfigContext";
 import { PriceContext } from "./PriceContext";
-import { config } from "../wagmi";
-import { sendTransaction } from "wagmi/actions";
-import { Address, encodeFunctionData } from "viem";
-import { ethers } from "ethers";
-import Size from '../abi/Size.json'
-import { PositionsContext } from "./PositionsContext";
+import { Address } from "viem";
 
 
 export interface Quote {
@@ -28,8 +22,6 @@ export type Currency =
 interface SwapContext {
   sellCreditQuote: (amount: number, tenor: number) => Quote;
   buyCreditQuote: (amount: number, tenor: number) => Quote;
-  sellCreditMarket: (quote: Quote, amount: bigint, tenor: number) => Promise<void>
-  buyCreditMarket: (quote: Quote, amount: bigint, tenor: number) => Promise<void>
 }
 
 export const SwapContext = createContext<SwapContext>({} as SwapContext);
@@ -40,8 +32,7 @@ type Props = {
 
 export function SwapProvider({ children }: Props) {
   const { market } = useContext(ConfigContext)
-  const { deployment, tokens } = market
-  const { updatePositions } = useContext(PositionsContext)
+  const { tokens } = market
   const { borrowOffers, loanOffers } = useContext(LimitOrdersContext)
   const { price } = useContext(PriceContext)
 
@@ -78,81 +69,11 @@ export function SwapProvider({ children }: Props) {
     return bestRate
   }
 
-  const sellCreditMarket = async (quote: Quote, amount: bigint, tenor: number): Promise<void> => {
-    const { user: lender, rate } = quote
-    const deadline = Math.floor(Date.now() / 1000) + 60 * 60
-    const maxAPR = Math.floor(rate * 1.05 * 1e18)
-    const exactAmountIn = true
-    const creditPositionId = ethers.MaxUint256
-    const arg = {
-      lender,
-      creditPositionId,
-      amount,
-      tenor,
-      deadline,
-      maxAPR,
-      exactAmountIn
-    }
-    console.log(arg)
-    const data = encodeFunctionData({
-      abi: [Size.abi.find(e => e.name === 'sellCreditMarket')],
-      functionName: 'sellCreditMarket',
-      args: [arg]
-    })
-    console.log(data)
-    try {
-      const tx = await sendTransaction(config, {
-        to: deployment.Size.address,
-        data
-      })
-      toast.success(<a target="_blank" href={`https://basescan.org/tx/${tx}`}>{tx}</a>)
-      updatePositions()
-    } catch (e: any) {
-      toast.error(e.shortMessage)
-    }
-  }
-
-  const buyCreditMarket = async (quote: Quote, amount: bigint, tenor: number): Promise<void> => {
-    const { user: borrower, rate } = quote
-    const deadline = Math.floor(Date.now() / 1000) + 60 * 60
-    const minAPR = Math.floor(rate * 1e18 / 1.05)
-    const exactAmountIn = true
-    const creditPositionId = ethers.MaxUint256
-    const arg = {
-      borrower,
-      creditPositionId,
-      amount,
-      tenor,
-      deadline,
-      minAPR,
-      exactAmountIn
-    }
-    console.log(arg)
-    const data = encodeFunctionData({
-      abi: [Size.abi.find(e => e.name === 'buyCreditMarket')],
-      functionName: 'buyCreditMarket',
-      args: [arg]
-    })
-    console.log(data)
-    try {
-      const tx = await sendTransaction(config, {
-        to: deployment.Size.address,
-        data
-      })
-      toast.success(<a target="_blank" href={`https://basescan.org/tx/${tx}`}>{tx}</a>)
-      updatePositions()
-    } catch (e: any) {
-      toast.error(e.shortMessage)
-    }
-  }
-
   return (
     <SwapContext.Provider
       value={{
         buyCreditQuote,
         sellCreditQuote,
-        buyCreditMarket,
-        sellCreditMarket,
       }}
     >
       {children}

@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react';
+import { SizeContext } from '../contexts/SizeContext';
 import { UserContext } from '../contexts/UserContext';
 
 const actions = [
@@ -16,7 +17,8 @@ const DEFAULT_DAYS = [
 ]
 
 const Limit = () => {
-  const { buyCreditLimit, sellCreditLimit, user } = useContext(UserContext)
+  const {user} = useContext(UserContext)
+  const { buyCreditLimit, sellCreditLimit } = useContext(SizeContext)
 
   const defaultOffer = {
     maxDueDate: Math.floor((new Date().getTime() + 1000 * 60 * 60 * 24 * 365) / 1000),
