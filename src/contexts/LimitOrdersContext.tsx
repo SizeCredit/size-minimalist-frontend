@@ -86,7 +86,7 @@ export function LimitOrdersProvider({ children }: Props) {
           aprs: log.args.curveRelativeTimeAprs!.map(e => Number(e) / 1e18),
           marketRateMultipliers: log.args.curveRelativeTimeMarketRateMultipliers!.map(e => Number(e) / 1e18),
         },
-      }))
+      })).reverse()
       const borrowOffers = deduplicate(sellCreditLimitOffers, 'user.account')
       const buyCreditLimitOffers = buyCreditLimit.map((log, i) => ({
         user: users[sellCreditLimit.length + i],
@@ -96,7 +96,7 @@ export function LimitOrdersProvider({ children }: Props) {
           aprs: log.args.curveRelativeTimeAprs!.map(e => Number(e) / 1e18),
           marketRateMultipliers: log.args.curveRelativeTimeMarketRateMultipliers!.map(e => Number(e) / 1e18),
         },
-      }))
+      })).reverse()
       const loanOffers = deduplicate(buyCreditLimitOffers, 'user.account')
       setContext({
         borrowOffers,

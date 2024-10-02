@@ -3,7 +3,7 @@ import { Abi } from 'viem';
 import baseMainnetWethUsdc from '../markets/base-mainnet-weth-usdc'
 import baseSepoliaWethUsdc from '../markets/base-sepolia-weth-usdc'
 
-type Token =
+export type Token =
   'UnderlyingCollateralToken' |
   'UnderlyingBorrowToken' |
   'CollateralToken' |
@@ -39,8 +39,6 @@ export function ConfigProvider({ children }: Props) {
     'base-mainnet-weth-usdc': baseMainnetWethUsdc,
     'base-sepolia-weth-usdc': baseSepoliaWethUsdc,
   }
-
-  console.log('marketName', marketName)
 
   const market = (markets as any)[marketName]
   const marketNames = Object.keys(markets)

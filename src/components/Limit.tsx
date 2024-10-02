@@ -90,7 +90,7 @@ const Limit = () => {
                     <input type="text" value={aprs[index]} onChange={e =>
                       setAprs(aprs.map((apr, i) => i === index ? (e.target.value) : apr) as number[])
                     } />
-                    <label>% APR</label>
+                    <label>APR</label>
                   </div>
                   <button className='button' onClick={() => remove(index)}>✕</button>
                 </div>

@@ -316,3 +316,7 @@ select {
   align-items: center;
   margin-bottom: 10px;
 }
+
+.chart-amount {
+  margin-bottom: 20px;
+}

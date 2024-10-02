@@ -8,6 +8,7 @@ import { getRate } from "../services/getRate";
 import { ConfigContext } from "./ConfigContext";
 import { PriceContext } from "./PriceContext";
 import { Address } from "viem";
+import { filterOffers } from "../services/filterOffers";
 
 
 export interface Quote {
@@ -37,14 +38,13 @@ export function SwapProvider({ children }: Props) {
   const { price } = useContext(PriceContext)
 
   const sellCreditQuote = (amount: number, tenor: number): Quote => {
-    const offers = loanOffers.
-      filter(loanOffer => loanOffer.curveRelativeTime.tenors[0] <= tenor && tenor <= loanOffer.curveRelativeTime.tenors[loanOffer.curveRelativeTime.tenors.length - 1])
-      .filter(loanOffer => Number(loanOffer.user.borrowATokenBalance) / 10 ** tokens.BorrowAToken.decimals > amount)
+    const offers = filterOffers(tokens, loanOffers, amount, true, tenor, price)
+
     const rates = offers.map(offer => ({
       user: offer.user.account as Address,
       rate: getRate(offer.curveRelativeTime, tenor)
     }))
-    if(rates.length === 0) {
+    if (rates.length === 0) {
       return {} as Quote
     }
     const bestRate = rates.reduce((best, current) => {
@@ -53,14 +53,12 @@ export function SwapProvider({ children }: Props) {
     return bestRate
   }
   const buyCreditQuote = (amount: number, tenor: number): Quote => {
-    const offers = borrowOffers.
-      filter(loanOffer => loanOffer.curveRelativeTime.tenors[0] <= tenor && tenor <= loanOffer.curveRelativeTime.tenors[loanOffer.curveRelativeTime.tenors.length - 1])
-      .filter(borrowOffer => price ? Number(borrowOffer.user.collateralTokenBalance) / 10 ** tokens.BorrowAToken.decimals > amount * price * Math.max(Number(borrowOffer.user.user.openingLimitBorrowCR) / 1e18, 1.5) : false)
+    const offers = filterOffers(tokens, borrowOffers, amount, false, tenor, price)
     const rates = offers.map(offer => ({
       user: offer.user.account as Address,
       rate: getRate(offer.curveRelativeTime, tenor)
     }))
-    if(rates.length === 0) {
+    if (rates.length === 0) {
       return {} as Quote
     }
     const bestRate = rates.reduce((best, current) => {

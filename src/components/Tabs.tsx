@@ -2,11 +2,13 @@ import { useState } from 'react';
 import Swap from './Swap';
 import Funding from './Funding';
 import Limit from './Limit';
+import Charts from './Charts';
 
 const tabs = [
   'Swap',
   'Limit',
-  'Funding'
+  'Funding',
+  'Charts'
 ]
 
 const Tabs = () => {
@@ -34,6 +36,9 @@ const Tabs = () => {
         }
         {
           activeTab === 'Funding' ? <Funding /> : null
+        }
+        {
+          activeTab === 'Charts' ? <Charts /> : null
         }
       </div>
     </div>
