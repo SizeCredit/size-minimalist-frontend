@@ -14,6 +14,7 @@ import { PositionsProvider } from './contexts/PositionsContext.tsx'
 import { LimitOrdersProvider } from './contexts/LimitOrdersContext.tsx'
 import { PriceProvider } from './contexts/PriceContext.tsx'
 import { SwapProvider } from './contexts/SwapContext.tsx'
+import { SidebarProvider } from './contexts/SidebarContext.tsx'
 
 globalThis.Buffer = Buffer
 
@@ -29,7 +30,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
               <LimitOrdersProvider>
                 <UserProvider>
                   <SwapProvider>
-                    <App />
+                    <SidebarProvider>
+                      <App />
+                    </SidebarProvider>
                   </SwapProvider>
                 </UserProvider>
               </LimitOrdersProvider>

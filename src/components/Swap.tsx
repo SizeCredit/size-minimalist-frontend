@@ -27,27 +27,30 @@ const Swap = () => {
 
   useEffect(() => {
     if (progress === 100) {
-      handleBuyAmountChange('10')
+      handleBuyAmountChange('10', days)
     }
   }, [progress])
 
-  const handleSellAmountChange = async (value: string) => {
+  const handleSellAmountChange = async (value: string, days: number) => {
     const quote = sellCreditQuote(parseFloat(value), tenor)
     setQuote(quote)
     setSellAmount(value);
-    setBuyAmount(format(Number(value) * (1 + quote.rate * days / 365)));
+    const newBuyAmount = action === actions[0] ? format(Number(value) * (1 + quote.rate * days / 365)) : format(Number(value) / (1 + quote.rate * days / 365));
+    setBuyAmount(newBuyAmount);
   };
 
-  const handleBuyAmountChange = async (value: string) => {
+  const handleBuyAmountChange = async (value: string, days: number) => {
     const quote = buyCreditQuote(parseFloat(value), tenor)
     setQuote(quote)
     setBuyAmount(value);
-    setSellAmount(format(Number(value) / (1 + quote.rate * days / 365)));
+    const newSellAmount = action === actions[0] ? format(Number(value) / (1 + quote.rate * days / 365)) : format(Number(value) * (1 + quote.rate * days / 365));
+    setSellAmount(newSellAmount);
   };
 
   const handleDaysChange = async (value: string) => {
     setDays(Number(value));
-    handleSellAmountChange(sellAmount)
+    if (action === actions[0]) handleBuyAmountChange(buyAmount, Number(value))
+    else handleSellAmountChange(sellAmount, Number(value))
   }
 
   const swap = () => action === actions[0] ? buyCreditMarket(
@@ -75,10 +78,10 @@ const Swap = () => {
       newBuyAmount
     );
     if (newAction === actions[0]) {
-      handleBuyAmountChange(newBuyAmount)
+      handleBuyAmountChange(newBuyAmount, days)
     }
     else {
-      handleSellAmountChange(newSellAmount)
+      handleSellAmountChange(newSellAmount, days)
     }
   };
 
@@ -99,7 +102,7 @@ const Swap = () => {
           <input
             type="number"
             value={action === actions[0] ? buyAmount : sellAmount}
-            onChange={e => action === actions[0] ? handleBuyAmountChange(e.target.value) : handleSellAmountChange(e.target.value)}
+            onChange={e => action === actions[0] ? handleBuyAmountChange(e.target.value, days) : handleSellAmountChange(e.target.value, days)}
             placeholder="0"
           />
           Credit
@@ -110,7 +113,9 @@ const Swap = () => {
         <span>
           ↓
         </span>
-        <small>{quote.rate !== 0 ? `${(quote.rate * 100).toFixed(2)}% APR` : ''}</small>
+        {
+          quote.rate !== 0 && quote.rate !== undefined ? <small>${(quote.rate * 100).toFixed(2)}% APR</small> : null
+        }
       </button>
 
       <div className="input-container">
@@ -120,7 +125,7 @@ const Swap = () => {
           <input
             type="number"
             value={action === actions[0] ? sellAmount : buyAmount}
-            onChange={e => action === actions[0] ? handleSellAmountChange(e.target.value) : handleBuyAmountChange(e.target.value)}
+            onChange={e => action === actions[0] ? handleSellAmountChange(e.target.value, days) : handleBuyAmountChange(e.target.value, days)}
             placeholder="0"
           />
           Cash
@@ -131,11 +136,11 @@ const Swap = () => {
         {sellAmount && buyAmount ? 'Swap' : 'Enter amount'}
       </button>
 
-        <div className="disclaimers">
-          <small>*Swap amounts do not include fees</small>
-          <small>*Unoptimized matching engine</small>
-          <small>*Unofficial Size application</small>
-        </div>
+      <div className="disclaimers">
+        <small>*Swap amounts do not include fees</small>
+        <small>*Unoptimized matching engine</small>
+        <small>*Unofficial Size application</small>
+      </div>
     </>
   );
 };

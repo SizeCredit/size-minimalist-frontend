@@ -95,12 +95,9 @@ select {
   flex-direction: row;
   text-align: center;
 
-  span {
-    margin-left: 100px;
-  }
-
   small {
-    margin-top: 5px;
+    margin-right: -100px;
+    margin-top: 10px;
     margin-left: 20px;
     font-size: 14px;
   }
@@ -126,6 +123,21 @@ select {
 }
 
 /* Sidebar */
+.collapsed {
+  display: none;
+}
+.button-collapse {
+  position: fixed;
+  bottom: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+.right {
+  position: fixed;
+  right: 10px;
+}
 
 .sidebar {
   position: fixed;
@@ -275,4 +287,25 @@ select {
 }
 .w-80 {
   width: 80px;
+}
+
+
+/* Limit */
+
+.limit-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+
+  input {
+    width: 50px;
+  }
+
+}
+
+.button {
+  background: none;
+  border: none;
+  cursor: pointer;
 }

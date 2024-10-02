@@ -7,6 +7,7 @@ import { ConfigContext } from '../contexts/ConfigContext';
 import { UserContext } from '../contexts/UserContext';
 import Blockies from 'react-blockies';
 import { formatDistance } from 'date-fns/formatDistance'
+import { SidebarContext } from '../contexts/SidebarContext';
 
 const Sidebar = () => {
   const account = useAccount()
@@ -14,13 +15,14 @@ const Sidebar = () => {
   const { disconnect } = useDisconnect()
   const { chain, tokens } = useContext(ConfigContext)
   const { user, creditPositions, debtPositions, repay } = useContext(UserContext)
+  const { collapsed, setCollapsed } = useContext(SidebarContext)
 
   useEffect(() => {
     toast.error(error?.message)
   }, [error])
 
   return (
-    <div className="sidebar">
+    <div className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
       <div className="wallet-info">
         <div className="wallet-address">
           <button
@@ -86,6 +88,11 @@ const Sidebar = () => {
             </div>
           </div>
         ))}
+      </div>
+      <div>
+        <button className='button-collapse' onClick={() => setCollapsed(true)}>
+          » Collapse
+        </button>
       </div>
     </div>
   );

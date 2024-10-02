@@ -16,6 +16,8 @@ interface UserContext {
   repay: (debtPositionId: string) => Promise<void>
   deposit: (token: string, amount: bigint) => Promise<void>,
   withdraw: (token: string, amount: bigint) => Promise<void>
+  buyCreditLimit: (tenors: bigint[], aprs: bigint[]) => Promise<void>
+  sellCreditLimit: (tenors: bigint[], aprs: bigint[]) => Promise<void>
 }
 
 export const UserContext = createContext<UserContext>({} as UserContext);
@@ -121,6 +123,62 @@ export function UserProvider({ children }: Props) {
     }
   }
 
+  const buyCreditLimit = async (tenors: bigint[], aprs: bigint[]) => {
+    const marketRateMultipliers = tenors.map(() => 0)
+    const arg = {
+      maxDueDate: Math.floor((new Date().getTime() + 1000 * 60 * 60 * 24 * 365)/1000),
+      curveRelativeTime: {
+        tenors,
+        aprs,
+        marketRateMultipliers
+      }
+    }
+    console.log(arg)
+    const data = encodeFunctionData({
+      abi: [Size.abi.find(e => e.name === 'buyCreditLimit')],
+      functionName: 'buyCreditLimit',
+      args: [arg]
+    })
+    console.log(data)
+    try {
+      const tx = await sendTransaction(config, {
+        to: deployment.Size.address,
+        data
+      })
+      toast.success(`https://basescan.org/tx/${tx}`)
+    } catch (e: any) {
+      toast.error(e.shortMessage)
+    }
+  }
+
+  const sellCreditLimit = async (tenors: bigint[], aprs: bigint[]) => {
+    const marketRateMultipliers = tenors.map(() => 0)
+    const arg = {
+      maxDueDate: Math.floor((new Date().getTime() + 1000 * 60 * 60 * 24 * 365)/1000),
+      curveRelativeTime: {
+        tenors,
+        aprs,
+        marketRateMultipliers
+      }
+    }
+    console.log(arg)
+    const data = encodeFunctionData({
+      abi: [Size.abi.find(e => e.name === 'sellCreditLimit')],
+      functionName: 'sellCreditLimit',
+      args: [arg]
+    })
+    console.log(data)
+    try {
+      const tx = await sendTransaction(config, {
+        to: deployment.Size.address,
+        data
+      })
+      toast.success(`https://basescan.org/tx/${tx}`)
+    } catch (e: any) {
+      toast.error(e.shortMessage)
+    }
+  }
+
   return (
     <UserContext.Provider
       value={{
@@ -129,7 +187,9 @@ export function UserProvider({ children }: Props) {
         creditPositions: creditPositions.filter(position => position.lender === account.address),
         repay,
         deposit,
-        withdraw
+        withdraw,
+        buyCreditLimit,
+        sellCreditLimit
       }}
     >
       {children}
