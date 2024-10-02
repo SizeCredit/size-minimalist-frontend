@@ -14,7 +14,8 @@ type Props = {
 };
 
 export function PriceProvider({ children }: Props) {
-  const { deployment } = useContext(ConfigContext)
+  const { market } = useContext(ConfigContext)
+  const { deployment } = market
   const [price, setPrice] = useState<number>()
 
   useEffect(() => {

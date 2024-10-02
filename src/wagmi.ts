@@ -10,7 +10,7 @@ export const config = createConfig({
   ],
   transports: {
     [base.id]: http(import.meta.env.VITE_BASE_RPC_URL),
-    [baseSepolia.id]: http(),
+    [baseSepolia.id]: http(import.meta.env.VITE_BASE_SEPOLIA_RPC_URL),
   },
 })
 

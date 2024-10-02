@@ -8,14 +8,18 @@ import { UserContext } from '../contexts/UserContext';
 import Blockies from 'react-blockies';
 import { formatDistance } from 'date-fns/formatDistance'
 import { SidebarContext } from '../contexts/SidebarContext';
+import { isMobile } from '../services/isMobile';
 
 const Sidebar = () => {
   const account = useAccount()
   const { connectors, connect, error } = useConnect()
   const { disconnect } = useDisconnect()
-  const { chain, tokens } = useContext(ConfigContext)
+  const { chain, market, marketNames, marketName, setMarketName } = useContext(ConfigContext)
+  const { tokens } = market
   const { user, creditPositions, debtPositions, repay } = useContext(UserContext)
   const { collapsed, setCollapsed } = useContext(SidebarContext)
+
+  const connector = isMobile() ? connectors[1] : connectors[0]
 
   useEffect(() => {
     toast.error(error?.message)
@@ -26,8 +30,8 @@ const Sidebar = () => {
       <div className="wallet-info">
         <div className="wallet-address">
           <button
-           onClick={
-            account.status === 'connected' ? () => disconnect() : () => connect({ connector: connectors[0] })} className="connect-button">
+            onClick={
+              account.status === 'connected' ? () => disconnect() : () => connect({ connector })} className="connect-button">
             {
               account.status === 'connected' ?
                 (
@@ -54,15 +58,28 @@ const Sidebar = () => {
           </button>
         </div>
       </div>
+      <div className='select-market'>
+        <label>Market</label>
+        <select onChange={(e) => setMarketName(e.target.value)}>
+          {
+            marketNames.map((m) => (
+              <option defaultValue={marketName} key={m} value={m}>{m}</option>
+            ))
+          }
+        </select>
+      </div>
+      <div className="tabs">
+        <div>
+          Balances
+        </div>
+      </div>
       <div className="balance-info">
         <h2>{format(user?.borrowATokenBalance, tokens.BorrowAToken.decimals)} {tokens.BorrowAToken.symbol}</h2>
         <h2>{format(user?.collateralTokenBalance, tokens.CollateralToken.decimals)} {tokens.CollateralToken.symbol}</h2>
         <h2>{format(user?.debtBalance, tokens.DebtToken.decimals)} {tokens.DebtToken.symbol}</h2>
       </div>
       <div className="tabs">
-        <div
-          key="Positions"
-        >
+        <div>
           Positions
         </div>
       </div>

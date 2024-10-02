@@ -39,10 +39,10 @@ type Props = {
 };
 
 export function SwapProvider({ children }: Props) {
-  const { deployment } = useContext(ConfigContext)
+  const { market } = useContext(ConfigContext)
+  const { deployment, tokens } = market
   const { updatePositions } = useContext(PositionsContext)
   const { borrowOffers, loanOffers } = useContext(LimitOrdersContext)
-  const { tokens } = useContext(ConfigContext)
   const { price } = useContext(PriceContext)
 
   const sellCreditQuote = (amount: number, tenor: number): Quote => {
@@ -105,7 +105,7 @@ export function SwapProvider({ children }: Props) {
         to: deployment.Size.address,
         data
       })
-      toast.success(`https://basescan.org/tx/${tx}`)
+      toast.success(<a target="_blank" href={`https://basescan.org/tx/${tx}`}>{tx}</a>)
       updatePositions()
     } catch (e: any) {
       toast.error(e.shortMessage)
@@ -139,7 +139,7 @@ export function SwapProvider({ children }: Props) {
         to: deployment.Size.address,
         data
       })
-      toast.success(`https://basescan.org/tx/${tx}`)
+      toast.success(<a target="_blank" href={`https://basescan.org/tx/${tx}`}>{tx}</a>)
       updatePositions()
     } catch (e: any) {
       toast.error(e.shortMessage)

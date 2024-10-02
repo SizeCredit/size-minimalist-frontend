@@ -41,7 +41,8 @@ export function LimitOrdersProvider({ children }: Props) {
   })
   const [progress, setProgress] = useState(0)
 
-  const { deployment } = useContext(ConfigContext)
+  const { market } = useContext(ConfigContext)
+  const { deployment } = market
 
   const publicClient = usePublicClient()
 

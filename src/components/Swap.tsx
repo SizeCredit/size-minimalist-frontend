@@ -8,7 +8,8 @@ import { ConfigContext } from '../contexts/ConfigContext';
 const actions = ['Buy', 'Sell'];
 
 const Swap = () => {
-  const { tokens } = useContext(ConfigContext)
+  const { market } = useContext(ConfigContext)
+  const { tokens } = market
   const [buyAmount, setBuyAmount] = useState('');
   const [sellAmount, setSellAmount] = useState('');
   const [action, setAction] = useState(actions[0]);

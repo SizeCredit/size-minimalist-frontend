@@ -10,7 +10,8 @@ const actions = [
 ]
 
 const Funding = () => {
-  const { deployment, tokens } = useContext(ConfigContext)
+  const { market } = useContext(ConfigContext)
+  const { deployment, tokens } = market
   const tokenDeployment = merge(deployment, tokens)
   const [action, setAction] = useState(actions[0])
 

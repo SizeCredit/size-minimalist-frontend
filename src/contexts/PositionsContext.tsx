@@ -42,7 +42,8 @@ type Props = {
 };
 
 export function PositionsProvider({ children }: Props) {
-  const { deployment } = useContext(ConfigContext)
+  const { market } = useContext(ConfigContext)
+  const { deployment } = market
   const [context, setContext] = useState<DebtPositionsCreditPositionsContext>({
     debtPositions: [],
     creditPositions: [],

@@ -2,10 +2,8 @@ import { createContext, Dispatch, ReactNode, useState } from 'react';
 import { base } from 'wagmi/chains'
 import { Chain } from 'wagmi/chains';
 import { Abi } from 'viem';
-import Size from '../abi/Size.json';
-import PriceFeed from '../abi/PriceFeed.json';
-import { erc20Abi } from 'viem';
-
+import baseMainnetWethUsdc from '../markets/base-mainnet-weth-usdc'
+import baseSepoliaWethUsdc from '../markets/base-sepolia-weth-usdc'
 
 type Token =
   'UnderlyingCollateralToken' |
@@ -14,16 +12,18 @@ type Token =
   'BorrowAToken' |
   'DebtToken'
 
-type Contract =
-  'Size' | 'WETH' | 'PriceFeed' | Token
-
 type Address = `0x${string}`
 
 interface ConfigContext {
   chain: Chain;
-  deployment: Record<Contract, { address: Address, abi: Abi, block: number }>
-  tokens: Record<Token, { decimals: number, symbol: string }>;
+  market: {
+    deployment: Record<string, { address: Address, abi: Abi, block: number }>
+    tokens: Record<Token, { decimals: number, symbol: string }>;
+  }
+  marketNames: string[]
   setChain: Dispatch<Chain>;
+  marketName: string;
+  setMarketName: Dispatch<string>
 }
 
 export const ConfigContext = createContext<ConfigContext>({} as ConfigContext);
@@ -32,33 +32,39 @@ type Props = {
   children: ReactNode;
 };
 
+const DEFAULT_MARKET = 'base-mainnet-weth-usdc'
+
 export function ConfigProvider({ children }: Props) {
   const [chain, setChain] = useState<Chain>(base);
-  const deployment = {
-    Size: { abi: Size.abi as Abi, address: '0xC2a429681CAd7C1ce36442fbf7A4a68B11eFF940' as Address, block: 17147278 },
-    PriceFeed: { abi: PriceFeed.abi as Abi, address: '0xd6938E55cc5f4B553948Cc153d360E8a8FA0de72' as Address, block: 17147277 },
-    WETH: { abi: erc20Abi, address: '0x4200000000000000000000000000000000000006' as Address, block: 0 },
-    UnderlyingCollateralToken: { abi: erc20Abi, address: '0x4200000000000000000000000000000000000006' as Address, block: 0 },
-    UnderlyingBorrowToken: { abi: erc20Abi, address: '0x833589fcd6edb6e08f4c7c32d4f71b54bda02913' as Address, block: 0 },
-    CollateralToken: { abi: erc20Abi, address: '0x' as Address, block: 0 },
-    BorrowAToken: { abi: erc20Abi, address: '0x' as Address, block: 0 },
-    DebtToken: { abi: erc20Abi, address: '0x' as Address, block: 0 },
+  const [marketName, setMarket] = useState(() => {
+    return localStorage.getItem("market") || DEFAULT_MARKET;
+  });
+  
+  const markets = {
+    'base-mainnet-weth-usdc': baseMainnetWethUsdc,
+    'base-sepolia-weth-usdc': baseSepoliaWethUsdc,
   }
-  const tokens = {
-    BorrowAToken: { decimals: 6, symbol: 'szUSDC' },
-    UnderlyingBorrowToken: { decimals: 6, symbol: 'USDC' },
-    UnderlyingCollateralToken: { decimals: 18, symbol: 'WETH' },
-    CollateralToken: { decimals: 18, symbol: 'szWETH' },
-    DebtToken: { decimals: 6, symbol: 'szDebtUSDC' }
+
+  console.log('marketName', marketName)
+
+  const market = (markets as any)[marketName]
+  const marketNames = Object.keys(markets)
+
+  const setMarketName = (name: string) => {
+    setMarket(name)
+    localStorage.setItem("market", name);
   }
+
 
   return (
     <ConfigContext.Provider
       value={{
         chain,
         setChain,
-        deployment,
-        tokens
+        market,
+        marketNames,
+        marketName,
+        setMarketName,
       }}
     >
       {children}

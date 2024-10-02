@@ -29,7 +29,8 @@ type Props = {
 export function UserProvider({ children }: Props) {
   const account = useAccount()
   const { creditPositions, debtPositions, updatePositions } = useContext(PositionsContext)
-  const { deployment } = useContext(ConfigContext)
+  const { market } = useContext(ConfigContext)
+  const { deployment } = market
   const getUserView = useReadContract({
     abi: deployment.Size.abi,
     address: deployment.Size.address,
@@ -57,7 +58,7 @@ export function UserProvider({ children }: Props) {
         to: deployment.Size.address,
         data
       })
-      toast.success(`https://basescan.org/tx/${tx}`)
+      toast.success(<a target="_blank" href={`https://basescan.org/tx/${tx}`}>{tx}</a>)
       updatePositions()
     } catch (e: any) {
       toast.error(e.shortMessage)
@@ -86,14 +87,14 @@ export function UserProvider({ children }: Props) {
           args: [deployment.Size.address, amount],
           address: token as Address
         })
-        toast.success(`https://basescan.org/tx/${approve}`)
+        toast.success(<a target="_blank" href={`https://basescan.org/tx/${approve}`}>{approve}</a>)
       }
       const tx = await sendTransaction(config, {
         to: deployment.Size.address,
         data,
         value: token === deployment.WETH.address ? amount : BigInt(0)
       })
-      toast.success(`https://basescan.org/tx/${tx}`)
+      toast.success(<a target="_blank" href={`https://basescan.org/tx/${tx}`}>{tx}</a>)
     } catch (e: any) {
       toast.error(e.shortMessage)
     }
@@ -118,7 +119,7 @@ export function UserProvider({ children }: Props) {
         to: deployment.Size.address,
         data
       })
-      toast.success(`https://basescan.org/tx/${tx}`)
+      toast.success(<a target="_blank" href={`https://basescan.org/tx/${tx}`}>{tx}</a>)
     } catch (e: any) {
       toast.error(e.shortMessage)
     }
@@ -127,7 +128,7 @@ export function UserProvider({ children }: Props) {
   const buyCreditLimit = async (tenors: bigint[], aprs: bigint[]) => {
     const marketRateMultipliers = tenors.map(() => 0)
     const arg = {
-      maxDueDate: Math.floor((new Date().getTime() + 1000 * 60 * 60 * 24 * 365)/1000),
+      maxDueDate: Math.floor((new Date().getTime() + 1000 * 60 * 60 * 24 * 365) / 1000),
       curveRelativeTime: {
         tenors,
         aprs,
@@ -146,7 +147,7 @@ export function UserProvider({ children }: Props) {
         to: deployment.Size.address,
         data
       })
-      toast.success(`https://basescan.org/tx/${tx}`)
+      toast.success(<a target="_blank" href={`https://basescan.org/tx/${tx}`}>{tx}</a>)
     } catch (e: any) {
       toast.error(e.shortMessage)
     }
@@ -155,7 +156,7 @@ export function UserProvider({ children }: Props) {
   const sellCreditLimit = async (tenors: bigint[], aprs: bigint[]) => {
     const marketRateMultipliers = tenors.map(() => 0)
     const arg = {
-      maxDueDate: Math.floor((new Date().getTime() + 1000 * 60 * 60 * 24 * 365)/1000),
+      maxDueDate: Math.floor((new Date().getTime() + 1000 * 60 * 60 * 24 * 365) / 1000),
       curveRelativeTime: {
         tenors,
         aprs,
@@ -174,7 +175,7 @@ export function UserProvider({ children }: Props) {
         to: deployment.Size.address,
         data
       })
-      toast.success(`https://basescan.org/tx/${tx}`)
+      toast.success(<a target="_blank" href={`https://basescan.org/tx/${tx}`}>{tx}</a>)
     } catch (e: any) {
       toast.error(e.shortMessage)
     }
