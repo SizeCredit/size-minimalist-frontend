@@ -15,13 +15,11 @@ type Token =
 type Address = `0x${string}`
 
 interface ConfigContext {
-  chain: Chain;
   market: {
     deployment: Record<string, { address: Address, abi: Abi, block: number }>
     tokens: Record<Token, { decimals: number, symbol: string }>;
   }
   marketNames: string[]
-  setChain: Dispatch<Chain>;
   marketName: string;
   setMarketName: Dispatch<string>
 }
@@ -35,7 +33,6 @@ type Props = {
 const DEFAULT_MARKET = 'base-mainnet-weth-usdc'
 
 export function ConfigProvider({ children }: Props) {
-  const [chain, setChain] = useState<Chain>(base);
   const [marketName, setMarket] = useState(() => {
     return localStorage.getItem("market") || DEFAULT_MARKET;
   });
@@ -59,8 +56,6 @@ export function ConfigProvider({ children }: Props) {
   return (
     <ConfigContext.Provider
       value={{
-        chain,
-        setChain,
         market,
         marketNames,
         marketName,

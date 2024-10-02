@@ -48,6 +48,7 @@ export function LimitOrdersProvider({ children }: Props) {
 
   useEffect(() => {
     (async () => {
+      setProgress(0)
       const [sellCreditLimit, buyCreditLimit] = await Promise.all([
         publicClient.getLogs({
           address: deployment.Size.address,
@@ -103,7 +104,7 @@ export function LimitOrdersProvider({ children }: Props) {
       })
       setProgress(100)
     })()
-  }, [])
+  }, [deployment])
 
   return (
     <LimitOrdersContext.Provider

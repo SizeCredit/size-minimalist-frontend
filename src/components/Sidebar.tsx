@@ -14,7 +14,7 @@ const Sidebar = () => {
   const account = useAccount()
   const { connectors, connect, error } = useConnect()
   const { disconnect } = useDisconnect()
-  const { chain, market, marketNames, marketName, setMarketName } = useContext(ConfigContext)
+  const { market, marketNames, marketName, setMarketName } = useContext(ConfigContext)
   const { tokens } = market
   const { user, creditPositions, debtPositions, repay } = useContext(UserContext)
   const { collapsed, setCollapsed } = useContext(SidebarContext)
@@ -49,12 +49,6 @@ const Sidebar = () => {
             <code className="address">
               {format(account.address) || 'Connect wallet'}
             </code>
-            &nbsp;
-            &nbsp;
-            &nbsp;
-            <small>
-              {chain.name}
-            </small>
           </button>
         </div>
       </div>

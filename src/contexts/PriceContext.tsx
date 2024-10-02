@@ -28,7 +28,7 @@ export function PriceProvider({ children }: Props) {
 
       setPrice(Number(p) / 1e18)
     })()
-  }, [])
+  }, [deployment])
 
   return (
     <PriceContext.Provider

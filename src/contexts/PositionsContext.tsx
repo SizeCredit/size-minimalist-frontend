@@ -51,6 +51,7 @@ export function PositionsProvider({ children }: Props) {
   const [progress, setProgress] = useState(0)
 
   const updatePositions = async () => {
+    setProgress(0)
     const positionsCount = await readContract(config, {
       abi: deployment.Size.abi,
       address: deployment.Size.address,
@@ -104,7 +105,7 @@ export function PositionsProvider({ children }: Props) {
 
   useEffect(() => {
     updatePositions()
-  }, [])
+  }, [deployment])
 
 
   return (
