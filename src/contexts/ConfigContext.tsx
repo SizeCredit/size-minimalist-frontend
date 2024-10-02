@@ -1,6 +1,4 @@
 import { createContext, Dispatch, ReactNode, useState } from 'react';
-import { base } from 'wagmi/chains'
-import { Chain } from 'wagmi/chains';
 import { Abi } from 'viem';
 import baseMainnetWethUsdc from '../markets/base-mainnet-weth-usdc'
 import baseSepoliaWethUsdc from '../markets/base-sepolia-weth-usdc'
