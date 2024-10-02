@@ -4,6 +4,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { filterOffers } from "../services/filterOffers";
 import { ConfigContext } from "../contexts/ConfigContext";
 import { PriceContext } from "../contexts/PriceContext";
+import { getRate } from "../services/getRate";
 
 // const CustomXAxisTick: React.FC<any> = ({ x, y, payload }) => {
 //   return (
@@ -38,11 +39,17 @@ const Charts = () => {
       if (aprIndex !== -1) {
         point[`B ${offer.user.account}`] = (offer.curveRelativeTime.aprs[aprIndex] * 100).toFixed(2); // Convert to percentage
       }
+      else if (offer.curveRelativeTime.tenors[0] / 60 / 60 / 24 <= day && day < offer.curveRelativeTime.tenors[offer.curveRelativeTime.tenors.length - 1] / 60 / 60 / 24) {
+        point[`B ${offer.user.account}`] = (getRate(offer.curveRelativeTime, day * 60 * 60 * 24) * 100).toFixed(2)
+      }
     });
     loanOffers.forEach((offer) => {
       const aprIndex = offer.curveRelativeTime.tenors.indexOf(day * 60 * 60 * 24);
       if (aprIndex !== -1) {
         point[`L ${offer.user.account}`] = (offer.curveRelativeTime.aprs[aprIndex] * 100).toFixed(2); // Convert to percentage
+      }
+      else if (offer.curveRelativeTime.tenors[0] / 60 / 60 / 24 <= day && day < offer.curveRelativeTime.tenors[offer.curveRelativeTime.tenors.length - 1] / 60 / 60 / 24) {
+        point[`L ${offer.user.account}`] = (getRate(offer.curveRelativeTime, day * 60 * 60 * 24) * 100).toFixed(2)
       }
     });
     return point;
