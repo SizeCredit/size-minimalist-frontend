@@ -8,6 +8,8 @@ import { SizeContext } from '../contexts/SizeContext';
 
 const actions = ['Buy', 'Sell'];
 
+const DECIMALS = 4
+
 const Swap = () => {
   const { market } = useContext(ConfigContext)
   const { tokens } = market
@@ -38,7 +40,7 @@ const Swap = () => {
     const quote = sellCreditQuote(parseFloat(value), tenor)
     setQuote(quote)
     setSellAmount(value);
-    const newBuyAmount = action === actions[0] ? format(Number(value) * (1 + quote.rate * days / 365)) : format(Number(value) / (1 + quote.rate * days / 365));
+    const newBuyAmount = action === actions[0] ? format(Number(value) * (1 + quote.rate * days / 365), DECIMALS) : format(Number(value) / (1 + quote.rate * days / 365), DECIMALS);
     setBuyAmount(newBuyAmount);
   };
 
@@ -46,7 +48,7 @@ const Swap = () => {
     const quote = buyCreditQuote(parseFloat(value), tenor)
     setQuote(quote)
     setBuyAmount(value);
-    const newSellAmount = action === actions[0] ? format(Number(value) / (1 + quote.rate * days / 365)) : format(Number(value) * (1 + quote.rate * days / 365));
+    const newSellAmount = action === actions[0] ? format(Number(value) / (1 + quote.rate * days / 365), DECIMALS) : format(Number(value) * (1 + quote.rate * days / 365), DECIMALS);
     setSellAmount(newSellAmount);
   };
 
