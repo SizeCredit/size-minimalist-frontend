@@ -13,6 +13,7 @@ import { sendTransaction } from "wagmi/actions";
 import { Address, encodeFunctionData } from "viem";
 import { ethers } from "ethers";
 import Size from '../abi/Size.json'
+import { PositionsContext } from "./PositionsContext";
 
 
 export interface Quote {
@@ -39,6 +40,7 @@ type Props = {
 
 export function SwapProvider({ children }: Props) {
   const { deployment } = useContext(ConfigContext)
+  const { updatePositions } = useContext(PositionsContext)
   const { borrowOffers, loanOffers } = useContext(LimitOrdersContext)
   const { tokens } = useContext(ConfigContext)
   const { price } = useContext(PriceContext)
@@ -104,6 +106,7 @@ export function SwapProvider({ children }: Props) {
         data
       })
       toast.success(`https://basescan.org/tx/${tx}`)
+      updatePositions()
     } catch (e: any) {
       toast.error(e.shortMessage)
     }
@@ -137,6 +140,7 @@ export function SwapProvider({ children }: Props) {
         data
       })
       toast.success(`https://basescan.org/tx/${tx}`)
+      updatePositions()
     } catch (e: any) {
       toast.error(e.shortMessage)
     }

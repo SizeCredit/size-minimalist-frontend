@@ -28,7 +28,7 @@ type Props = {
 
 export function UserProvider({ children }: Props) {
   const account = useAccount()
-  const { creditPositions, debtPositions } = useContext(PositionsContext)
+  const { creditPositions, debtPositions, updatePositions } = useContext(PositionsContext)
   const { deployment } = useContext(ConfigContext)
   const getUserView = useReadContract({
     abi: deployment.Size.abi,
@@ -58,6 +58,7 @@ export function UserProvider({ children }: Props) {
         data
       })
       toast.success(`https://basescan.org/tx/${tx}`)
+      updatePositions()
     } catch (e: any) {
       toast.error(e.shortMessage)
     }
