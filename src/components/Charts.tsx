@@ -66,7 +66,6 @@ const Charts = () => {
     return point;
   });
 
-  // Generate more distinct shades of blue and green
   const generateColors = (count: number, baseHue: number, saturationRange: number[], lightnessRange: number[]) => {
     return Array.from({ length: count }, (_, i) => {
       const saturation = saturationRange[0] + (i * (saturationRange[1] - saturationRange[0]) / (count - 1));
@@ -75,8 +74,8 @@ const Charts = () => {
     });
   };
 
-  const borrowColors = generateColors(borrowOffers.length, 0, [70, 100], [30, 60]);
-  const loanColors = generateColors(loanOffers.length, 180, [70, 100], [30, 60]);
+  const loanColors = generateColors(loanOffers.length, 0, [70, 100], [30, 60]);
+  const borrowColors = generateColors(borrowOffers.length, 180, [70, 100], [30, 60]);
 
   useEffect(() => {
     const el = document.getElementsByClassName('swap-container')[0]
