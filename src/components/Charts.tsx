@@ -14,11 +14,13 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     return (
       <div className="bg-white border border-gray-200 p-4 rounded shadow-md">
         <p className="label">{`Day: ${label}`}</p>
-        {payload.map((p: any) => (
-          <div>
-            <code key={p.dataKey} style={{ color: p.stroke, textDecoration: Number(p.value) === bestBorrowOffer || Number(p.value) === bestLoanOffer ? 'underline' : '' }}>{`${p.dataKey}: ${p.value}%`}</code>
-          </div>
-        ))}
+        {payload
+          .sort((a: any, b: any) => a.dataKey.startsWith('LO') === b.dataKey.startsWith('LO') ? Number(b.value) - Number(a.value) : b.dataKey.startsWith('LO') ? 1 : -1)
+          .map((p: any) => (
+            <div>
+              <code key={p.dataKey} style={{ color: p.stroke, textDecoration: Number(p.value) === bestBorrowOffer || Number(p.value) === bestLoanOffer ? 'underline' : '' }}>{`${p.dataKey}: ${p.value}%`}</code>
+            </div>
+          ))}
       </div>
     );
   }
@@ -74,7 +76,7 @@ const Charts = () => {
   };
 
   const borrowColors = generateColors(borrowOffers.length, 0, [70, 100], [30, 60]);
-  const loanColors = generateColors(loanOffers.length,  180, [70, 100], [30, 60]);
+  const loanColors = generateColors(loanOffers.length, 180, [70, 100], [30, 60]);
 
   useEffect(() => {
     const el = document.getElementsByClassName('swap-container')[0]

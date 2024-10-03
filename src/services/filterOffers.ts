@@ -7,7 +7,6 @@ function collateralRatio(
   amount: number): number {
   const collateral = Number(offer.user.collateralTokenBalance) / 10 ** tokens.CollateralToken.decimals
   const debt = (Number(offer.user.debtBalance) / 10 ** tokens.DebtToken.decimals) + amount
-  console.log(offer.user.account, collateral*price/debt)
   return collateral * price / debt
 }
 
