@@ -38,7 +38,7 @@ export function SwapProvider({ children }: Props) {
   const { price } = useContext(PriceContext)
 
   const sellCreditQuote = (amount: number, tenor: number): Quote => {
-    const offers = filterOffers(tokens, loanOffers, amount, true, tenor, price)
+    const offers = filterOffers(tokens, loanOffers, amount, true, price, tenor)
 
     const rates = offers.map(offer => ({
       user: offer.user.account as Address,
@@ -53,7 +53,7 @@ export function SwapProvider({ children }: Props) {
     return bestRate
   }
   const buyCreditQuote = (amount: number, tenor: number): Quote => {
-    const offers = filterOffers(tokens, borrowOffers, amount, false, tenor, price)
+    const offers = filterOffers(tokens, borrowOffers, amount, true, price, tenor)
     const rates = offers.map(offer => ({
       user: offer.user.account as Address,
       rate: getRate(offer.curveRelativeTime, tenor)

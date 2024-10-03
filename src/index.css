@@ -133,6 +133,8 @@ select {
   border: none;
   font-size: 20px;
   cursor: pointer;
+  color: white;
+  background-color: var(--primary-color);
 }
 .right {
   position: fixed;

@@ -32,7 +32,7 @@ const Swap = () => {
 
   useEffect(() => {
     if (progress === 100) {
-      handleBuyAmountChange('10', days)
+      handleBuyAmountChange(market.minimumCreditAmount.toString(), days)
     }
   }, [progress])
 

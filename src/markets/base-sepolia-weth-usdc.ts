@@ -17,6 +17,7 @@ export default {
     UnderlyingCollateralToken: { decimals: 18, symbol: 'WETH' },
     CollateralToken: { decimals: 18, symbol: 'szWETH' },
     DebtToken: { decimals: 6, symbol: 'szDebtUSDC' }
-  }
+  },
+  minimumCreditAmount: 10
 }
 

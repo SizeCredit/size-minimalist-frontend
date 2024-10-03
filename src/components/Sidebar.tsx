@@ -102,7 +102,7 @@ const Sidebar = () => {
           </div>
         ))}
       </div>
-      <div>
+      <div className='container-collapse'>
         <button className='button-collapse' onClick={() => setCollapsed(true)}>
           » Collapse
         </button>

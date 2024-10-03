@@ -16,6 +16,7 @@ interface ConfigContext {
   market: {
     deployment: Record<string, { address: Address, abi: Abi, block: number }>
     tokens: Record<Token, { decimals: number, symbol: string }>;
+    minimumCreditAmount: number;
   }
   marketNames: string[]
   marketName: string;

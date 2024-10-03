@@ -5,31 +5,40 @@ import { filterOffers } from "../services/filterOffers";
 import { ConfigContext } from "../contexts/ConfigContext";
 import { PriceContext } from "../contexts/PriceContext";
 import { getRate } from "../services/getRate";
+import { format } from "../services/format";
 
-// const CustomXAxisTick: React.FC<any> = ({ x, y, payload }) => {
-//   return (
-//     <g transform={`translate(${x},${y})`}>
-//       <text x={0} y={0} dy={16} textAnchor="middle" fill="#666" fontSize={12}>
-//         {payload.value}
-//       </text>
-//     </g>
-//   );
-// };
-
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    const bestBorrowOffer = Math.max(...payload.filter((p: any) => p.dataKey.includes('BO ')).map((p: any) => p.value))
+    const bestLoanOffer = Math.min(...payload.filter((p: any) => p.dataKey.includes('LO ')).map((p: any) => p.value))
+    return (
+      <div className="bg-white border border-gray-200 p-4 rounded shadow-md">
+        <p className="label">{`Day: ${label}`}</p>
+        {payload.map((p: any) => (
+          <div>
+            <code key={p.dataKey} style={{ color: p.stroke, textDecoration: Number(p.value) === bestBorrowOffer || Number(p.value) === bestLoanOffer ? 'underline' : '' }}>{`${p.dataKey}: ${p.value}%`}</code>
+          </div>
+        ))}
+      </div>
+    );
+  }
+  return null;
+}
 
 const Charts = () => {
-  const { borrowOffers: bos, loanOffers: los } = useContext(LimitOrdersContext)
+  const { borrowOffers: allBorrowOffers, loanOffers: allLoanOffers } = useContext(LimitOrdersContext)
   const { market } = useContext(ConfigContext)
   const { tokens } = market
   const { price } = useContext(PriceContext)
-  const [amount, setAmount] = useState(10)
+  const [amount, setAmount] = useState(market.minimumCreditAmount)
 
-  const borrowOffers = filterOffers(tokens, bos, amount, true, 0, price)
-  const loanOffers = filterOffers(tokens, los, amount, false, 0, price)
+  const borrowOffers = filterOffers(tokens, allBorrowOffers, amount, false, price)
+  const loanOffers = filterOffers(tokens, allLoanOffers, amount, true, price)
 
   // Combine all unique tenors
-  const days = [...new Set([...borrowOffers.flatMap(o => o.curveRelativeTime.tenors), ...loanOffers.flatMap(o => o.curveRelativeTime.tenors)])].sort((a, b) => a - b)
-    .map(e => e / 60 / 60 / 24)
+  // const days = [...new Set([...borrowOffers.flatMap(o => o.curveRelativeTime.tenors), ...loanOffers.flatMap(o => o.curveRelativeTime.tenors)])].sort((a, b) => a - b)
+  //   .map(e => e / 60 / 60 / 24)
+  const days = Array.from({ length: 365 }, (_, i) => i + 1)
 
   // Prepare data for the chart
   const data = days.map(day => {
@@ -37,19 +46,19 @@ const Charts = () => {
     borrowOffers.forEach((offer) => {
       const aprIndex = offer.curveRelativeTime.tenors.indexOf(day * 60 * 60 * 24);
       if (aprIndex !== -1) {
-        point[`B ${offer.user.account}`] = (offer.curveRelativeTime.aprs[aprIndex] * 100).toFixed(2); // Convert to percentage
+        point[`BO ${offer.user.account}`] = (offer.curveRelativeTime.aprs[aprIndex] * 100).toFixed(2); // Convert to percentage
       }
       else if (offer.curveRelativeTime.tenors[0] / 60 / 60 / 24 <= day && day < offer.curveRelativeTime.tenors[offer.curveRelativeTime.tenors.length - 1] / 60 / 60 / 24) {
-        point[`B ${offer.user.account}`] = (getRate(offer.curveRelativeTime, day * 60 * 60 * 24) * 100).toFixed(2)
+        point[`BO ${offer.user.account}`] = (getRate(offer.curveRelativeTime, day * 60 * 60 * 24) * 100).toFixed(2)
       }
     });
     loanOffers.forEach((offer) => {
       const aprIndex = offer.curveRelativeTime.tenors.indexOf(day * 60 * 60 * 24);
       if (aprIndex !== -1) {
-        point[`L ${offer.user.account}`] = (offer.curveRelativeTime.aprs[aprIndex] * 100).toFixed(2); // Convert to percentage
+        point[`LO ${offer.user.account}`] = (offer.curveRelativeTime.aprs[aprIndex] * 100).toFixed(2); // Convert to percentage
       }
       else if (offer.curveRelativeTime.tenors[0] / 60 / 60 / 24 <= day && day < offer.curveRelativeTime.tenors[offer.curveRelativeTime.tenors.length - 1] / 60 / 60 / 24) {
-        point[`L ${offer.user.account}`] = (getRate(offer.curveRelativeTime, day * 60 * 60 * 24) * 100).toFixed(2)
+        point[`LO ${offer.user.account}`] = (getRate(offer.curveRelativeTime, day * 60 * 60 * 24) * 100).toFixed(2)
       }
     });
     return point;
@@ -64,8 +73,8 @@ const Charts = () => {
     });
   };
 
-  const borrowColors = generateColors(borrowOffers.length, 220, [70, 100], [30, 60]); // Shades of blue
-  const loanColors = generateColors(loanOffers.length, 120, [70, 100], [30, 60]);  // Shades of green
+  const borrowColors = generateColors(borrowOffers.length, 0, [70, 100], [30, 60]);
+  const loanColors = generateColors(loanOffers.length,  180, [70, 100], [30, 60]);
 
   useEffect(() => {
     const el = document.getElementsByClassName('swap-container')[0]
@@ -80,10 +89,32 @@ const Charts = () => {
     }
   }, [])
 
+  const copyOrders = () => {
+    const orders = {
+      borrowOffers: allBorrowOffers.map(offer => ({
+        user: offer.user.account,
+        borrowATokenBalance: format(offer.user.borrowATokenBalance, tokens.BorrowAToken.decimals),
+        collateralTokenBalance: format(offer.user.collateralTokenBalance, tokens.CollateralToken.decimals),
+        debtBalance: format(offer.user.debtBalance, tokens.DebtToken.decimals),
+        maxDueDate: offer.maxDueDate,
+        curveRelativeTime: offer.curveRelativeTime,
+      })),
+      loanOffers: allLoanOffers.map(offer => ({
+        user: offer.user.account,
+        borrowATokenBalance: format(offer.user.borrowATokenBalance, tokens.BorrowAToken.decimals),
+        collateralTokenBalance: format(offer.user.collateralTokenBalance, tokens.CollateralToken.decimals),
+        debtBalance: format(offer.user.debtBalance, tokens.DebtToken.decimals),
+        maxDueDate: offer.maxDueDate,
+        curveRelativeTime: offer.curveRelativeTime,
+      })),
+    }
+    navigator.clipboard.writeText(JSON.stringify(orders, null, 2))
+  }
+
   return (
     <>
       <div className='chart-amount'>
-        <label>Amount</label>
+        <label>Amount ({(market.tokens.UnderlyingBorrowToken.symbol)})</label>
         <input type="text" value={amount} onChange={e => setAmount(Number(e.target.value))} />
       </div>
       <ResponsiveContainer width="100%" height={500}>
@@ -93,32 +124,40 @@ const Charts = () => {
             label={{ value: 'Maturity (days)', position: 'insideBottom', offset: -10 }}
             ticks={days}
             dataKey="day"
-            scale="log"
           />
           <YAxis label={{ value: 'APR (%)', angle: -90 }} />
-          <Tooltip />
+          <Tooltip content={<CustomTooltip />} />
           {borrowOffers.map((borrowOffer, index) => (
             <Line
               key={`borrow${index}`}
               type="linear"
-              dataKey={`B ${borrowOffer.user.account}`}
+              dataKey={`BO ${borrowOffer.user.account}`}
               stroke={borrowColors[index]}
-              name={`B ${borrowOffer.user.account}`}
+              name={`BO ${borrowOffer.user.account}`}
               connectNulls
+              strokeDasharray="5 5"
+              strokeWidth={2}
+              dot={false}
             />
           ))}
           {loanOffers.map((loanOffer, index) => (
             <Line
               key={`loan${index}`}
               type="linear"
-              dataKey={`L ${loanOffer.user.account}`}
+              dataKey={`LO ${loanOffer.user.account}`}
               stroke={loanColors[index]}
-              name={`L ${loanOffer.user.account}`}
+              name={`LO ${loanOffer.user.account}`}
               connectNulls
+              strokeWidth={2}
+              dot={false}
             />
           ))}
         </LineChart>
       </ResponsiveContainer>
+
+      <button className="button" onClick={copyOrders}>
+        Copy orders to clipboard
+      </button>
 
       <div className="disclaimers">
         <small>*Unofficial Size application</small>
