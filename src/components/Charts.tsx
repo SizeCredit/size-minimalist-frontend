@@ -93,6 +93,7 @@ const Charts = () => {
     const orders = {
       borrowOffers: allBorrowOffers.map(offer => ({
         user: offer.user.account,
+        openingLimitBorrowCR: Math.max(Number(offer.user.user.openingLimitBorrowCR) / 1e18, 1.5),
         borrowATokenBalance: format(offer.user.borrowATokenBalance, tokens.BorrowAToken.decimals),
         collateralTokenBalance: format(offer.user.collateralTokenBalance, tokens.CollateralToken.decimals),
         debtBalance: format(offer.user.debtBalance, tokens.DebtToken.decimals),
@@ -101,6 +102,7 @@ const Charts = () => {
       })),
       loanOffers: allLoanOffers.map(offer => ({
         user: offer.user.account,
+        openingLimitBorrowCR: Math.max(Number(offer.user.user.openingLimitBorrowCR) / 1e18, 1.5),
         borrowATokenBalance: format(offer.user.borrowATokenBalance, tokens.BorrowAToken.decimals),
         collateralTokenBalance: format(offer.user.collateralTokenBalance, tokens.CollateralToken.decimals),
         debtBalance: format(offer.user.debtBalance, tokens.DebtToken.decimals),
