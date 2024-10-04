@@ -33,6 +33,7 @@ const Charts = () => {
   const { tokens } = market
   const { price } = useContext(PriceContext)
   const [amount, setAmount] = useState(market.minimumCreditAmount)
+  const [minDays, setMinDays] = useState(1)
   const [maxDays, setMaxDays] = useState(365)
 
   const borrowOffers = filterOffers(tokens, allBorrowOffers, amount, false, price)
@@ -41,7 +42,7 @@ const Charts = () => {
   // Combine all unique tenors
   // const days = [...new Set([...borrowOffers.flatMap(o => o.curveRelativeTime.tenors), ...loanOffers.flatMap(o => o.curveRelativeTime.tenors)])].sort((a, b) => a - b)
   //   .map(e => e / 60 / 60 / 24)
-  const days = Array.from({ length: maxDays }, (_, i) => i + 1)
+  const days = Array.from({ length: (maxDays - minDays + 1) }, (_, i) => minDays + i + 1)
 
   // Prepare data for the chart
   const data = days.map(day => {
@@ -122,6 +123,8 @@ const Charts = () => {
         <input type="text" value={amount} onChange={e => setAmount(Number(e.target.value))} />
       </div>
       <div className='chart-days'>
+        <label>Min Days</label>
+        <input type="text" value={minDays} onChange={e => setMinDays(Number(e.target.value))} />
         <label>Max Days</label>
         <input type="text" value={maxDays} onChange={e => setMaxDays(Number(e.target.value))} />
       </div>
