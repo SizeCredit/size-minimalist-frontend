@@ -15,10 +15,10 @@ const CustomTooltip = ({ active, payload, label }: any) => {
       <div className="bg-white border border-gray-200 p-4 rounded shadow-md">
         <p className="label">{`Day: ${label}`}</p>
         {payload
-          .sort((a: any, b: any) => a.dataKey.startsWith('LO') === b.dataKey.startsWith('LO') ? Number(b.value) - Number(a.value) : b.dataKey.startsWith('LO') ? 1 : -1)
+          .sort((a: any, b: any) => Number(b.value) - Number(a.value))
           .map((p: any) => (
             <div>
-              <code key={p.dataKey} style={{ color: p.stroke, textDecoration: Number(p.value) === bestBorrowOffer || Number(p.value) === bestLoanOffer ? 'underline' : '' }}>{`${p.dataKey}: ${p.value}%`}</code>
+              <code key={p.dataKey} style={{ color: p.stroke, textDecoration: Number(p.value) === bestBorrowOffer && p.dataKey.startsWith('BO ') || Number(p.value) === bestLoanOffer && p.dataKey.startsWith('LO') ? 'underline' : '' }}>{`${p.dataKey}: ${p.value}%`}</code>
             </div>
           ))}
       </div>
@@ -39,9 +39,6 @@ const Charts = () => {
   const borrowOffers = filterOffers(tokens, allBorrowOffers, amount, false, price)
   const loanOffers = filterOffers(tokens, allLoanOffers, amount, true, price)
 
-  // Combine all unique tenors
-  // const days = [...new Set([...borrowOffers.flatMap(o => o.curveRelativeTime.tenors), ...loanOffers.flatMap(o => o.curveRelativeTime.tenors)])].sort((a, b) => a - b)
-  //   .map(e => e / 60 / 60 / 24)
   const days = Array.from({ length: (maxDays - minDays + 1) }, (_, i) => minDays + i + 1)
 
   // Prepare data for the chart
@@ -84,7 +81,7 @@ const Charts = () => {
     const style = (el as any).style
     const original = { ...style }
     style.width = '100%'
-    style.height = '100%'
+    style.height = 'calc(100% - 20px)'
     return () => {
       Object.keys(original).forEach(key => {
         style[key] = original[key]
