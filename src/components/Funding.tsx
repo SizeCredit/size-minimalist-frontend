@@ -19,7 +19,7 @@ const Funding = () => {
     tokenDeployment.UnderlyingCollateralToken,
     tokenDeployment.UnderlyingBorrowToken
   ]
-
+  
   const { deposit, withdraw } = useContext(SizeContext)
   const [token, setToken] = useState<Record<string, any>>(
     depositTokens[0]
@@ -27,8 +27,6 @@ const Funding = () => {
   const [amount, setAmount] = useState('0');
 
   const onClick = () => action === actions[0] ? deposit(token!.address, parseUnits(amount, token!.decimals)) : withdraw(token!.address, parseUnits(amount, token!.decimals))
-
-  console.log(token)
 
   return (
     <>

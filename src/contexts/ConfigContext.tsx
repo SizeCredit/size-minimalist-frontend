@@ -1,6 +1,7 @@
 import { createContext, Dispatch, ReactNode, useState } from 'react';
 import { Abi } from 'viem';
 import baseMainnetWethUsdc from '../markets/base-mainnet-weth-usdc'
+import baseMainnetCbbtcUsdc from '../markets/base-mainnet-cbbtc-usdc'
 import baseSepoliaWethUsdc from '../markets/base-sepolia-weth-usdc'
 
 export type Token =
@@ -38,6 +39,7 @@ export function ConfigProvider({ children }: Props) {
   
   const markets = {
     'base-mainnet-weth-usdc': baseMainnetWethUsdc,
+    'base-mainnet-cbbtc-usdc': baseMainnetCbbtcUsdc,
     'base-sepolia-weth-usdc': baseSepoliaWethUsdc,
   }
 

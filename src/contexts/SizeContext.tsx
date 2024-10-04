@@ -81,6 +81,7 @@ export function SizeProvider({ children }: Props) {
           address: token as Address
         })
         toast.success(<a target="_blank" href={`https://basescan.org/tx/${approve}`}>{approve}</a>)
+        await new Promise(resolve => setTimeout(resolve, 5000))
       }
       const tx = await sendTransaction(config, {
         to: deployment.Size.address,

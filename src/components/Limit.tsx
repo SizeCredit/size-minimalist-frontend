@@ -37,7 +37,7 @@ const Limit = () => {
   const offer = action === actions[0] ? loanOffer : borrowOffer
 
   const [days, setDays] = useState(offer.curveRelativeTime.tenors.map(e => Number(e) / (60 * 60 * 24)))
-  const [aprs, setAprs] = useState(offer.curveRelativeTime.aprs.map(e => Number(e) / 1e18))
+  const [aprs, setAprs] = useState(offer.curveRelativeTime.aprs.map(e => 100 * Number(e) / 1e18))
 
   const remove = (index: number) => {
     setDays(days.filter((_, i) => i !== index))
@@ -53,15 +53,15 @@ const Limit = () => {
     setAction(action)
     const offer = action === actions[0] ? loanOffer : borrowOffer
     setDays(offer.curveRelativeTime.tenors.map(e => Number(e) / (60 * 60 * 24)))
-    setAprs(offer.curveRelativeTime.aprs.map(e => Number(e) / 1e18))
+    setAprs(offer.curveRelativeTime.aprs.map(e => 100 * Number(e) / 1e18))
   }
 
   const onClick = () => {
     if (action === actions[0]) {
-      buyCreditLimit(days.map(e => BigInt(e * 60 * 60 * 24)), aprs.map(e => BigInt(e * 1e18)))
+      buyCreditLimit(days.map(e => BigInt(e * 60 * 60 * 24)), aprs.map(e => BigInt(e * 1e18 / 100)))
     }
     else {
-      sellCreditLimit(days.map(e => BigInt(e * 60 * 60 * 24)), aprs.map(e => BigInt(e * 1e18)))
+      sellCreditLimit(days.map(e => BigInt(e * 60 * 60 * 24)), aprs.map(e => BigInt(e * 1e18 / 100)))
     }
   }
 
@@ -90,7 +90,7 @@ const Limit = () => {
                     <input type="text" value={aprs[index]} onChange={e =>
                       setAprs(aprs.map((apr, i) => i === index ? (e.target.value) : apr) as number[])
                     } />
-                    <label>APR</label>
+                    <label>% APR</label>
                   </div>
                   <button className='button' onClick={() => remove(index)}>✕</button>
                 </div>

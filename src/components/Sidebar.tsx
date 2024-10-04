@@ -64,10 +64,10 @@ const Sidebar = () => {
       </div>
       <div className='select-market'>
         <label>Market</label>
-        <select onChange={(e) => setMarketName(e.target.value)}>
+        <select value={marketName} onChange={(e) => setMarketName(e.target.value)}>
           {
             marketNames.map((m) => (
-              <option defaultValue={marketName} key={m} value={m}>{m}</option>
+              <option key={m} value={m}>{m}</option>
             ))
           }
         </select>

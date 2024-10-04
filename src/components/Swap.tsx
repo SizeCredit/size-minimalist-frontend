@@ -20,8 +20,8 @@ const Swap = () => {
   const [quote, setQuote] = useState<Quote>(
     {
       user: '0x',
-      rate: 0,
-    }
+      rate: undefined,
+    } as unknown as Quote
   );
 
   const tenor = days * 24 * 60 * 60
@@ -109,7 +109,7 @@ const Swap = () => {
           ↓
         </span>
         {
-          quote.rate !== 0 && quote.rate !== undefined ? <small>{(quote.rate * 100).toFixed(2)}% APR</small> : null
+          quote.rate !== undefined ? <small>{(quote.rate * 100).toFixed(2)}% APR</small> : null
         }
       </button>
 
