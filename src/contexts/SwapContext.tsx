@@ -53,7 +53,7 @@ export function SwapProvider({ children }: Props) {
     return bestRate
   }
   const buyCreditQuote = (amount: number, tenor: number): Quote => {
-    const offers = filterOffers(tokens, borrowOffers, amount, true, price, tenor)
+    const offers = filterOffers(tokens, borrowOffers, amount, false, price, tenor)
     const rates = offers.map(offer => ({
       user: offer.user.account as Address,
       rate: getRate(offer.curveRelativeTime, tenor)

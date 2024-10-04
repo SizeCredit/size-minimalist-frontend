@@ -71,22 +71,12 @@ const Swap = () => {
 
   const swapAction = () => {
     const newAction = action === actions[0] ? actions[1] : actions[0];
-    const newSellAmount = buyAmount;
-    const newBuyAmount = sellAmount;
-    setAction(
-      newAction
-    );
-    setSellAmount(
-      newSellAmount
-    );
-    setBuyAmount(
-      newBuyAmount
-    );
+    setAction(newAction);
     if (newAction === actions[0]) {
-      handleBuyAmountChange(newBuyAmount, days)
+      handleBuyAmountChange(buyAmount, days)
     }
     else {
-      handleSellAmountChange(newSellAmount, days)
+      handleSellAmountChange(sellAmount, days)
     }
   };
 

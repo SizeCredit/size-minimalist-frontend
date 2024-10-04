@@ -91,7 +91,7 @@ const Sidebar = () => {
         {creditPositions.filter(e => e.credit > 0).map((creditPosition, index) => (
           <div key={index} className="position-item">
             <div className="position-details">
-              <div className="position-name">Credit Position #{smallId(creditPosition.creditPositionId)}</div>
+              <div className="position-name" onClick={() => navigator.clipboard.writeText(creditPosition.creditPositionId)}>Credit Position #{smallId(creditPosition.creditPositionId)}</div>
               <div className="position-amount positive">{format(creditPosition.credit, tokens.BorrowAToken.decimals)} {tokens.UnderlyingBorrowToken.symbol}</div>
               <div className="">Due {formatDistance(creditPosition.debtPosition.dueDate, new Date())}</div>
             </div>
@@ -105,7 +105,7 @@ const Sidebar = () => {
           return (
           <div key={index} className="position-item">
             <div className="position-details">
-              <div className="position-name">Debt Position #{debtPosition.debtPositionId}</div>
+              <div className="position-name" onClick={() => navigator.clipboard.writeText(debtPosition.debtPositionId)}>Debt Position #{debtPosition.debtPositionId}</div>
               <div className="position-amount negative">{format(debtPosition.futureValue, tokens.BorrowAToken.decimals)} {tokens.UnderlyingBorrowToken.symbol}</div>
               <div className="">Due {formatDistance(debtPosition.dueDate, new Date())}</div>
               <button className="repay" onClick={() => repay(debtPosition.debtPositionId)}>Repay</button>
