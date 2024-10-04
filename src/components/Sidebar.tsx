@@ -10,6 +10,8 @@ import { formatDistance } from 'date-fns/formatDistance'
 import { SidebarContext } from '../contexts/SidebarContext';
 import { isMobile } from '../services/isMobile';
 import { SizeContext } from '../contexts/SizeContext';
+import { compensateCandidates } from '../services/compensateCandidates';
+import { PositionsContext } from '../contexts/PositionsContext';
 
 const Sidebar = () => {
   const account = useAccount()
@@ -17,8 +19,9 @@ const Sidebar = () => {
   const { disconnect } = useDisconnect()
   const { market, marketNames, marketName, setMarketName } = useContext(ConfigContext)
   const { tokens } = market
+  const { creditPositions: allCreditPositions } = useContext(PositionsContext)
   const { user, creditPositions, debtPositions } = useContext(UserContext)
-  const { repay } = useContext(SizeContext)
+  const { repay, compensate } = useContext(SizeContext)
   const { collapsed, setCollapsed } = useContext(SidebarContext)
 
   const connector = isMobile() ? connectors[1] : connectors[0]
@@ -29,6 +32,11 @@ const Sidebar = () => {
 
   return (
     <div className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
+      <div className='container-collapse'>
+        <button className='button-collapse' onClick={() => setCollapsed(true)}>
+          » Collapse
+        </button>
+      </div>
       <div className="wallet-info">
         <div className="wallet-address">
           <button
@@ -91,21 +99,23 @@ const Sidebar = () => {
         ))}
       </div>
       <div className="position-list">
-        {debtPositions.filter(e => e.futureValue > 0).map((debtPosition, index) => (
+        {debtPositions.filter(e => e.futureValue > 0).map((debtPosition, index) => { 
+          const candidates = compensateCandidates(debtPosition, allCreditPositions, creditPositions)
+          const canCompensate = candidates.creditPositionsToCompensate.length > 0 && candidates.creditPositionsWithDebtToRepay.length > 0
+          return (
           <div key={index} className="position-item">
             <div className="position-details">
               <div className="position-name">Debt Position #{debtPosition.debtPositionId}</div>
               <div className="position-amount negative">{format(debtPosition.futureValue, tokens.BorrowAToken.decimals)} {tokens.UnderlyingBorrowToken.symbol}</div>
               <div className="">Due {formatDistance(debtPosition.dueDate, new Date())}</div>
               <button className="repay" onClick={() => repay(debtPosition.debtPositionId)}>Repay</button>
+              {
+                canCompensate ? (<button className="repay compensate" onClick={() => compensate(candidates.creditPositionsWithDebtToRepay[0].creditPositionId, candidates.creditPositionsToCompensate[0].creditPositionId)}><span>Compensate</span> <small>#{smallId(candidates.creditPositionsToCompensate[0].creditPositionId)}</small></button>) : null
+              }
+              
             </div>
           </div>
-        ))}
-      </div>
-      <div className='container-collapse'>
-        <button className='button-collapse' onClick={() => setCollapsed(true)}>
-          » Collapse
-        </button>
+        )})}
       </div>
     </div>
   );
