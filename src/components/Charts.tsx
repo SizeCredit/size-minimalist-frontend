@@ -35,11 +35,14 @@ const Charts = () => {
   const [amount, setAmount] = useState(market.minimumCreditAmount)
   const [minDays, setMinDays] = useState(1)
   const [maxDays, setMaxDays] = useState(365)
+  const [userFilter, setUserFilter] = useState('')
 
   const borrowOffers = filterOffers(tokens, allBorrowOffers, amount, false, price)
+    .filter(offer => userFilter ? userFilter.split(',').some(u => offer.user.account.toString().includes(u)) : true)
   const loanOffers = filterOffers(tokens, allLoanOffers, amount, true, price)
+    .filter(offer => userFilter ? userFilter.split(',').some(u => offer.user.account.toString().includes(u)) : true)
 
-  const days = Array.from({ length: (maxDays - minDays + 1) }, (_, i) => minDays + i + 1)
+  const days = Array.from({ length: (maxDays - minDays + 1) }, (_, i) => minDays + i)
 
   // Prepare data for the chart
   const data = days.map(day => {
@@ -67,8 +70,8 @@ const Charts = () => {
 
   const generateColors = (count: number, baseHue: number, saturationRange: number[], lightnessRange: number[]) => {
     return Array.from({ length: count }, (_, i) => {
-      const saturation = saturationRange[0] + (i * (saturationRange[1] - saturationRange[0]) / (count - 1));
-      const lightness = lightnessRange[0] + (i * (lightnessRange[1] - lightnessRange[0]) / (count - 1));
+      const saturation = saturationRange[0] + (i * (saturationRange[1] - saturationRange[0]) / (count));
+      const lightness = lightnessRange[0] + (i * (lightnessRange[1] - lightnessRange[0]) / (count));
       return `hsl(${baseHue}, ${saturation}%, ${lightness}%)`;
     });
   };
@@ -125,7 +128,12 @@ const Charts = () => {
         <label>Max Days</label>
         <input type="text" value={maxDays} onChange={e => setMaxDays(Number(e.target.value))} />
       </div>
-      <ResponsiveContainer width="100%" height={500}>
+      <div className='chart-user'>
+        <label>User</label>
+        <input type="text" value={userFilter} className="chart-user-input" onChange={e => setUserFilter(e.target.value)} />
+      </div>
+      <div className='mb-20'/>
+      <ResponsiveContainer width="100%" height={600}>
         <LineChart data={data} margin={{ top: 20, right: 20, left: 20, bottom: 20 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis

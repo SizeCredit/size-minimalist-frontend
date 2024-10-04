@@ -328,6 +328,9 @@ select {
   margin-bottom: 10px;
 }
 
-.chart-amount {
+.mb-20 {
   margin-bottom: 20px;
+}
+.chart-user-input {
+  width: calc(100% - 60px);
 }
