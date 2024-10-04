@@ -12,10 +12,12 @@ import { isMobile } from '../services/isMobile';
 import { SizeContext } from '../contexts/SizeContext';
 import { compensateCandidates } from '../services/compensateCandidates';
 import { PositionsContext } from '../contexts/PositionsContext';
+import { PriceContext } from '../contexts/PriceContext';
 
 const Sidebar = () => {
   const account = useAccount()
   const { connectors, connect, error } = useConnect()
+  const { price } = useContext(PriceContext)
   const { disconnect } = useDisconnect()
   const { market, marketNames, marketName, setMarketName } = useContext(ConfigContext)
   const { tokens } = market
@@ -74,13 +76,21 @@ const Sidebar = () => {
       </div>
       <div className="tabs">
         <div>
+          Price
+        </div>
+      </div>
+      <div className="price-info">
+        <h5>{format(price)} {tokens.UnderlyingCollateralToken.symbol}/{tokens.UnderlyingBorrowToken.symbol}</h5>
+      </div>
+      <div className="tabs">
+        <div>
           Balances
         </div>
       </div>
       <div className="balance-info">
-        <h2>{format(user?.borrowATokenBalance, tokens.BorrowAToken.decimals)} {tokens.BorrowAToken.symbol}</h2>
-        <h2>{format(user?.collateralTokenBalance, tokens.CollateralToken.decimals)} {tokens.CollateralToken.symbol}</h2>
-        <h2>{format(user?.debtBalance, tokens.DebtToken.decimals)} {tokens.DebtToken.symbol}</h2>
+        <h5>{format(user?.borrowATokenBalance, tokens.BorrowAToken.decimals)} {tokens.BorrowAToken.symbol}</h5>
+        <h5>{format(user?.collateralTokenBalance, tokens.CollateralToken.decimals)} {tokens.CollateralToken.symbol}</h5>
+        <h5>{format(user?.debtBalance, tokens.DebtToken.decimals)} {tokens.DebtToken.symbol}</h5>
       </div>
       <div className="tabs">
         <div>
@@ -99,23 +109,24 @@ const Sidebar = () => {
         ))}
       </div>
       <div className="position-list">
-        {debtPositions.filter(e => e.futureValue > 0).map((debtPosition, index) => { 
+        {debtPositions.filter(e => e.futureValue > 0).map((debtPosition, index) => {
           const candidates = compensateCandidates(debtPosition, allCreditPositions, creditPositions)
           const canCompensate = candidates.creditPositionsToCompensate.length > 0 && candidates.creditPositionsWithDebtToRepay.length > 0
           return (
-          <div key={index} className="position-item">
-            <div className="position-details">
-              <div className="position-name" onClick={() => navigator.clipboard.writeText(debtPosition.debtPositionId)}>Debt Position #{debtPosition.debtPositionId}</div>
-              <div className="position-amount negative">{format(debtPosition.futureValue, tokens.BorrowAToken.decimals)} {tokens.UnderlyingBorrowToken.symbol}</div>
-              <div className="">Due {formatDistance(debtPosition.dueDate, new Date())}</div>
-              <button className="repay" onClick={() => repay(debtPosition.debtPositionId)}>Repay</button>
-              {
-                canCompensate ? (<button className="repay compensate" onClick={() => compensate(candidates.creditPositionsWithDebtToRepay[0].creditPositionId, candidates.creditPositionsToCompensate[0].creditPositionId)}><span>Compensate</span> <small>#{smallId(candidates.creditPositionsToCompensate[0].creditPositionId)}</small></button>) : null
-              }
-              
+            <div key={index} className="position-item">
+              <div className="position-details">
+                <div className="position-name" onClick={() => navigator.clipboard.writeText(debtPosition.debtPositionId)}>Debt Position #{debtPosition.debtPositionId}</div>
+                <div className="position-amount negative">{format(debtPosition.futureValue, tokens.BorrowAToken.decimals)} {tokens.UnderlyingBorrowToken.symbol}</div>
+                <div className="">Due {formatDistance(debtPosition.dueDate, new Date())}</div>
+                <button className="repay" onClick={() => repay(debtPosition.debtPositionId)}>Repay</button>
+                {
+                  canCompensate ? (<button className="repay compensate" onClick={() => compensate(candidates.creditPositionsWithDebtToRepay[0].creditPositionId, candidates.creditPositionsToCompensate[0].creditPositionId)}><span>Compensate</span> <small>#{smallId(candidates.creditPositionsToCompensate[0].creditPositionId)}</small></button>) : null
+                }
+
+              </div>
             </div>
-          </div>
-        )})}
+          )
+        })}
       </div>
     </div>
   );
