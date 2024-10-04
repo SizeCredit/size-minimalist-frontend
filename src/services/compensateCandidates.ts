@@ -6,7 +6,7 @@ export function compensateCandidates(debtPosition: DebtPosition, creditPositions
 } {
   const creditPositionsWithDebtToRepay = creditPositions.filter(creditPosition => creditPosition.debtPosition.debtPositionId === debtPosition.debtPositionId)
   const creditPositionsToCompensate = myCreditPositions.filter(creditPosition => debtPosition.dueDate.getTime() > creditPosition.debtPosition.dueDate.getTime())
-  .filter(creditPosition => creditPosition.debtPosition.futureValue > 0 && creditPosition.debtPosition.dueDate.getTime() > new Date().getTime())
+  .filter(creditPosition => creditPosition.debtPosition.futureValue > 0 && creditPosition.debtPosition.dueDate.getTime() > new Date().getTime()).sort((a, b) => Number(b.credit - a.credit))
   return {
     creditPositionsWithDebtToRepay,
     creditPositionsToCompensate
