@@ -3,12 +3,12 @@ import {
   formatUnits
 } from "ethers";
 
-export function format(value: string | BigNumberish | undefined, decimals = 2): string {
+export function format(value: string | BigNumberish | undefined, decimals = 2, truncate = 2): string {
   if (typeof value === 'string') {
     return value.substring(0, 6) + '...' + value.substring(value.length - 4)
   }
   else if (typeof value === 'bigint') {
-    return truncateDecimal(formatUnits(value.toString(), decimals), decimals)
+    return truncateDecimal(formatUnits(value.toString(), decimals), truncate)
   }
   else if (typeof value == 'number') {
     return value.toFixed(decimals)

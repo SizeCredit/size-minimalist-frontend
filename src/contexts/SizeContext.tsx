@@ -16,7 +16,7 @@ interface SizeContext {
   withdraw: (token: string, amount: bigint) => Promise<void>
   buyCreditLimit: (tenors: bigint[], aprs: bigint[]) => Promise<void>
   sellCreditLimit: (tenors: bigint[], aprs: bigint[]) => Promise<void>
-  sellCreditMarket: (quote: Quote, amount: bigint, tenor: number) => Promise<void>
+  sellCreditMarket: (quote: Quote, amount: bigint, tenor: number, creditPositionId?: bigint) => Promise<void>
   buyCreditMarket: (quote: Quote, amount: bigint, tenor: number) => Promise<void>
   compensate: (creditPositionWithDebtToRepayId: string, creditPositionToCompensateId: string) => Promise<void>
 }
@@ -183,12 +183,12 @@ export function SizeProvider({ children }: Props) {
     }
   }
 
-  const sellCreditMarket = async (quote: Quote, amount: bigint, tenor: number): Promise<void> => {
+  const sellCreditMarket = async (quote: Quote, amount: bigint, tenor: number, creditPositionId?: bigint): Promise<void> => {
     const { user: lender, rate } = quote
     const deadline = Math.floor(Date.now() / 1000) + 60 * 60
     const maxAPR = Math.floor(rate * 1.05 * 1e18)
     const exactAmountIn = true
-    const creditPositionId = ethers.MaxUint256
+    creditPositionId = creditPositionId || ethers.MaxUint256
     const arg = {
       lender,
       creditPositionId,
