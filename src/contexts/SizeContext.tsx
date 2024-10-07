@@ -5,7 +5,7 @@ import { config } from '../wagmi'
 import { PositionsContext } from './PositionsContext';
 import { Address, encodeFunctionData, erc20Abi } from 'viem';
 import Size from '../abi/Size.json'
-import { sendTransaction, writeContract } from 'wagmi/actions';
+import { readContract, sendTransaction, writeContract } from 'wagmi/actions';
 import { toast } from 'react-toastify';
 import { Quote } from './SwapContext';
 import { ethers } from 'ethers';
@@ -74,14 +74,22 @@ export function SizeProvider({ children }: Props) {
     console.log(data)
     try {
       if (token !== deployment.WETH.address) {
-        const approve = await writeContract(config, {
+        const allowance = await readContract(config, {
           abi: erc20Abi,
-          functionName: 'approve',
-          args: [deployment.Size.address, amount],
+          functionName: 'allowance',
+          args: [account.address!, deployment.Size.address],
           address: token as Address
         })
-        toast.success(<a target="_blank" href={`https://basescan.org/tx/${approve}`}>{approve}</a>)
-        await new Promise(resolve => setTimeout(resolve, 5000))
+        if (allowance < amount) {
+          const approve = await writeContract(config, {
+            abi: erc20Abi,
+            functionName: 'approve',
+            args: [deployment.Size.address, amount],
+            address: token as Address
+          })
+          toast.success(<a target="_blank" href={`https://basescan.org/tx/${approve}`}>{approve}</a>)
+          await new Promise(resolve => setTimeout(resolve, 7000))
+        }
       }
       const tx = await sendTransaction(config, {
         to: deployment.Size.address,
