@@ -5,7 +5,6 @@ import { LimitOrdersContext } from '../contexts/LimitOrdersContext';
 import { parseUnits } from 'ethers';
 import { ConfigContext } from '../contexts/ConfigContext';
 import { SizeContext } from '../contexts/SizeContext';
-import { set } from 'date-fns';
 
 const actions = ['Buy', 'Sell'];
 
