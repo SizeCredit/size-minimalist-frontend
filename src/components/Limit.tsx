@@ -7,25 +7,16 @@ const actions = [
   'SellCreditLimit'
 ]
 
-const DEFAULT_DAYS = [
-  1,
-  7,
-  30,
-  60,
-  150,
-  365
-]
-
 const Limit = () => {
   const {user} = useContext(UserContext)
   const { buyCreditLimit, sellCreditLimit } = useContext(SizeContext)
 
   const defaultOffer = {
-    maxDueDate: Math.floor((new Date().getTime() + 1000 * 60 * 60 * 24 * 365) / 1000),
+    maxDueDate: 0,
     curveRelativeTime: {
-      tenors: DEFAULT_DAYS.map(e => e * 60 * 60 * 24),
-      aprs: DEFAULT_DAYS.map(() => 0),
-      marketRateMultipliers: DEFAULT_DAYS.map(() => 0)
+      tenors: [],
+      aprs: [],
+      marketRateMultipliers: []
     }
   }
 
