@@ -27,7 +27,7 @@ const Limit = () => {
 
   const offer = action === actions[0] ? loanOffer : borrowOffer
 
-  const [days, setDays] = useState(offer.curveRelativeTime.tenors.map(e => Number(e) / (60 * 60 * 24)))
+  const [days, setDays] = useState(offer.curveRelativeTime.tenors.map(e => (Number(e) / (60 * 60 * 24)).toString()))
   const [aprs, setAprs] = useState(offer.curveRelativeTime.aprs.map(e => 100 * Number(e) / 1e18))
 
   const remove = (index: number) => {
@@ -36,23 +36,23 @@ const Limit = () => {
   }
 
   const add = () => {
-    setDays([...days, 0])
+    setDays([...days, '0'])
     setAprs([...aprs, 0])
   }
 
   const onChangeAction = (action: string) => {
     setAction(action)
     const offer = action === actions[0] ? loanOffer : borrowOffer
-    setDays(offer.curveRelativeTime.tenors.map(e => Number(e) / (60 * 60 * 24)))
+    setDays(offer.curveRelativeTime.tenors.map(e => (Number(e) / (60 * 60 * 24)).toString()))
     setAprs(offer.curveRelativeTime.aprs.map(e => 100 * Number(e) / 1e18))
   }
 
   const onClick = () => {
     if (action === actions[0]) {
-      buyCreditLimit(days.map(e => BigInt(e * 60 * 60 * 24)), aprs.map(e => BigInt(e * 1e18 / 100)))
+      buyCreditLimit(days.map(e => BigInt(Number(e) * 60 * 60 * 24)), aprs.map(e => BigInt(e * 1e18 / 100)))
     }
     else {
-      sellCreditLimit(days.map(e => BigInt(e * 60 * 60 * 24)), aprs.map(e => BigInt(e * 1e18 / 100)))
+      sellCreditLimit(days.map(e => BigInt(Number(e) * 60 * 60 * 24)), aprs.map(e => BigInt(e * 1e18 / 100)))
     }
   }
 
@@ -73,7 +73,7 @@ const Limit = () => {
                 <div key={index} className='limit-row'>
                   <div className='limit-days'>
                     <input type="text" value={days[index]} onChange={e =>
-                      setDays(days.map((day, i) => i === index ? (e.target.value) : day) as number[])
+                      setDays(days.map((day, i) => i === index ? (e.target.value) : day) as string[])
                     } />
                     <label>days</label>
                   </div>

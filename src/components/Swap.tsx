@@ -16,7 +16,7 @@ const Swap = () => {
   const [buyAmount, setBuyAmount] = useState('');
   const [sellAmount, setSellAmount] = useState('');
   const [action, setAction] = useState(actions[0]);
-  const [days, setDays] = useState(30);
+  const [days, setDays] = useState('30');
   const [quote, setQuote] = useState<Quote>(
     {
       user: '0x',
@@ -24,7 +24,7 @@ const Swap = () => {
     } as unknown as Quote
   );
 
-  const tenor = days * 24 * 60 * 60
+  const tenor = Number(days) * 24 * 60 * 60
 
   const { sellCreditQuote, buyCreditQuote } = useContext(SwapContext)
   const { sellCreditMarket, buyCreditMarket } = useContext(SizeContext)
@@ -32,13 +32,18 @@ const Swap = () => {
 
   useEffect(() => {
     if (progress === 100) {
-      handleBuyCredit(market.minimumCreditAmount.toString(), days)
+      handleBuyCredit(market.minimumCreditAmount.toString())
     }
   }, [progress])
 
-  const handleSellCredit = async (value: string, days: number, reverse = false) => {
+  useEffect(() => {
+    if (action === actions[0]) handleBuyCredit(buyAmount)
+    else handleSellCredit(sellAmount)
+  }, [days])
+
+  const handleSellCredit = async (value: string, reverse = false) => {
     if (reverse) {
-      const newSellAmount = format(Number(value) / (1 + quote.rate * days / 365), DECIMALS)
+      const newSellAmount = format(Number(value) / (1 + quote.rate * Number(days) / 365), DECIMALS)
       setSellAmount(newSellAmount);
       setBuyAmount(value);
     }
@@ -46,15 +51,15 @@ const Swap = () => {
       const quote = sellCreditQuote(parseFloat(value), tenor)
       setQuote(quote)
       setSellAmount(value);
-      const newBuyAmount = format(Number(value) * (1 + quote.rate * days / 365), DECIMALS)
+      const newBuyAmount = format(Number(value) * (1 + quote.rate * Number(days) / 365), DECIMALS)
       setBuyAmount(newBuyAmount);
     }
 
   };
 
-  const handleBuyCredit = async (value: string, days: number, reverse = false) => {
+  const handleBuyCredit = async (value: string, reverse = false) => {
     if (reverse) {
-      const newBuyAmount = format(Number(value) * (1 + quote.rate * days / 365), DECIMALS)
+      const newBuyAmount = format(Number(value) * (1 + quote.rate * Number(days) / 365), DECIMALS)
       setSellAmount(value);
       setBuyAmount(newBuyAmount);
     }
@@ -62,15 +67,13 @@ const Swap = () => {
       const quote = buyCreditQuote(parseFloat(value), tenor)
       setQuote(quote)
       setBuyAmount(value);
-      const newSellAmount = format(Number(value) / (1 + quote.rate * days / 365), DECIMALS)
+      const newSellAmount = format(Number(value) / (1 + quote.rate * Number(days) / 365), DECIMALS)
       setSellAmount(newSellAmount);
     }
   };
 
   const handleDaysChange = async (value: string) => {
-    setDays(Number(value));
-    if (action === actions[0]) handleBuyCredit(buyAmount, Number(value))
-    else handleSellCredit(sellAmount, Number(value))
+    setDays(value)
   }
 
   const swap = () => action === actions[0] ? buyCreditMarket(
@@ -88,10 +91,10 @@ const Swap = () => {
     const newAction = action === actions[0] ? actions[1] : actions[0];
     setAction(newAction);
     if (newAction === actions[0]) {
-      handleBuyCredit(buyAmount, days)
+      handleBuyCredit(buyAmount)
     }
     else {
-      handleSellCredit(sellAmount, days)
+      handleSellCredit(sellAmount)
     }
   };
 
@@ -112,7 +115,7 @@ const Swap = () => {
           <input
             type="number"
             value={action === actions[0] ? buyAmount : sellAmount}
-            onChange={e => action === actions[0] ? handleBuyCredit(e.target.value, days) : handleSellCredit(e.target.value, days)}
+            onChange={e => action === actions[0] ? handleBuyCredit(e.target.value) : handleSellCredit(e.target.value)}
             placeholder="0"
           />
           Credit
@@ -135,7 +138,7 @@ const Swap = () => {
           <input
             type="number"
             value={action === actions[0] ? sellAmount : buyAmount}
-            onChange={e => action === actions[0] ? handleBuyCredit(e.target.value, days, true) : handleSellCredit(e.target.value, days, true)}
+            onChange={e => action === actions[0] ? handleBuyCredit(e.target.value, true) : handleSellCredit(e.target.value, true)}
             placeholder="0"
           />
           Cash
