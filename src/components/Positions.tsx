@@ -27,9 +27,9 @@ const Positions = () => {
       </div>
 
       <div>
-        <code>
+        <pre>
           {position ? JSON.stringify(toObject(position), null, 2) : null}
-        </code>
+        </pre>
       </div>
 
       <div className="disclaimers">
