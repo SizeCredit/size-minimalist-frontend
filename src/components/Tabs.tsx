@@ -3,12 +3,14 @@ import Swap from './Swap';
 import Funding from './Funding';
 import Limit from './Limit';
 import Charts from './Charts';
+import Positions from './Positions';
 
 const tabs = [
   'Swap',
   'Limit',
   'Funding',
-  'Charts'
+  'Charts',
+  'Positions'
 ]
 
 const Tabs = () => {
@@ -39,6 +41,9 @@ const Tabs = () => {
         }
         {
           activeTab === 'Charts' ? <Charts /> : null
+        }
+        {
+          activeTab === 'Positions' ? <Positions /> : null
         }
       </div>
     </div>
