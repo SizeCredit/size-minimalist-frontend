@@ -1,8 +1,10 @@
 import { useContext, useState } from 'react';
 import { PositionsContext } from '../contexts/PositionsContext';
+import { SizeContext } from '../contexts/SizeContext';
 
 const Positions = () => {
   const { debtPositions, creditPositions } = useContext(PositionsContext)
+  const { claim } = useContext(SizeContext)
   const [positionId, setPositionId] = useState('');
 
   const position = debtPositions.find(debtPosition => debtPosition.debtPositionId === positionId) || creditPositions.find(creditPosition => creditPosition.creditPositionId === positionId)
@@ -32,9 +34,16 @@ const Positions = () => {
         </pre>
       </div>
 
+      <div>
+        <button className='action-button' onClick={() => claim(positionId)}>
+          Claim
+        </button>
+      </div>
+
       <div className="disclaimers">
         <small>*Unofficial Size application</small>
       </div>
+
     </>
   );
 };

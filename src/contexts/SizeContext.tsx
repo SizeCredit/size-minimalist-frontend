@@ -19,6 +19,7 @@ interface SizeContext {
   sellCreditMarket: (quote: Quote, amount: bigint, tenor: number, creditPositionId?: bigint) => Promise<void>
   buyCreditMarket: (quote: Quote, amount: bigint, tenor: number) => Promise<void>
   compensate: (creditPositionWithDebtToRepayId: string, creditPositionToCompensateId: string) => Promise<void>
+  claim: (creditPositionId: string) => Promise<void>
 }
 
 export const SizeContext = createContext<SizeContext>({} as SizeContext);
@@ -276,6 +277,29 @@ export function SizeProvider({ children }: Props) {
     }
   }
 
+  const claim = async (creditPositionId: string) => {
+    const arg = {
+      creditPositionId,
+    }
+    console.log(arg)
+    const data = encodeFunctionData({
+      abi: [Size.abi.find(e => e.name === 'claim')],
+      functionName: 'claim',
+      args: [arg]
+    })
+    console.log(data)
+    try {
+      const tx = await sendTransaction(config, {
+        to: deployment.Size.address,
+        data
+      })
+      toast.success(<a target="_blank" href={`https://basescan.org/tx/${tx}`}>{tx}</a>)
+      updatePositions()
+    } catch (e: any) {
+      toast.error(e.shortMessage)
+    }
+  }
+
 
   return (
     <SizeContext.Provider
@@ -287,7 +311,8 @@ export function SizeProvider({ children }: Props) {
         buyCreditLimit,
         sellCreditMarket,
         buyCreditMarket,
-        compensate
+        compensate,
+        claim
       }}
     >
       {children}
