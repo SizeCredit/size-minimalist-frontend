@@ -9,6 +9,7 @@ import { readContract, sendTransaction, writeContract } from 'wagmi/actions';
 import { toast } from 'react-toastify';
 import { Quote } from './SwapContext';
 import { ethers } from 'ethers';
+import { PriceContext } from './PriceContext';
 
 interface SizeContext {
   repay: (debtPositionId: string) => Promise<void>
@@ -20,6 +21,7 @@ interface SizeContext {
   buyCreditMarket: (quote: Quote, amount: bigint, tenor: number) => Promise<void>
   compensate: (creditPositionWithDebtToRepayId: string, creditPositionToCompensateId: string) => Promise<void>
   claim: (creditPositionId: string) => Promise<void>
+  liquidate: (debtPositionId: string) => Promise<void>
 }
 
 export const SizeContext = createContext<SizeContext>({} as SizeContext);
@@ -30,9 +32,10 @@ type Props = {
 
 export function SizeProvider({ children }: Props) {
   const account = useAccount()
-  const { updatePositions } = useContext(PositionsContext)
+  const { updatePositions, debtPositions } = useContext(PositionsContext)
   const { market } = useContext(ConfigContext)
-  const { deployment } = market
+  const { price } = useContext(PriceContext)
+  const { deployment, tokens } = market
 
   const repay = async (debtPositionId: string) => {
     const borrower = account.address
@@ -300,6 +303,33 @@ export function SizeProvider({ children }: Props) {
     }
   }
 
+  const liquidate = async (debtPositionId: string) => {
+    const debtPosition = debtPositions.find(e => e.debtPositionId === debtPositionId)!
+    const minimumCollateralProfit = 0.98 * (Number(debtPosition.futureValue) * 10 ** tokens.CollateralToken.decimals / 10 ** tokens.BorrowAToken.decimals) / price!
+    const deadline = Math.floor(Date.now() / 1000) + 60 * 60
+    const arg = {
+      debtPositionId,
+      minimumCollateralProfit,
+      deadline
+    }
+    console.log(arg)
+    const data = encodeFunctionData({
+      abi: [Size.abi.find(e => e.name === 'liquidate')],
+      functionName: 'liquidate',
+      args: [arg]
+    })
+    console.log(data)
+    try {
+      const tx = await sendTransaction(config, {
+        to: deployment.Size.address,
+        data
+      })
+      toast.success(<a target="_blank" href={`https://basescan.org/tx/${tx}`}>{tx}</a>)
+      updatePositions()
+    } catch (e: any) {
+      toast.error(e.shortMessage)
+    }
+  }
 
   return (
     <SizeContext.Provider
@@ -312,7 +342,8 @@ export function SizeProvider({ children }: Props) {
         sellCreditMarket,
         buyCreditMarket,
         compensate,
-        claim
+        claim,
+        liquidate
       }}
     >
       {children}
