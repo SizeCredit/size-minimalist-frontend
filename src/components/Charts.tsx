@@ -33,7 +33,7 @@ const Charts = () => {
   const { tokens } = market
   const { price } = useContext(PriceContext)
   const [amount, setAmount] = useState(market.minimumCreditAmount)
-  const [minDays, setMinDays] = useState(1)
+  const [minDays, setMinDays] = useState(0)
   const [maxDays, setMaxDays] = useState(365)
   const [userFilter, setUserFilter] = useState('')
 
