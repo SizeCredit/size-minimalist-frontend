@@ -1,48 +1,54 @@
-import { Buffer } from 'buffer'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { WagmiProvider } from 'wagmi'
+import { Buffer } from "buffer";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { WagmiProvider } from "wagmi";
 
-import App from './App.tsx'
-import { config } from './wagmi.ts'
+import App from "./App.tsx";
+import { config } from "./wagmi.ts";
 
-import './index.css'
-import { ConfigProvider } from './contexts/ConfigContext.tsx'
-import { UserProvider } from './contexts/UserContext.tsx'
-import { PositionsProvider } from './contexts/PositionsContext.tsx'
-import { LimitOrdersProvider } from './contexts/LimitOrdersContext.tsx'
-import { PriceProvider } from './contexts/PriceContext.tsx'
-import { SwapProvider } from './contexts/SwapContext.tsx'
-import { SidebarProvider } from './contexts/SidebarContext.tsx'
-import { SizeProvider } from './contexts/SizeContext.tsx'
+import "./index.css";
+import { ConfigProvider } from "./contexts/ConfigContext.tsx";
+import { UserProvider } from "./contexts/UserContext.tsx";
+import { PositionsProvider } from "./contexts/PositionsContext.tsx";
+import { LimitOrdersProvider } from "./contexts/LimitOrdersContext.tsx";
+import { PriceProvider } from "./contexts/PriceContext.tsx";
+import { SwapProvider } from "./contexts/SwapContext.tsx";
+import { SidebarProvider } from "./contexts/SidebarContext.tsx";
+import { SizeProvider } from "./contexts/SizeContext.tsx";
+import { RegistryProvider } from "./contexts/RegistryContext.tsx";
+import { FactoryProvider } from "./contexts/FactoryContext.tsx";
 
-globalThis.Buffer = Buffer
+globalThis.Buffer = Buffer;
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient();
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <ConfigProvider>
-          <PriceProvider>
-            <PositionsProvider>
-              <LimitOrdersProvider>
-                <UserProvider>
-                  <SwapProvider>
-                    <SidebarProvider>
-                      <SizeProvider>
-                        <App />
-                      </SizeProvider>
-                    </SidebarProvider>
-                  </SwapProvider>
-                </UserProvider>
-              </LimitOrdersProvider>
-            </PositionsProvider>
-          </PriceProvider>
+          <RegistryProvider>
+            <FactoryProvider>
+              <PriceProvider>
+                <PositionsProvider>
+                  <LimitOrdersProvider>
+                    <UserProvider>
+                      <SwapProvider>
+                        <SidebarProvider>
+                          <SizeProvider>
+                            <App />
+                          </SizeProvider>
+                        </SidebarProvider>
+                      </SwapProvider>
+                    </UserProvider>
+                  </LimitOrdersProvider>
+                </PositionsProvider>
+              </PriceProvider>
+            </FactoryProvider>
+          </RegistryProvider>
         </ConfigProvider>
       </QueryClientProvider>
     </WagmiProvider>
   </React.StrictMode>,
-)
+);

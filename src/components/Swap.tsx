@@ -1,158 +1,182 @@
-import { useContext, useEffect, useState } from 'react';
-import { Quote, SwapContext } from '../contexts/SwapContext';
-import { format } from '../services/format';
-import { LimitOrdersContext } from '../contexts/LimitOrdersContext';
-import { parseUnits } from 'ethers';
-import { ConfigContext } from '../contexts/ConfigContext';
-import { SizeContext } from '../contexts/SizeContext';
+import { useContext, useEffect, useState } from "react";
+import { Quote, SwapContext } from "../contexts/SwapContext";
+import { format } from "../services/format";
+import { LimitOrdersContext } from "../contexts/LimitOrdersContext";
+import { parseUnits } from "ethers";
+import { ConfigContext } from "../contexts/ConfigContext";
+import { SizeContext } from "../contexts/SizeContext";
 
-const actions = ['Buy', 'Sell'];
+const actions = ["Buy", "Sell"];
 
-const DECIMALS = 4
+const DECIMALS = 4;
 
 const Swap = () => {
-  const { market } = useContext(ConfigContext)
-  const { tokens } = market
-  const [buyAmount, setBuyAmount] = useState('');
-  const [sellAmount, setSellAmount] = useState('');
+  const { market } = useContext(ConfigContext);
+  const { tokens } = market;
+  const [buyAmount, setBuyAmount] = useState("");
+  const [sellAmount, setSellAmount] = useState("");
   const [action, setAction] = useState(actions[0]);
-  const [days, setDays] = useState('30');
-  const [quote, setQuote] = useState<Quote>(
-    {
-      user: '0x',
-      rate: undefined,
-    } as unknown as Quote
-  );
+  const [days, setDays] = useState("30");
+  const [quote, setQuote] = useState<Quote>({
+    user: "0x",
+    rate: undefined,
+  } as unknown as Quote);
 
-  const tenor = Number(days) * 24 * 60 * 60
+  const tenor = Number(days) * 24 * 60 * 60;
 
-  const { sellCreditQuote, buyCreditQuote } = useContext(SwapContext)
-  const { sellCreditMarket, buyCreditMarket } = useContext(SizeContext)
-  const { progress } = useContext(LimitOrdersContext)
+  const { sellCreditQuote, buyCreditQuote } = useContext(SwapContext);
+  const { sellCreditMarket, buyCreditMarket } = useContext(SizeContext);
+  const { progress } = useContext(LimitOrdersContext);
 
   useEffect(() => {
     if (progress === 100) {
-      handleBuyCredit(market.minimumCreditAmount.toString())
+      handleBuyCredit(market.minimumCreditAmount.toString());
     }
-  }, [progress])
+  }, [progress]);
 
   useEffect(() => {
-    if (action === actions[0]) handleBuyCredit(buyAmount)
-    else handleSellCredit(sellAmount)
-  }, [days])
+    if (action === actions[0]) handleBuyCredit(buyAmount);
+    else handleSellCredit(sellAmount);
+  }, [days]);
 
   const handleSellCredit = async (value: string, reverse = false) => {
     if (reverse) {
-      const newSellAmount = format(Number(value) / (1 + quote.rate * Number(days) / 365), DECIMALS)
+      const newSellAmount = format(
+        Number(value) / (1 + (quote.rate * Number(days)) / 365),
+        DECIMALS,
+      );
       setSellAmount(newSellAmount);
       setBuyAmount(value);
-    }
-    else {
-      const quote = sellCreditQuote(parseFloat(value), tenor)
-      setQuote(quote)
+    } else {
+      const quote = sellCreditQuote(parseFloat(value), tenor);
+      setQuote(quote);
       setSellAmount(value);
-      const newBuyAmount = format(Number(value) * (1 + quote.rate * Number(days) / 365), DECIMALS)
+      const newBuyAmount = format(
+        Number(value) * (1 + (quote.rate * Number(days)) / 365),
+        DECIMALS,
+      );
       setBuyAmount(newBuyAmount);
     }
-
   };
 
   const handleBuyCredit = async (value: string, reverse = false) => {
     if (reverse) {
-      const newBuyAmount = format(Number(value) * (1 + quote.rate * Number(days) / 365), DECIMALS)
+      const newBuyAmount = format(
+        Number(value) * (1 + (quote.rate * Number(days)) / 365),
+        DECIMALS,
+      );
       setSellAmount(value);
       setBuyAmount(newBuyAmount);
-    }
-    else {
-      const quote = buyCreditQuote(parseFloat(value), tenor)
-      setQuote(quote)
+    } else {
+      const quote = buyCreditQuote(parseFloat(value), tenor);
+      setQuote(quote);
       setBuyAmount(value);
-      const newSellAmount = format(Number(value) / (1 + quote.rate * Number(days) / 365), DECIMALS)
+      const newSellAmount = format(
+        Number(value) / (1 + (quote.rate * Number(days)) / 365),
+        DECIMALS,
+      );
       setSellAmount(newSellAmount);
     }
   };
 
   const handleDaysChange = async (value: string) => {
-    setDays(value)
-  }
+    setDays(value);
+  };
 
-  const swap = () => action === actions[0] ? buyCreditMarket(
-    quote,
-    parseUnits(Number(buyAmount).toString(), tokens.BorrowAToken.decimals),
-    tenor
-  ) :
-    sellCreditMarket(
-      quote,
-      parseUnits(Number(sellAmount).toString(), tokens.BorrowAToken.decimals),
-      tenor
-    )
+  const swap = () =>
+    action === actions[0]
+      ? buyCreditMarket(
+          quote,
+          parseUnits(
+            Number(buyAmount).toString(),
+            tokens.BorrowAToken.decimals,
+          ),
+          tenor,
+        )
+      : sellCreditMarket(
+          quote,
+          parseUnits(
+            Number(sellAmount).toString(),
+            tokens.BorrowAToken.decimals,
+          ),
+          tenor,
+        );
 
   const change = () => {
     const newAction = action === actions[0] ? actions[1] : actions[0];
     setAction(newAction);
     if (newAction === actions[0]) {
-      handleBuyCredit(buyAmount)
-    }
-    else {
-      handleSellCredit(sellAmount)
+      handleBuyCredit(buyAmount);
+    } else {
+      handleSellCredit(sellAmount);
     }
   };
 
   return (
     <>
-
-      <div className="input-container">
-        <div className='maturity'>
-          <label>Maturity</label>
-          <input type="text" value={days} onChange={e => handleDaysChange(e.target.value)} />
-          <label className="days">days</label>
+      <div className="">
+        <div className="input-container">
+          <div className="maturity">
+            <label>Maturity</label>
+            <input
+              type="text"
+              value={days}
+              onChange={(e) => handleDaysChange(e.target.value)}
+            />
+            <label className="days">days</label>
+          </div>
         </div>
-      </div>
 
-      <div className="input-container">
-        <label>{action}</label>
-        <div className="input-group">
-          <input
-            type="number"
-            value={action === actions[0] ? buyAmount : sellAmount}
-            onChange={e => action === actions[0] ? handleBuyCredit(e.target.value) : handleSellCredit(e.target.value)}
-            placeholder="0"
-          />
-          Credit
+        <div className="input-container">
+          <label>{action}</label>
+          <div className="input-group">
+            <input
+              type="number"
+              value={action === actions[0] ? buyAmount : sellAmount}
+              onChange={(e) =>
+                action === actions[0]
+                  ? handleBuyCredit(e.target.value)
+                  : handleSellCredit(e.target.value)
+              }
+              placeholder="0"
+            />
+            Credit
+          </div>
         </div>
-      </div>
 
-      <button className="swap-button" onClick={change}>
-        <span>
-          ↓
-        </span>
-        {
-          quote.rate !== undefined ? <small>{(quote.rate * 100).toFixed(2)}% APR</small> : null
-        }
-      </button>
+        <button className="swap-button" onClick={change}>
+          <span>↓</span>
+          {quote.rate !== undefined ? (
+            <small>{(quote.rate * 100).toFixed(2)}% APR</small>
+          ) : null}
+        </button>
 
-      <div className="input-container">
-        <label>{action === actions[0] ? actions[1] : actions[0]}
-        </label>
-        <div className="input-group">
-          <input
-            type="number"
-            value={action === actions[0] ? sellAmount : buyAmount}
-            onChange={e => action === actions[0] ? handleBuyCredit(e.target.value, true) : handleSellCredit(e.target.value, true)}
-            placeholder="0"
-          />
-          Cash
+        <div className="input-container">
+          <label>{action === actions[0] ? actions[1] : actions[0]}</label>
+          <div className="input-group">
+            <input
+              type="number"
+              value={action === actions[0] ? sellAmount : buyAmount}
+              onChange={(e) =>
+                action === actions[0]
+                  ? handleBuyCredit(e.target.value, true)
+                  : handleSellCredit(e.target.value, true)
+              }
+              placeholder="0"
+            />
+            Cash
+          </div>
         </div>
-      </div>
 
-      <button className="action-button" onClick={() => swap()}>
-        {sellAmount && buyAmount ? 'Swap' : 'Enter amount'}
-      </button>
+        <button className="action-button" onClick={() => swap()}>
+          {sellAmount && buyAmount ? "Swap" : "Enter amount"}
+        </button>
 
-      <div className="disclaimers">
-        <small>*Swap amounts do not include fees</small>
-        <small>*Unoptimized matching engine</small>
-        <small>*Unofficial Size application</small>
+        <div className="disclaimers">
+          <small>*Swap amounts do not include fees</small>
+          <small>*Unoptimized matching engine</small>
+          <small>*Unofficial Size application</small>
+        </div>
       </div>
     </>
   );

@@ -1,6 +1,6 @@
-import { http, createConfig } from 'wagmi'
-import { base, baseSepolia } from 'wagmi/chains'
-import { injected, walletConnect } from 'wagmi/connectors'
+import { http, createConfig } from "wagmi";
+import { base, baseSepolia } from "wagmi/chains";
+import { injected, walletConnect } from "wagmi/connectors";
 
 export const config = createConfig({
   chains: [base, baseSepolia],
@@ -12,10 +12,10 @@ export const config = createConfig({
     [base.id]: http(import.meta.env.VITE_BASE_RPC_URL),
     [baseSepolia.id]: http(import.meta.env.VITE_BASE_SEPOLIA_RPC_URL),
   },
-})
+});
 
-declare module 'wagmi' {
+declare module "wagmi" {
   interface Register {
-    config: typeof config
+    config: typeof config;
   }
 }

@@ -5,7 +5,9 @@ interface SidebarContext {
   setCollapsed: (collapsed: boolean) => void;
 }
 
-export const SidebarContext = createContext<SidebarContext>({} as SidebarContext);
+export const SidebarContext = createContext<SidebarContext>(
+  {} as SidebarContext,
+);
 
 type Props = {
   children: ReactNode;
@@ -18,7 +20,7 @@ export function SidebarProvider({ children }: Props) {
     <SidebarContext.Provider
       value={{
         collapsed,
-        setCollapsed
+        setCollapsed,
       }}
     >
       {children}

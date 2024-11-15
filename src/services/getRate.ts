@@ -1,6 +1,10 @@
 import { YieldCurve } from "../contexts/LimitOrdersContext";
 
-export function getRate(curve: YieldCurve, tenor: number, marketRate = 0): number {
+export function getRate(
+  curve: YieldCurve,
+  tenor: number,
+  marketRate = 0,
+): number {
   for (let i = 0; i < curve.tenors.length - 1; i++) {
     const t1 = curve.tenors[i];
     const r1 = curve.aprs[i];
@@ -12,12 +16,12 @@ export function getRate(curve: YieldCurve, tenor: number, marketRate = 0): numbe
     // If the input tenor lies between t1 and t2, perform linear interpolation
     if (tenor >= t1 && tenor <= t2) {
       // Interpolated apr
-      const aprInterpolated = r1 + (r2 - r1) * (tenor - t1) / (t2 - t1);
+      const aprInterpolated = r1 + ((r2 - r1) * (tenor - t1)) / (t2 - t1);
       // Interpolated market rate multiplier
-      const mrmInterpolated = mrm1 + (mrm2 - mrm1) * (tenor - t1) / (t2 - t1);
+      const mrmInterpolated = mrm1 + ((mrm2 - mrm1) * (tenor - t1)) / (t2 - t1);
       // Final rate is apr + (marketRateMultiplier * marketRate)
       return aprInterpolated + mrmInterpolated * marketRate;
     }
   }
-  return NaN
+  return NaN;
 }

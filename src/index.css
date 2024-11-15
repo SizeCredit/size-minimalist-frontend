@@ -1,6 +1,6 @@
 :root {
-  --primary-color: #FF002E;
-  --secondary-color: #FFCCCC;
+  --primary-color: #ff002e;
+  --secondary-color: #ffcccc;
 }
 
 /* App */
@@ -15,17 +15,24 @@
   font-family: Arial, sans-serif;
 }
 
+.index {
+  background-color: white;
+  border-radius: 20px;
+  width: 400px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
 .swap-container {
   background-color: white;
   border-radius: 20px;
   padding: 20px;
-  width: 400px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .tab-container {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-rows: auto auto;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   margin-bottom: 20px;
 }
 
@@ -52,7 +59,7 @@
 .input-container {
   background-color: #f8f9fa;
   border-radius: 12px;
-  padding: 15px;
+  padding: 20px;
   margin-bottom: 10px;
 }
 
@@ -150,7 +157,7 @@ select {
   height: 100vh; /* Full height */
   background-color: #ffffff;
   padding: 20px;
-  box-shadow: -2px 0 5px rgba(0,0,0,0.1); /* Shadow on the left side */
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1); /* Shadow on the left side */
   overflow-y: auto;
   transition: right 0.3s ease; /* Transition for smooth animation */
   z-index: 999;
@@ -184,7 +191,7 @@ select {
   margin: 0;
 }
 .balance-change {
-  color: #4CAF50;
+  color: #4caf50;
   font-size: 14px;
 }
 .action-buttons {
@@ -200,8 +207,14 @@ select {
   color: #fff;
   cursor: pointer;
 }
-.buy { background-color: #E0E0FF; color: #5050FF; }
-.receive { background-color: #FFE0FF; color: #FF50FF; }
+.buy {
+  background-color: #e0e0ff;
+  color: #5050ff;
+}
+.receive {
+  background-color: #ffe0ff;
+  color: #ff50ff;
+}
 .tabs {
   display: flex;
   margin-top: 20px;
@@ -245,8 +258,12 @@ select {
 .position-change {
   font-size: 12px;
 }
-.positive { color: #4CAF50; }
-.negative { color: #F44336; }
+.positive {
+  color: #4caf50;
+}
+.negative {
+  color: #f44336;
+}
 .show-hidden {
   width: 100%;
   padding: 10px;
@@ -300,7 +317,6 @@ select {
   width: 80px;
 }
 
-
 /* Limit */
 
 .limit-row {
@@ -312,7 +328,6 @@ select {
   input {
     width: 50px;
   }
-
 }
 
 .button {
@@ -333,4 +348,37 @@ select {
 }
 .chart-user-input {
   width: calc(100% - 60px);
+}
+
+/* Registry */
+
+.registry {
+  height: 600px;
+  width: calc(50vw - 60px);
+  overflow-y: auto;
+}
+.registry-container {
+  padding: 20px;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 600px;
+}
+
+.registry-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.market-entry {
+  border: 1px solid #ddd;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+.market-entry div {
+  margin-bottom: 8px;
+}
+.market-entry div b {
+  color: #333;
 }

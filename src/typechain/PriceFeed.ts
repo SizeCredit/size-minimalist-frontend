@@ -27,33 +27,33 @@ export interface PriceFeedInterface extends Interface {
       | "decimals"
       | "getPrice"
       | "quote"
-      | "quoteStalePriceInterval"
+      | "quoteStalePriceInterval",
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: "base", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "baseStalePriceInterval",
-    values?: undefined
+    values?: undefined,
   ): string;
   encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
   encodeFunctionData(functionFragment: "getPrice", values?: undefined): string;
   encodeFunctionData(functionFragment: "quote", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "quoteStalePriceInterval",
-    values?: undefined
+    values?: undefined,
   ): string;
 
   decodeFunctionResult(functionFragment: "base", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "baseStalePriceInterval",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getPrice", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "quote", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "quoteStalePriceInterval",
-    data: BytesLike
+    data: BytesLike,
   ): Result;
 }
 
@@ -66,38 +66,38 @@ export interface PriceFeed extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent
+    event: TCEvent,
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
   removeAllListeners<TCEvent extends TypedContractEvent>(
-    event?: TCEvent
+    event?: TCEvent,
   ): Promise<this>;
 
   base: TypedContractMethod<[], [string], "view">;
@@ -113,26 +113,26 @@ export interface PriceFeed extends BaseContract {
   quoteStalePriceInterval: TypedContractMethod<[], [bigint], "view">;
 
   getFunction<T extends ContractMethod = ContractMethod>(
-    key: string | FunctionFragment
+    key: string | FunctionFragment,
   ): T;
 
   getFunction(
-    nameOrSignature: "base"
+    nameOrSignature: "base",
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "baseStalePriceInterval"
+    nameOrSignature: "baseStalePriceInterval",
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
-    nameOrSignature: "decimals"
+    nameOrSignature: "decimals",
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
-    nameOrSignature: "getPrice"
+    nameOrSignature: "getPrice",
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
-    nameOrSignature: "quote"
+    nameOrSignature: "quote",
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "quoteStalePriceInterval"
+    nameOrSignature: "quoteStalePriceInterval",
   ): TypedContractMethod<[], [bigint], "view">;
 
   filters: {};
