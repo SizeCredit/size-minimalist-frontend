@@ -7,12 +7,12 @@ export default {
   deployment: {
     Size: {
       abi: Size.abi as Abi,
-      address: "0x3AE40a5126b3E37dfcB172bbF485b1E2A6DBD882" as Address,
+      address: "0x3009B1049F2ef921Bb35A80A3D5ee0a47Bd0211A" as Address,
       block: 12778899,
     },
     PriceFeed: {
       abi: PriceFeed.abi as Abi,
-      address: "0x56A5CD8bADd94E5d46e3cc028393Bdb4A91b66eD" as Address,
+      address: "0x4C4B6E64b5765196661E3FF80b5Da8c917392BDB" as Address,
       block: 0,
     },
     WETH: {

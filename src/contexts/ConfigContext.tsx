@@ -22,7 +22,7 @@ interface ConfigContext {
     minimumCreditAmount: number;
   };
   chain: {
-    SizeRegistry: { address: Address; abi: Abi };
+    SizeFactory: { address: Address; abi: Abi };
     WETH: { address: Address; abi: Abi };
   };
   marketNames: string[];
