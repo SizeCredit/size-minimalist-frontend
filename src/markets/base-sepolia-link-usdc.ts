@@ -8,7 +8,7 @@ export default {
     Size: {
       abi: Size.abi as Abi,
       address: "0xA5f2066647d22dfBd2Ed0dD43344dB9DCe4b4632" as Address,
-      block: 17950234,
+      block: 18082796,
     },
     PriceFeed: {
       abi: PriceFeed.abi as Abi,
