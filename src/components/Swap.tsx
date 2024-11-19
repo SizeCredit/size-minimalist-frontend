@@ -42,7 +42,7 @@ const Swap = () => {
   const handleSellCredit = async (value: string, reverse = false) => {
     if (reverse) {
       const newSellAmount = format(
-        Number(value) / (1 + (quote.rate * Number(days)) / 365),
+        Number(value) * (1 + (quote.rate * Number(days)) / 365),
         DECIMALS,
       );
       setSellAmount(newSellAmount);
@@ -52,7 +52,7 @@ const Swap = () => {
       setQuote(quote);
       setSellAmount(value);
       const newBuyAmount = format(
-        Number(value) * (1 + (quote.rate * Number(days)) / 365),
+        Number(value) / (1 + (quote.rate * Number(days)) / 365),
         DECIMALS,
       );
       setBuyAmount(newBuyAmount);
