@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import { Quote } from "./SwapContext";
 import { ethers } from "ethers";
 import { PriceContext } from "./PriceContext";
+import { base } from "wagmi/chains";
 
 interface SizeContext {
   repay: (debtPositionId: string) => Promise<void>;
@@ -45,9 +46,14 @@ type Props = {
 export function SizeProvider({ children }: Props) {
   const account = useAccount();
   const { updatePositions, debtPositions } = useContext(PositionsContext);
-  const { market } = useContext(ConfigContext);
+  const { market, chain } = useContext(ConfigContext);
   const { price } = useContext(PriceContext);
   const { deployment, tokens } = market;
+
+  const BASESCAN =
+    chain.chain.id === base.id
+      ? "https://basescan.org"
+      : "https://sepolia.basescan.org";
 
   const repay = async (debtPositionId: string) => {
     const borrower = account.address;
@@ -68,7 +74,7 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`https://basescan.org/tx/${tx}`}>
+        <a target="_blank" href={`${BASESCAN}/tx/${tx}`}>
           {tx}
         </a>,
       );
@@ -111,7 +117,7 @@ export function SizeProvider({ children }: Props) {
             address: token as Address,
           });
           toast.success(
-            <a target="_blank" href={`https://basescan.org/tx/${approve}`}>
+            <a target="_blank" href={`${BASESCAN}/tx/${approve}`}>
               {approve}
             </a>,
           );
@@ -124,7 +130,7 @@ export function SizeProvider({ children }: Props) {
         value: token === deployment.WETH.address ? amount : BigInt(0),
       });
       toast.success(
-        <a target="_blank" href={`https://basescan.org/tx/${tx}`}>
+        <a target="_blank" href={`${BASESCAN}/tx/${tx}`}>
           {tx}
         </a>,
       );
@@ -153,7 +159,7 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`https://basescan.org/tx/${tx}`}>
+        <a target="_blank" href={`${BASESCAN}/tx/${tx}`}>
           {tx}
         </a>,
       );
@@ -187,7 +193,7 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`https://basescan.org/tx/${tx}`}>
+        <a target="_blank" href={`${BASESCAN}/tx/${tx}`}>
           {tx}
         </a>,
       );
@@ -221,7 +227,7 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`https://basescan.org/tx/${tx}`}>
+        <a target="_blank" href={`${BASESCAN}/tx/${tx}`}>
           {tx}
         </a>,
       );
@@ -263,7 +269,7 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`https://basescan.org/tx/${tx}`}>
+        <a target="_blank" href={`${BASESCAN}/tx/${tx}`}>
           {tx}
         </a>,
       );
@@ -305,7 +311,7 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`https://basescan.org/tx/${tx}`}>
+        <a target="_blank" href={`${BASESCAN}/tx/${tx}`}>
           {tx}
         </a>,
       );
@@ -337,7 +343,7 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`https://basescan.org/tx/${tx}`}>
+        <a target="_blank" href={`${BASESCAN}/tx/${tx}`}>
           {tx}
         </a>,
       );
@@ -364,7 +370,7 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`https://basescan.org/tx/${tx}`}>
+        <a target="_blank" href={`${BASESCAN}/tx/${tx}`}>
           {tx}
         </a>,
       );
@@ -403,7 +409,7 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`https://basescan.org/tx/${tx}`}>
+        <a target="_blank" href={`${BASESCAN}/tx/${tx}`}>
           {tx}
         </a>,
       );

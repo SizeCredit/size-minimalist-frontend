@@ -1,5 +1,6 @@
 import { createContext, Dispatch, ReactNode, useState } from "react";
 import { Abi } from "viem";
+import { type Chain } from "wagmi/chains";
 import baseMainnetWethUsdc from "../markets/base-mainnet-weth-usdc";
 import baseMainnetCbbtcUsdc from "../markets/base-mainnet-cbbtc-usdc";
 import baseSepoliaWethUsdc from "../markets/base-sepolia-weth-usdc";
@@ -22,6 +23,7 @@ interface ConfigContext {
     minimumCreditAmount: number;
   };
   chain: {
+    chain: Chain;
     SizeFactory: { address: Address; abi: Abi };
     WETH: { address: Address; abi: Abi };
   };

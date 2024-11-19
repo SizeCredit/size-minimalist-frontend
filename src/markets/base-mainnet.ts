@@ -1,8 +1,10 @@
 import { Abi, Address } from "viem";
 import SizeFactory from "../abi/SizeFactory.json";
 import { erc20Abi } from "viem";
+import { base } from "wagmi/chains";
 
 export default {
+  chain: base,
   SizeFactory: {
     abi: SizeFactory.abi as Abi,
     address: "0x330Dc31dB45672c1F565cf3EC91F9a01f8f3DF0b" as Address,
