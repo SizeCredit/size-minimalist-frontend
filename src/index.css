@@ -319,6 +319,10 @@ select {
 
 /* Limit */
 
+.limit-container {
+  width: 400px;
+}
+
 .limit-row {
   display: flex;
   justify-content: space-between;
@@ -348,6 +352,12 @@ select {
 }
 .chart-user-input {
   width: calc(100% - 60px);
+}
+
+/* Funding */
+
+.funding-container {
+  width: 400px;
 }
 
 /* Registry */

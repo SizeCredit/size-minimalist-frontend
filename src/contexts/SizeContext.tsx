@@ -74,6 +74,9 @@ export function SizeProvider({ children }: Props) {
       );
       updatePositions();
     } catch (e: any) {
+      // const data: string = err?.error?.data?.originalError?.data;
+      console.error(Object.keys(e));
+      console.error(e.cause, e.details);
       toast.error(e.shortMessage);
     }
   };

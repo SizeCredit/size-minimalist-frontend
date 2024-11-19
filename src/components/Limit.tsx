@@ -70,64 +70,66 @@ const Limit = () => {
 
   return (
     <>
-      <div className="input-container">
-        <div className="limit">
-          <select onChange={(e) => onChangeAction(e.target.value)}>
-            {actions.map((action) => (
-              <option key={action} value={action}>
-                {action}
-              </option>
-            ))}
-          </select>
-          {days.map((_, index) => {
-            return (
-              <div key={index} className="limit-row">
-                <div className="limit-days">
-                  <input
-                    type="text"
-                    value={days[index]}
-                    onChange={(e) =>
-                      setDays(
-                        days.map((day, i) =>
-                          i === index ? e.target.value : day,
-                        ) as string[],
-                      )
-                    }
-                  />
-                  <label>days</label>
+      <div className="limit-container">
+        <div className="input-container">
+          <div className="limit">
+            <select onChange={(e) => onChangeAction(e.target.value)}>
+              {actions.map((action) => (
+                <option key={action} value={action}>
+                  {action}
+                </option>
+              ))}
+            </select>
+            {days.map((_, index) => {
+              return (
+                <div key={index} className="limit-row">
+                  <div className="limit-days">
+                    <input
+                      type="text"
+                      value={days[index]}
+                      onChange={(e) =>
+                        setDays(
+                          days.map((day, i) =>
+                            i === index ? e.target.value : day,
+                          ) as string[],
+                        )
+                      }
+                    />
+                    <label>days</label>
+                  </div>
+                  <div className="limit-aprs">
+                    <input
+                      type="text"
+                      value={aprs[index]}
+                      onChange={(e) =>
+                        setAprs(
+                          aprs.map((apr, i) =>
+                            i === index ? e.target.value : apr,
+                          ) as number[],
+                        )
+                      }
+                    />
+                    <label>% APR</label>
+                  </div>
+                  <button className="button" onClick={() => remove(index)}>
+                    ✕
+                  </button>
                 </div>
-                <div className="limit-aprs">
-                  <input
-                    type="text"
-                    value={aprs[index]}
-                    onChange={(e) =>
-                      setAprs(
-                        aprs.map((apr, i) =>
-                          i === index ? e.target.value : apr,
-                        ) as number[],
-                      )
-                    }
-                  />
-                  <label>% APR</label>
-                </div>
-                <button className="button" onClick={() => remove(index)}>
-                  ✕
-                </button>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
+          <button className="button" onClick={() => add()}>
+            +
+          </button>
         </div>
-        <button className="button" onClick={() => add()}>
-          +
+
+        <button className="action-button" onClick={onClick}>
+          {action}
         </button>
-      </div>
 
-      <button className="action-button" onClick={onClick}>
-        {action}
-      </button>
-
-      <div className="disclaimers">
-        <small>*Unofficial Size application</small>
+        <div className="disclaimers">
+          <small>*Unofficial Size application</small>
+        </div>
       </div>
     </>
   );

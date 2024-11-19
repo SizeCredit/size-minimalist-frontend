@@ -22,7 +22,7 @@ const Swap = () => {
     rate: undefined,
   } as unknown as Quote);
 
-  const tenor = Number(days) * 24 * 60 * 60;
+  const tenor = Math.floor(Number(days) * 24 * 60 * 60);
 
   const { sellCreditQuote, buyCreditQuote } = useContext(SwapContext);
   const { sellCreditMarket, buyCreditMarket } = useContext(SizeContext);

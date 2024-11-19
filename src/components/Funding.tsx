@@ -28,41 +28,45 @@ const Funding = () => {
 
   return (
     <>
-      <div className="input-container">
-        <div className="deposit">
-          <select onChange={(e) => setAction(e.target.value)}>
-            {actions.map((action) => (
-              <option key={action} value={action}>
-                {action}
-              </option>
-            ))}
-          </select>
-          <input
-            type="text"
-            className="w-80"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-          />
-          <select
-            onChange={(e) =>
-              setToken(depositTokens.find((x) => x.symbol === e.target.value)!)
-            }
-          >
-            {depositTokens.map((token) => (
-              <option key={token.symbol} value={token.symbol}>
-                {token.symbol}
-              </option>
-            ))}
-          </select>
+      <div className="funding-container">
+        <div className="input-container">
+          <div className="deposit">
+            <select onChange={(e) => setAction(e.target.value)}>
+              {actions.map((action) => (
+                <option key={action} value={action}>
+                  {action}
+                </option>
+              ))}
+            </select>
+            <input
+              type="text"
+              className="w-80"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+            />
+            <select
+              onChange={(e) =>
+                setToken(
+                  depositTokens.find((x) => x.symbol === e.target.value)!,
+                )
+              }
+            >
+              {depositTokens.map((token) => (
+                <option key={token.symbol} value={token.symbol}>
+                  {token.symbol}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-      </div>
 
-      <button className="action-button" onClick={onClick}>
-        {action}
-      </button>
+        <button className="action-button" onClick={onClick}>
+          {action}
+        </button>
 
-      <div className="disclaimers">
-        <small>*Unofficial Size application</small>
+        <div className="disclaimers">
+          <small>*Unofficial Size application</small>
+        </div>
       </div>
     </>
   );

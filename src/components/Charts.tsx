@@ -176,7 +176,7 @@ const Charts = () => {
   );
 
   useEffect(() => {
-    const el = document.getElementsByClassName("index")[0];
+    const el = document.getElementsByClassName("swap-container")[0];
     const style = (el as any).style;
     const original = { ...style };
     style.width = "100%";
