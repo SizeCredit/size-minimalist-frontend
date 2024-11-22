@@ -6,6 +6,7 @@ import baseMainnetCbbtcUsdc from "../markets/base-mainnet-cbbtc-usdc";
 import baseSepoliaWethUsdc from "../markets/base-sepolia-weth-usdc";
 import baseSepoliaLinkUsdc from "../markets/base-sepolia-link-usdc";
 import baseSepolia from "../markets/base-sepolia";
+import baseMainnet from "../markets/base-mainnet";
 
 export type Token =
   | "UnderlyingCollateralToken"
@@ -44,7 +45,7 @@ export function ConfigProvider({ children }: Props) {
   const [marketName, setMarket] = useState(() => {
     return localStorage.getItem("market") || DEFAULT_MARKET;
   });
-  const chain = marketName.includes("mainnet") ? baseSepolia : baseSepolia;
+  const chain = marketName.includes("mainnet") ? baseMainnet : baseSepolia;
 
   const markets = {
     "base-mainnet-weth-usdc": baseMainnetWethUsdc,
