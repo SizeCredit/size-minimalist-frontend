@@ -170,10 +170,11 @@ export function SizeProvider({ children }: Props) {
 
   const buyCreditLimit = async (tenors: bigint[], aprs: bigint[]) => {
     const marketRateMultipliers = tenors.map(() => 0);
+    const maxDueDate = tenors.length === 0 ? 0 : Math.floor(
+      (new Date().getTime() + 1000 * 60 * 60 * 24 * 365) / 1000,
+    );
     const arg = {
-      maxDueDate: Math.floor(
-        (new Date().getTime() + 1000 * 60 * 60 * 24 * 365) / 1000,
-      ),
+      maxDueDate,
       curveRelativeTime: {
         tenors,
         aprs,
@@ -204,10 +205,11 @@ export function SizeProvider({ children }: Props) {
 
   const sellCreditLimit = async (tenors: bigint[], aprs: bigint[]) => {
     const marketRateMultipliers = tenors.map(() => 0);
+    const maxDueDate = tenors.length === 0 ? 0 : Math.floor(
+      (new Date().getTime() + 1000 * 60 * 60 * 24 * 365) / 1000,
+    );
     const arg = {
-      maxDueDate: Math.floor(
-        (new Date().getTime() + 1000 * 60 * 60 * 24 * 365) / 1000,
-      ),
+      maxDueDate,
       curveRelativeTime: {
         tenors,
         aprs,
