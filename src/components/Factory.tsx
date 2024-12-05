@@ -35,6 +35,16 @@ const Factory = () => {
                 </a>
               </div>
               <div>
+                &nbsp;&nbsp; Total Supply:{" "}
+                {format(
+                  market.tokens.collateralToken.totalSupply,
+                  market.tokens.collateralToken.decimals,
+                  3,
+                  ",",
+                )}{" "}
+                {market.tokens.collateralToken.symbol}
+              </div>
+              <div>
                 <b>Borrow AToken:</b>{" "}
                 <a
                   href={`${BASESCAN}/token/${market.data.borrowAToken.toString()}`}
@@ -45,6 +55,16 @@ const Factory = () => {
                 </a>
               </div>
               <div>
+                &nbsp;&nbsp; Total Supply:{" "}
+                {format(
+                  market.tokens.borrowAToken.totalSupply,
+                  market.tokens.borrowAToken.decimals,
+                  3,
+                  ",",
+                )}{" "}
+                {market.tokens.borrowAToken.symbol}
+              </div>
+              <div>
                 <b>Debt Token:</b>{" "}
                 <a
                   href={`${BASESCAN}/token/${market.data.debtToken.toString()}`}
@@ -53,6 +73,16 @@ const Factory = () => {
                 >
                   <code>{market.data.debtToken.toString()}</code>
                 </a>
+              </div>
+              <div>
+                &nbsp;&nbsp; Total Supply:{" "}
+                {format(
+                  market.tokens.debtToken.totalSupply,
+                  market.tokens.debtToken.decimals,
+                  3,
+                  ",",
+                )}{" "}
+                {market.tokens.debtToken.symbol}
               </div>
               <div>
                 <b>Underlying Collateral Token:</b>{" "}
@@ -112,6 +142,14 @@ const Factory = () => {
                 </a>
               </div>
               <div>
+                &nbsp;&nbsp; Fees:{" "}
+                {format(
+                  market.tokens.borrowAToken.feeRecipientBalance,
+                  market.tokens.borrowAToken.decimals,
+                )}{" "}
+                {market.tokens.borrowAToken.symbol}
+              </div>
+              <div>
                 <b>CR Opening:</b> {format(market.riskConfig.crOpening, 18 - 2)}
                 %
               </div>
@@ -132,6 +170,8 @@ const Factory = () => {
                 {format(
                   market.riskConfig.borrowATokenCap,
                   market.tokens.borrowAToken.decimals,
+                  0,
+                  ",",
                 )}{" "}
                 {market.tokens.underlyingBorrowToken.symbol}
               </div>
@@ -153,6 +193,39 @@ const Factory = () => {
                 >
                   <code>{market.oracle.priceFeed.toString()}</code>
                 </a>
+              </div>
+              <div>
+                <div>
+                  &nbsp;&nbsp; Price:{" "}
+                  {format(market.priceFeed.price, 18, 2, ",")}{" "}
+                  {market.tokens.underlyingCollateralToken.symbol} {"/"}{" "}
+                  {market.tokens.underlyingBorrowToken.symbol}
+                </div>
+                <div>
+                  &nbsp;&nbsp; Chainlink Base Aggregator:{" "}
+                  <a
+                    href={`${BASESCAN}/address/${market.priceFeed.base}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {market.priceFeed.baseDescription}
+                    {" ("}
+                    {market.priceFeed.baseStalePriceInterval} seconds
+                    {" stale interval)"}
+                  </a>
+                </div>
+                <div>
+                  &nbsp;&nbsp; Chainlink Quote Aggregator:{" "}
+                  <a
+                    href={`${BASESCAN}/address/${market.priceFeed.quote}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {market.priceFeed.quoteDescription} {" ("}
+                    {market.priceFeed.quoteStalePriceInterval} seconds
+                    {" stale interval)"}
+                  </a>
+                </div>
               </div>
               <div>
                 <b>Variable Pool Borrow Rate Stale Interval:</b>{" "}

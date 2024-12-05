@@ -10,7 +10,6 @@ import { toast } from "react-toastify";
 import { Quote } from "./SwapContext";
 import { ethers } from "ethers";
 import { PriceContext } from "./PriceContext";
-import { base } from "wagmi/chains";
 import { FactoryContext } from "./FactoryContext";
 
 interface SizeContext {

@@ -14,11 +14,13 @@ import { PositionsContext } from "../contexts/PositionsContext";
 import { PriceContext } from "../contexts/PriceContext";
 import { SwapContext } from "../contexts/SwapContext";
 import { FactoryContext } from "../contexts/FactoryContext";
+import { ConfigContext } from "../contexts/ConfigContext";
 
 const Sidebar = () => {
   const account = useAccount();
   const { connectors, connect, error } = useConnect();
   const { price } = useContext(PriceContext);
+  const { pastBlocks, setPastBlocks } = useContext(ConfigContext);
   const { disconnect } = useDisconnect();
   const { market, markets, setMarketName } = useContext(FactoryContext);
   const { creditPositions: allCreditPositions } = useContext(PositionsContext);
@@ -65,8 +67,10 @@ const Sidebar = () => {
           </button>
         </div>
       </div>
-      <div className="select-market">
-        <label>Market</label>
+      <div className="tabs">
+        <div>Market</div>
+      </div>
+      <div className="market-info">
         <select
           value={market?.description || ""}
           onChange={(e) => setMarketName(e.target.value)}
@@ -77,6 +81,16 @@ const Sidebar = () => {
             </option>
           ))}
         </select>
+      </div>
+      <div className="past-blocks">
+        <div className="past-blocks-content">
+          <label>Past Blocks</label>
+          <input
+            type="number"
+            value={Number(pastBlocks)}
+            onChange={(e) => setPastBlocks(BigInt(e.target.value))}
+          />
+        </div>
       </div>
       <div className="tabs">
         <div>Price</div>

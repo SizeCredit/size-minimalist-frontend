@@ -9,6 +9,8 @@ import {
 import { config } from "../wagmi";
 import Size from "../abi/Size.json";
 import SizeFactory from "../abi/SizeFactory.json";
+import PriceFeed from "../abi/PriceFeed.json";
+import AggregatorV3Interface from "../abi/AggregatorV3Interface.json";
 import {
   DataViewStruct,
   InitializeFeeConfigParamsStruct,
@@ -26,6 +28,23 @@ export type Token =
   | "borrowAToken"
   | "debtToken";
 
+interface TokenInformation {
+  symbol: string;
+  decimals: number;
+  totalSupply: bigint;
+  feeRecipientBalance: bigint;
+}
+
+interface PriceFeedInformation {
+  base: Address;
+  quote: Address;
+  baseDescription: string;
+  quoteDescription: string;
+  baseStalePriceInterval: number;
+  quoteStalePriceInterval: number;
+  price: bigint;
+}
+
 export interface Market {
   address: Address;
   description: string;
@@ -33,7 +52,8 @@ export interface Market {
   feeConfig: InitializeFeeConfigParamsStruct;
   riskConfig: InitializeRiskConfigParamsStruct;
   oracle: InitializeOracleParamsStruct;
-  tokens: Record<Token, { symbol: string; decimals: number }>;
+  priceFeed: PriceFeedInformation;
+  tokens: Record<Token, TokenInformation>;
 }
 
 interface FactoryContext {
@@ -119,6 +139,51 @@ export function FactoryProvider({ children }: Props) {
       ),
     );
 
+    const priceFeedInformation = await Promise.all(
+      addresses.map(async (_, i) => {
+        const [
+          base,
+          quote,
+          baseStalePriceInterval,
+          quoteStalePriceInterval,
+          getPrice,
+        ] = await Promise.all(
+          [
+            "base",
+            "quote",
+            "baseStalePriceInterval",
+            "quoteStalePriceInterval",
+            "getPrice",
+          ].map(
+            async (param) =>
+              readContract(config, {
+                abi: PriceFeed.abi,
+                address: oracles[i].priceFeed as Address,
+                functionName: param,
+              }) as Promise<unknown>,
+          ),
+        );
+        console.log(baseStalePriceInterval);
+        return {
+          base: base as Address,
+          quote: quote as Address,
+          baseDescription: (await readContract(config, {
+            abi: AggregatorV3Interface.abi,
+            address: base as Address,
+            functionName: "description",
+          })) as string,
+          quoteDescription: (await readContract(config, {
+            abi: AggregatorV3Interface.abi,
+            address: quote as Address,
+            functionName: "description",
+          })) as string,
+          baseStalePriceInterval: Number(baseStalePriceInterval as bigint),
+          quoteStalePriceInterval: Number(quoteStalePriceInterval as bigint),
+          price: getPrice as bigint,
+        };
+      }),
+    );
+
     const tokens = await Promise.all(
       addresses.map(async (_, i) => {
         const tokensArray = await Promise.all(
@@ -139,15 +204,32 @@ export function FactoryProvider({ children }: Props) {
               address: (datas[i] as any)[tokenName],
               functionName: "decimals",
             });
-            return { symbol, decimals, tokenName };
+            const totalSupply = await readContract(config, {
+              abi: erc20Abi,
+              address: (datas[i] as any)[tokenName],
+              functionName: "totalSupply",
+            });
+            const feeRecipientBalance = await readContract(config, {
+              abi: erc20Abi,
+              address: (datas[i] as any)[tokenName],
+              functionName: "balanceOf",
+              args: [feeConfigs[i].feeRecipient as Address],
+            });
+            return {
+              symbol,
+              decimals,
+              totalSupply,
+              feeRecipientBalance,
+              tokenName,
+            };
           }),
         );
         return tokensArray.reduce(
-          (acc, { symbol, decimals, tokenName }) => {
-            acc[tokenName as Token] = { symbol, decimals };
+          (acc, { tokenName, ...rest }) => {
+            acc[tokenName as Token] = { ...rest };
             return acc;
           },
-          {} as Record<Token, { symbol: string; decimals: number }>,
+          {} as Record<Token, TokenInformation>,
         );
       }),
     );
@@ -161,10 +243,11 @@ export function FactoryProvider({ children }: Props) {
         riskConfig: riskConfigs[i],
         oracle: oracles[i],
         tokens: tokens[i],
+        priceFeed: priceFeedInformation[i],
       })),
     );
 
-    setMarketName(descriptions[0]);
+    setMarketName(descriptions[descriptions.length - 1]);
 
     setProgress(100);
   };
