@@ -379,6 +379,7 @@ select {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  min-width: 600px;
 }
 .market-entry {
   border: 1px solid #ddd;

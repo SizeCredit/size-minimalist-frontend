@@ -1,6 +1,6 @@
 import { createContext, ReactNode } from "react";
 import { Address } from "viem";
-import { type Chain } from "wagmi/chains";
+import { base, type Chain } from "wagmi/chains";
 import baseSepolia from "../markets/base-sepolia";
 import baseMainnet from "../markets/base-mainnet";
 import { useAccount, useBlockNumber } from "wagmi";
@@ -12,6 +12,7 @@ interface ConfigContext {
     SizeFactory: Address;
     WETH: Address;
   };
+  BASESCAN: string;
   blockNumber?: bigint;
   pastBlocks: bigint;
 }
@@ -31,10 +32,16 @@ export function ConfigProvider({ children }: Props) {
   const blockNumber = useBlockNumber({ config }).data;
   const pastBlocks = 10_000n;
 
+  const BASESCAN =
+    chain.chain.id === base.id
+      ? "https://basescan.org"
+      : "https://sepolia.basescan.org";
+
   return (
     <ConfigContext.Provider
       value={{
         chain,
+        BASESCAN,
         blockNumber,
         pastBlocks,
       }}

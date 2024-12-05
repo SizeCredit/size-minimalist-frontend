@@ -6,7 +6,7 @@ import Charts from "./Charts";
 import Positions from "./Positions";
 import Factory from "./Factory";
 
-const tabs = ["Swap", "Limit", "Funding", "Charts", "Positions", "Factory"];
+const tabs = ["Factory", "Swap", "Limit", "Funding", "Charts", "Positions"];
 
 const Tabs = () => {
   const [activeTab, setActiveTab] = useState(tabs[0]);

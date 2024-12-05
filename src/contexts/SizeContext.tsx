@@ -47,14 +47,9 @@ type Props = {
 export function SizeProvider({ children }: Props) {
   const account = useAccount();
   const { updatePositions, debtPositions } = useContext(PositionsContext);
-  const { chain } = useContext(ConfigContext);
+  const { chain, BASESCAN } = useContext(ConfigContext);
   const { market } = useContext(FactoryContext);
   const { price } = useContext(PriceContext);
-
-  const BASESCAN =
-    chain.chain.id === base.id
-      ? "https://basescan.org"
-      : "https://sepolia.basescan.org";
 
   const repay = async (debtPositionId: string) => {
     const borrower = account.address;
