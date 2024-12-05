@@ -1,22 +1,23 @@
-import { Token } from "../contexts/ConfigContext";
+import { Market } from "../contexts/FactoryContext";
 import { LimitOrder } from "../contexts/LimitOrdersContext";
 
 function collateralRatio(
-  tokens: Record<Token, { decimals: number }>,
+  market: Market,
   offer: LimitOrder,
   price: number,
   amount: number,
 ): number {
   const collateral =
     Number(offer.user.collateralTokenBalance) /
-    10 ** tokens.CollateralToken.decimals;
+    10 ** market.tokens.collateralToken.decimals;
   const debt =
-    Number(offer.user.debtBalance) / 10 ** tokens.DebtToken.decimals + amount;
+    Number(offer.user.debtBalance) / 10 ** market.tokens.debtToken.decimals +
+    amount;
   return (collateral * price) / debt;
 }
 
 export function filterOffers(
-  tokens: Record<Token, { decimals: number }>,
+  market: Market,
   offers: LimitOrder[],
   amount: number,
   sell: boolean,
@@ -37,10 +38,10 @@ export function filterOffers(
     .filter((offer) => {
       return sell
         ? Number(offer.user.borrowATokenBalance) /
-            10 ** tokens.BorrowAToken.decimals >
+            10 ** market.tokens.borrowAToken.decimals >
             amount
         : price
-          ? collateralRatio(tokens, offer, price, amount) >
+          ? collateralRatio(market, offer, price, amount) >
             Math.max(Number(offer.user.user.openingLimitBorrowCR) / 1e18, 1.5)
           : false;
     });

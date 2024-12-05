@@ -3,16 +3,15 @@ import { Quote, SwapContext } from "../contexts/SwapContext";
 import { format } from "../services/format";
 import { LimitOrdersContext } from "../contexts/LimitOrdersContext";
 import { parseUnits } from "ethers";
-import { ConfigContext } from "../contexts/ConfigContext";
 import { SizeContext } from "../contexts/SizeContext";
+import { FactoryContext } from "../contexts/FactoryContext";
 
 const actions = ["Buy", "Sell"];
 
 const DECIMALS = 4;
 
 const Swap = () => {
-  const { market } = useContext(ConfigContext);
-  const { tokens } = market;
+  const { market } = useContext(FactoryContext);
   const [buyAmount, setBuyAmount] = useState("");
   const [sellAmount, setSellAmount] = useState("");
   const [action, setAction] = useState(actions[0]);
@@ -29,10 +28,16 @@ const Swap = () => {
   const { progress } = useContext(LimitOrdersContext);
 
   useEffect(() => {
+    if (!market) return;
     if (progress === 100) {
-      handleBuyCredit(market.minimumCreditAmount.toString());
+      handleBuyCredit(
+        (
+          Number(market.riskConfig.minimumCreditBorrowAToken) /
+          10 ** market.tokens.borrowAToken.decimals
+        ).toString(),
+      );
     }
-  }, [progress]);
+  }, [market, progress]);
 
   useEffect(() => {
     if (action === actions[0]) handleBuyCredit(buyAmount);
@@ -89,7 +94,7 @@ const Swap = () => {
           quote,
           parseUnits(
             Number(buyAmount).toString(),
-            tokens.BorrowAToken.decimals,
+            market?.tokens.borrowAToken.decimals,
           ),
           tenor,
         )
@@ -97,7 +102,7 @@ const Swap = () => {
           quote,
           parseUnits(
             Number(sellAmount).toString(),
-            tokens.BorrowAToken.decimals,
+            market?.tokens.borrowAToken.decimals,
           ),
           tenor,
         );

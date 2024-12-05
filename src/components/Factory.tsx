@@ -1,12 +1,9 @@
 import { useContext } from "react";
 import { FactoryContext } from "../contexts/FactoryContext";
 import { format } from "../services/format";
-import { ConfigContext } from "../contexts/ConfigContext";
 
 const Factory = () => {
   const { markets } = useContext(FactoryContext);
-  const { market } = useContext(ConfigContext);
-  const { tokens } = market;
 
   return (
     <>
@@ -45,7 +42,7 @@ const Factory = () => {
               <div>
                 <b>Fragmentation Fee:</b>{" "}
                 {format(market.feeConfig.fragmentationFee, 18)}{" "}
-                {tokens.UnderlyingBorrowToken.symbol}
+                {market.tokens.underlyingBorrowToken.symbol}
               </div>
               <div>
                 <b>Liquidation Reward:</b>{" "}
@@ -79,17 +76,17 @@ const Factory = () => {
                 <b>Min Borrow A Token:</b>{" "}
                 {format(
                   market.riskConfig.minimumCreditBorrowAToken,
-                  tokens.BorrowAToken.decimals,
+                  market.tokens.borrowAToken.decimals,
                 )}{" "}
-                {tokens.UnderlyingBorrowToken.symbol}
+                {market.tokens.underlyingBorrowToken.symbol}
               </div>
               <div>
                 <b>Borrow A Token Cap:</b>{" "}
                 {format(
                   market.riskConfig.borrowATokenCap,
-                  tokens.BorrowAToken.decimals,
+                  market.tokens.borrowAToken.decimals,
                 )}{" "}
-                {tokens.UnderlyingBorrowToken.symbol}
+                {market.tokens.underlyingBorrowToken.symbol}
               </div>
               <div>
                 <b>Min Tenor:</b> {market.riskConfig.minTenor.toString()}{" "}

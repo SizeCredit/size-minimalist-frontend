@@ -1,30 +1,33 @@
 import { useContext, useState } from "react";
-import { ConfigContext } from "../contexts/ConfigContext";
-import { merge } from "../services/merge";
 import { parseUnits } from "ethers";
 import { SizeContext } from "../contexts/SizeContext";
+import { FactoryContext, Token } from "../contexts/FactoryContext";
 
 const actions = ["Deposit", "Withdraw"];
 
 const Funding = () => {
-  const { market } = useContext(ConfigContext);
-  const { deployment, tokens } = market;
-  const tokenDeployment = merge(deployment, tokens);
+  const { market } = useContext(FactoryContext);
   const [action, setAction] = useState(actions[0]);
 
-  const depositTokens = [
-    tokenDeployment.UnderlyingCollateralToken,
-    tokenDeployment.UnderlyingBorrowToken,
+  const depositTokens: Token[] = [
+    "underlyingCollateralToken",
+    "underlyingBorrowToken",
   ];
 
   const { deposit, withdraw } = useContext(SizeContext);
-  const [token, setToken] = useState<Record<string, any>>(depositTokens[0]);
+  const [token, setToken] = useState<Token>(depositTokens[0]);
   const [amount, setAmount] = useState("0");
 
   const onClick = () =>
     action === actions[0]
-      ? deposit(token!.address, parseUnits(amount, token!.decimals))
-      : withdraw(token!.address, parseUnits(amount, token!.decimals));
+      ? deposit(
+          market?.data[token] as string,
+          parseUnits(amount, market?.tokens[token].decimals),
+        )
+      : withdraw(
+          market?.data[token] as string,
+          parseUnits(amount, market?.tokens[token].decimals),
+        );
 
   return (
     <>
@@ -47,13 +50,18 @@ const Funding = () => {
             <select
               onChange={(e) =>
                 setToken(
-                  depositTokens.find((x) => x.symbol === e.target.value)!,
+                  depositTokens.find(
+                    (x) => market?.tokens[x].symbol === e.target.value,
+                  )!,
                 )
               }
             >
               {depositTokens.map((token) => (
-                <option key={token.symbol} value={token.symbol}>
-                  {token.symbol}
+                <option
+                  key={market?.tokens[token].symbol}
+                  value={market?.tokens[token].symbol}
+                >
+                  {market?.tokens[token].symbol}
                 </option>
               ))}
             </select>

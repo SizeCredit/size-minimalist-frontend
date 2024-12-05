@@ -1,7 +1,6 @@
 import { createContext, ReactNode, useContext } from "react";
 import { useAccount, useReadContract } from "wagmi";
 import { UserViewStruct } from "../typechain/Size";
-import { ConfigContext } from "./ConfigContext";
 import { config } from "../wagmi";
 import {
   CreditPosition,
@@ -9,6 +8,9 @@ import {
   PositionsContext,
 } from "./PositionsContext";
 import { BigNumberish } from "ethers";
+import { FactoryContext } from "./FactoryContext";
+import Size from "../abi/Size.json";
+import { Address, erc20Abi } from "viem";
 
 interface User extends UserViewStruct {
   underlyingBorrowTokenBalance: BigNumberish;
@@ -30,30 +32,31 @@ type Props = {
 export function UserProvider({ children }: Props) {
   const account = useAccount();
   const { creditPositions, debtPositions } = useContext(PositionsContext);
-  const { market } = useContext(ConfigContext);
-  const { deployment } = market;
-  const getUserView = useReadContract({
-    abi: deployment.Size.abi,
-    address: deployment.Size.address,
-    functionName: "getUserView",
-    args: [account.address],
-    config,
-  });
+  const { market } = useContext(FactoryContext);
+  const getUserView = market
+    ? useReadContract({
+        abi: Size.abi,
+        address: market.address,
+        functionName: "getUserView",
+        args: [account.address],
+        config,
+      })
+    : undefined;
   const userView = (getUserView?.data || {}) as UserViewStruct;
 
   const underlyingBorrowTokenBalance = useReadContract({
-    abi: deployment.UnderlyingBorrowToken.abi,
-    address: deployment.UnderlyingBorrowToken.address,
+    abi: erc20Abi,
+    address: market?.data.underlyingBorrowToken as Address,
     functionName: "balanceOf",
-    args: [account.address],
+    args: [account.address!],
     config,
   });
 
   const underlyingCollateralTokenBalance = useReadContract({
-    abi: deployment.UnderlyingCollateralToken.abi,
-    address: deployment.UnderlyingCollateralToken.address,
+    abi: erc20Abi,
+    address: market?.data.underlyingCollateralToken as Address,
     functionName: "balanceOf",
-    args: [account.address],
+    args: [account.address!],
     config,
   });
 

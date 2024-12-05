@@ -5,9 +5,11 @@ import {
   useEffect,
   useState,
 } from "react";
-import { ConfigContext } from "./ConfigContext";
 import { config } from "../wagmi";
+import PriceFeed from "../abi/PriceFeed.json";
 import { readContract } from "wagmi/actions";
+import { FactoryContext } from "./FactoryContext";
+import { Address } from "viem";
 
 interface PriceContext {
   price?: number;
@@ -20,21 +22,20 @@ type Props = {
 };
 
 export function PriceProvider({ children }: Props) {
-  const { market } = useContext(ConfigContext);
-  const { deployment } = market;
+  const { market } = useContext(FactoryContext);
   const [price, setPrice] = useState<number>();
 
   useEffect(() => {
     (async () => {
       const p = await readContract(config, {
-        abi: deployment.PriceFeed.abi,
-        address: deployment.PriceFeed.address,
+        abi: PriceFeed.abi,
+        address: market?.oracle.priceFeed as Address,
         functionName: "getPrice",
       });
 
       setPrice(Number(p) / 1e18);
     })();
-  }, [deployment]);
+  }, [market]);
 
   return (
     <PriceContext.Provider
