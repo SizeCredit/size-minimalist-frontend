@@ -97,16 +97,16 @@ const Sidebar = () => {
               {format(
                 user?.collateralTokenBalance,
                 market?.tokens.collateralToken.decimals,
-                4,
+                3,
               )}{" "}
               {market?.tokens.collateralToken.symbol}
             </b>
-            &nbsp; &nbsp; &nbsp;
+            &nbsp;&nbsp;
             <i>
               {format(
                 user?.underlyingCollateralTokenBalance,
                 market?.tokens.collateralToken.decimals,
-                4,
+                3,
               )}{" "}
               {market?.tokens.underlyingCollateralToken.symbol}
             </i>
@@ -117,16 +117,16 @@ const Sidebar = () => {
             {format(
               user?.borrowATokenBalance,
               market?.tokens.borrowAToken.decimals,
-              4,
+              3,
             )}{" "}
             {market?.tokens.borrowAToken.symbol}
           </b>
-          &nbsp; &nbsp; &nbsp;
+          &nbsp;&nbsp;
           <i>
             {format(
               user?.underlyingBorrowTokenBalance,
               market?.tokens.borrowAToken.decimals,
-              4,
+              3,
             )}{" "}
             {market?.tokens.underlyingBorrowToken.symbol}
           </i>
@@ -134,7 +134,7 @@ const Sidebar = () => {
         <div>
           <span>
             <b>
-              {format(user?.debtBalance, market?.tokens.debtToken.decimals, 4)}{" "}
+              {format(user?.debtBalance, market?.tokens.debtToken.decimals, 3)}{" "}
               {market?.tokens.debtToken.symbol}
             </b>
           </span>

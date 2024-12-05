@@ -33,15 +33,13 @@ export function UserProvider({ children }: Props) {
   const account = useAccount();
   const { creditPositions, debtPositions } = useContext(PositionsContext);
   const { market } = useContext(FactoryContext);
-  const getUserView = market
-    ? useReadContract({
-        abi: Size.abi,
-        address: market.address,
-        functionName: "getUserView",
-        args: [account.address],
-        config,
-      })
-    : undefined;
+  const getUserView = useReadContract({
+    abi: Size.abi,
+    address: market?.address,
+    functionName: "getUserView",
+    args: [account.address],
+    config,
+  });
   const userView = (getUserView?.data || {}) as UserViewStruct;
 
   const underlyingBorrowTokenBalance = useReadContract({

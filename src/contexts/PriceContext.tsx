@@ -26,10 +26,12 @@ export function PriceProvider({ children }: Props) {
   const [price, setPrice] = useState<number>();
 
   useEffect(() => {
+    if (!market) return;
+
     (async () => {
       const p = await readContract(config, {
         abi: PriceFeed.abi,
-        address: market?.oracle.priceFeed as Address,
+        address: market.oracle.priceFeed as Address,
         functionName: "getPrice",
       });
 
