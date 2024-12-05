@@ -3,7 +3,6 @@ import { format, smallId } from "../services/format";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useContext, useEffect } from "react";
-import { ConfigContext } from "../contexts/ConfigContext";
 import { UserContext } from "../contexts/UserContext";
 import Blockies from "react-blockies";
 import { formatDistance } from "date-fns/formatDistance";
@@ -14,15 +13,16 @@ import { compensateCandidates } from "../services/compensateCandidates";
 import { PositionsContext } from "../contexts/PositionsContext";
 import { PriceContext } from "../contexts/PriceContext";
 import { SwapContext } from "../contexts/SwapContext";
+import { FactoryContext } from "../contexts/FactoryContext";
+import { ConfigContext } from "../contexts/ConfigContext";
 
 const Sidebar = () => {
   const account = useAccount();
   const { connectors, connect, error } = useConnect();
   const { price } = useContext(PriceContext);
+  const { pastBlocks, setPastBlocks } = useContext(ConfigContext);
   const { disconnect } = useDisconnect();
-  const { market, marketNames, marketName, setMarketName } =
-    useContext(ConfigContext);
-  const { tokens } = market;
+  const { market, markets, setMarketName } = useContext(FactoryContext);
   const { creditPositions: allCreditPositions } = useContext(PositionsContext);
   const { user, creditPositions, debtPositions } = useContext(UserContext);
   const { repay, compensate, sellCreditMarket } = useContext(SizeContext);
@@ -67,26 +67,38 @@ const Sidebar = () => {
           </button>
         </div>
       </div>
-      <div className="select-market">
-        <label>Market</label>
+      <div className="tabs">
+        <div>Market</div>
+      </div>
+      <div className="market-info">
         <select
-          value={marketName}
+          value={market?.description || ""}
           onChange={(e) => setMarketName(e.target.value)}
         >
-          {marketNames.map((m) => (
-            <option key={m} value={m}>
-              {m}
+          {markets.map((m) => (
+            <option key={m.description} value={m.description}>
+              {m.description}
             </option>
           ))}
         </select>
+      </div>
+      <div className="past-blocks">
+        <div className="past-blocks-content">
+          <label>Past Blocks</label>
+          <input
+            type="number"
+            value={Number(pastBlocks)}
+            onChange={(e) => setPastBlocks(BigInt(e.target.value))}
+          />
+        </div>
       </div>
       <div className="tabs">
         <div>Price</div>
       </div>
       <div className="price-info">
         <h5>
-          {format(price)} {tokens.UnderlyingCollateralToken.symbol}/
-          {tokens.UnderlyingBorrowToken.symbol}
+          {format(price)} {market?.tokens.underlyingCollateralToken.symbol}/
+          {market?.tokens.underlyingBorrowToken.symbol}
         </h5>
       </div>
       <div className="tabs">
@@ -98,42 +110,46 @@ const Sidebar = () => {
             <b>
               {format(
                 user?.collateralTokenBalance,
-                tokens.CollateralToken.decimals,
-                4,
+                market?.tokens.collateralToken.decimals,
+                3,
               )}{" "}
-              {tokens.CollateralToken.symbol}
+              {market?.tokens.collateralToken.symbol}
             </b>
-            &nbsp; &nbsp; &nbsp;
+            &nbsp;&nbsp;
             <i>
               {format(
                 user?.underlyingCollateralTokenBalance,
-                tokens.CollateralToken.decimals,
-                4,
+                market?.tokens.collateralToken.decimals,
+                3,
               )}{" "}
-              {tokens.UnderlyingCollateralToken.symbol}
+              {market?.tokens.underlyingCollateralToken.symbol}
             </i>
           </span>
         </div>
         <div>
           <b>
-            {format(user?.borrowATokenBalance, tokens.BorrowAToken.decimals, 4)}{" "}
-            {tokens.BorrowAToken.symbol}
+            {format(
+              user?.borrowATokenBalance,
+              market?.tokens.borrowAToken.decimals,
+              3,
+            )}{" "}
+            {market?.tokens.borrowAToken.symbol}
           </b>
-          &nbsp; &nbsp; &nbsp;
+          &nbsp;&nbsp;
           <i>
             {format(
               user?.underlyingBorrowTokenBalance,
-              tokens.BorrowAToken.decimals,
-              4,
+              market?.tokens.borrowAToken.decimals,
+              3,
             )}{" "}
-            {tokens.UnderlyingBorrowToken.symbol}
+            {market?.tokens.underlyingBorrowToken.symbol}
           </i>
         </div>
         <div>
           <span>
             <b>
-              {format(user?.debtBalance, tokens.DebtToken.decimals, 4)}{" "}
-              {tokens.DebtToken.symbol}
+              {format(user?.debtBalance, market?.tokens.debtToken.decimals, 3)}{" "}
+              {market?.tokens.debtToken.symbol}
             </b>
           </span>
         </div>
@@ -146,7 +162,10 @@ const Sidebar = () => {
           .filter((e) => e.credit > 0)
           .map((creditPosition, index) => {
             const credit = Number(
-              format(creditPosition.credit, tokens.BorrowAToken.decimals),
+              format(
+                creditPosition.credit,
+                market?.tokens.borrowAToken.decimals,
+              ),
             );
             const tenor = Math.floor(
               (creditPosition.debtPosition.dueDate.getTime() -
@@ -173,9 +192,9 @@ const Sidebar = () => {
                   <div className="position-amount positive">
                     {format(
                       creditPosition.credit,
-                      tokens.BorrowAToken.decimals,
+                      market?.tokens.borrowAToken.decimals,
                     )}{" "}
-                    {tokens.UnderlyingBorrowToken.symbol}
+                    {market?.tokens.underlyingBorrowToken.symbol}
                   </div>
                   <div className="">
                     Due{" "}
@@ -230,9 +249,9 @@ const Sidebar = () => {
                   <div className="position-amount negative">
                     {format(
                       debtPosition.futureValue,
-                      tokens.BorrowAToken.decimals,
+                      market?.tokens.borrowAToken.decimals,
                     )}{" "}
-                    {tokens.UnderlyingBorrowToken.symbol}
+                    {market?.tokens.underlyingBorrowToken.symbol}
                   </div>
                   <div className="">
                     Due {formatDistance(debtPosition.dueDate, new Date())}

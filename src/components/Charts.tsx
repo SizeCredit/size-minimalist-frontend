@@ -10,10 +10,10 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { filterOffers } from "../services/filterOffers";
-import { ConfigContext } from "../contexts/ConfigContext";
 import { PriceContext } from "../contexts/PriceContext";
 import { getRate } from "../services/getRate";
 import { format } from "../services/format";
+import { FactoryContext } from "../contexts/FactoryContext";
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
@@ -58,40 +58,39 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 const Charts = () => {
   const { borrowOffers: allBorrowOffers, loanOffers: allLoanOffers } =
     useContext(LimitOrdersContext);
-  const { market } = useContext(ConfigContext);
-  const { tokens } = market;
+  const { market } = useContext(FactoryContext);
   const { price } = useContext(PriceContext);
-  const [amount, setAmount] = useState(market.minimumCreditAmount);
+  const [amount, setAmount] = useState(
+    market
+      ? Number(market.riskConfig.minimumCreditBorrowAToken) /
+          10 ** market.tokens.borrowAToken.decimals
+      : 0,
+  );
+
   const [minDays, setMinDays] = useState(0);
   const [maxDays, setMaxDays] = useState(365);
   const [userFilter, setUserFilter] = useState("");
 
-  const borrowOffers = filterOffers(
-    tokens,
-    allBorrowOffers,
-    amount,
-    false,
-    price,
-  ).filter((offer) =>
-    userFilter
-      ? userFilter
-          .split(",")
-          .some((u) => offer.user.account.toString().includes(u))
-      : true,
-  );
-  const loanOffers = filterOffers(
-    tokens,
-    allLoanOffers,
-    amount,
-    true,
-    price,
-  ).filter((offer) =>
-    userFilter
-      ? userFilter
-          .split(",")
-          .some((u) => offer.user.account.toString().includes(u))
-      : true,
-  );
+  const borrowOffers = market
+    ? filterOffers(market, allBorrowOffers, amount, false, price).filter(
+        (offer) =>
+          userFilter
+            ? userFilter
+                .split(",")
+                .some((u) => offer.user.account.toString().includes(u))
+            : true,
+      )
+    : [];
+  const loanOffers = market
+    ? filterOffers(market, allLoanOffers, amount, true, price).filter(
+        (offer) =>
+          userFilter
+            ? userFilter
+                .split(",")
+                .some((u) => offer.user.account.toString().includes(u))
+            : true,
+      )
+    : [];
 
   const days = Array.from(
     { length: maxDays - minDays + 1 },
@@ -198,13 +197,16 @@ const Charts = () => {
         ),
         borrowATokenBalance: format(
           offer.user.borrowATokenBalance,
-          tokens.BorrowAToken.decimals,
+          market!.tokens.borrowAToken.decimals,
         ),
         collateralTokenBalance: format(
           offer.user.collateralTokenBalance,
-          tokens.CollateralToken.decimals,
+          market!.tokens.collateralToken.decimals,
         ),
-        debtBalance: format(offer.user.debtBalance, tokens.DebtToken.decimals),
+        debtBalance: format(
+          offer.user.debtBalance,
+          market!.tokens.debtToken.decimals,
+        ),
         maxDueDate: offer.maxDueDate,
         curveRelativeTime: offer.curveRelativeTime,
       })),
@@ -216,13 +218,16 @@ const Charts = () => {
         ),
         borrowATokenBalance: format(
           offer.user.borrowATokenBalance,
-          tokens.BorrowAToken.decimals,
+          market!.tokens.borrowAToken.decimals,
         ),
         collateralTokenBalance: format(
           offer.user.collateralTokenBalance,
-          tokens.CollateralToken.decimals,
+          market!.tokens.collateralToken.decimals,
         ),
-        debtBalance: format(offer.user.debtBalance, tokens.DebtToken.decimals),
+        debtBalance: format(
+          offer.user.debtBalance,
+          market!.tokens.debtToken.decimals,
+        ),
         maxDueDate: offer.maxDueDate,
         curveRelativeTime: offer.curveRelativeTime,
       })),
@@ -233,7 +238,7 @@ const Charts = () => {
   return (
     <>
       <div className="chart-amount">
-        <label>Amount ({market.tokens.UnderlyingBorrowToken.symbol})</label>
+        <label>Amount ({market?.tokens.underlyingBorrowToken.symbol})</label>
         <input
           type="text"
           value={amount}

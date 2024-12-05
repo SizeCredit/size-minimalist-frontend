@@ -6,11 +6,12 @@ import {
   useState,
 } from "react";
 import { CreditPositionStruct, DebtPositionStruct } from "../typechain/Size";
-import { ConfigContext } from "./ConfigContext";
+import Size from "../abi/Size.json";
 import { config } from "../wagmi";
 import { ethers } from "ethers";
 import { readContract } from "wagmi/actions";
 import { delayed } from "../services/delayed";
+import { FactoryContext } from "./FactoryContext";
 
 const RPC_REQUESTS_PER_SECOND = 10;
 
@@ -49,8 +50,7 @@ type Props = {
 };
 
 export function PositionsProvider({ children }: Props) {
-  const { market } = useContext(ConfigContext);
-  const { deployment } = market;
+  const { market } = useContext(FactoryContext);
   const [context, setContext] = useState<DebtPositionsCreditPositionsContext>({
     debtPositions: [],
     creditPositions: [],
@@ -58,10 +58,12 @@ export function PositionsProvider({ children }: Props) {
   const [progress, setProgress] = useState(0);
 
   const updatePositions = async () => {
+    if (!market) return;
+
     setProgress(0);
     const positionsCount = (await readContract(config, {
-      abi: deployment.Size.abi,
-      address: deployment.Size.address,
+      abi: Size.abi,
+      address: market?.address,
       functionName: "getPositionsCount",
     })) as [number, number];
 
@@ -72,8 +74,8 @@ export function PositionsProvider({ children }: Props) {
       .map(
         (_, i) => () =>
           readContract(config, {
-            abi: deployment.Size.abi,
-            address: deployment.Size.address,
+            abi: Size.abi,
+            address: market.address,
             functionName: "getDebtPosition",
             args: [BigInt(i)],
           }) as Promise<DebtPositionStruct>,
@@ -107,8 +109,8 @@ export function PositionsProvider({ children }: Props) {
       .map(
         (_, i) => () =>
           readContract(config, {
-            abi: deployment.Size.abi,
-            address: deployment.Size.address,
+            abi: Size.abi,
+            address: market.address,
             functionName: "getCreditPosition",
             args: [ethers.MaxUint256 / BigInt(2) + BigInt(i)],
           }) as Promise<CreditPositionStruct>,
@@ -147,7 +149,7 @@ export function PositionsProvider({ children }: Props) {
 
   useEffect(() => {
     updatePositions();
-  }, [deployment]);
+  }, [market]);
 
   return (
     <PositionsContext.Provider

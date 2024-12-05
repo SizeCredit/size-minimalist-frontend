@@ -13,6 +13,8 @@ import { deduplicate } from "../services/deduplicate";
 import { UserViewStruct } from "../typechain/Size";
 import { readContract } from "wagmi/actions";
 import { config } from "../wagmi";
+import { FactoryContext } from "./FactoryContext";
+import Size from "../abi/Size.json";
 
 const RPC_REQUESTS_PER_SECOND = 10;
 
@@ -49,28 +51,30 @@ export function LimitOrdersProvider({ children }: Props) {
   });
   const [progress, setProgress] = useState(0);
 
-  const { market } = useContext(ConfigContext);
-  const { deployment } = market;
+  const { blockNumber, pastBlocks } = useContext(ConfigContext);
+  const { market } = useContext(FactoryContext);
 
   const publicClient = usePublicClient();
 
   useEffect(() => {
     (async () => {
+      if (!market || !blockNumber) return;
+
       setProgress(0);
       const [sellCreditLimit, buyCreditLimit] = await Promise.all([
         publicClient.getLogs({
-          address: deployment.Size.address,
+          address: market.address,
           event: parseAbiItem(
             "event SellCreditLimit(uint256 indexed maxDueDate, uint256[] curveRelativeTimeTenors, int256[] curveRelativeTimeAprs, uint256[] curveRelativeTimeMarketRateMultipliers)",
           ),
-          fromBlock: BigInt(deployment.Size.block),
+          fromBlock: blockNumber - pastBlocks,
         }),
         publicClient.getLogs({
-          address: deployment.Size.address,
+          address: market.address,
           event: parseAbiItem(
             "event BuyCreditLimit(uint256 indexed maxDueDate, uint256[] curveRelativeTimeTenors, int256[] curveRelativeTimeAprs, uint256[] curveRelativeTimeMarketRateMultipliers)",
           ),
-          fromBlock: BigInt(deployment.Size.block),
+          fromBlock: blockNumber - pastBlocks,
         }),
       ]);
       const transactionHashes = [
@@ -92,8 +96,8 @@ export function LimitOrdersProvider({ children }: Props) {
         senders.map(
           (sender) =>
             readContract(config, {
-              abi: deployment.Size.abi,
-              address: deployment.Size.address,
+              abi: Size.abi,
+              address: market.address,
               functionName: "getUserView",
               args: [sender],
             }) as Promise<UserViewStruct>,
@@ -136,7 +140,7 @@ export function LimitOrdersProvider({ children }: Props) {
       });
       setProgress(100);
     })();
-  }, [deployment]);
+  }, [market]);
 
   return (
     <LimitOrdersContext.Provider value={{ ...context, progress }}>

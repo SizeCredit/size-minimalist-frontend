@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { Quote } from "./SwapContext";
 import { ethers } from "ethers";
 import { PriceContext } from "./PriceContext";
-import { base } from "wagmi/chains";
+import { FactoryContext } from "./FactoryContext";
 
 interface SizeContext {
   repay: (debtPositionId: string) => Promise<void>;
@@ -46,14 +46,9 @@ type Props = {
 export function SizeProvider({ children }: Props) {
   const account = useAccount();
   const { updatePositions, debtPositions } = useContext(PositionsContext);
-  const { market, chain } = useContext(ConfigContext);
+  const { chain, BASESCAN } = useContext(ConfigContext);
+  const { market } = useContext(FactoryContext);
   const { price } = useContext(PriceContext);
-  const { deployment, tokens } = market;
-
-  const BASESCAN =
-    chain.chain.id === base.id
-      ? "https://basescan.org"
-      : "https://sepolia.basescan.org";
 
   const repay = async (debtPositionId: string) => {
     const borrower = account.address;
@@ -70,7 +65,7 @@ export function SizeProvider({ children }: Props) {
     console.log(data);
     try {
       const tx = await sendTransaction(config, {
-        to: deployment.Size.address,
+        to: market!.address,
         data,
       });
       toast.success(
@@ -102,18 +97,18 @@ export function SizeProvider({ children }: Props) {
     });
     console.log(data);
     try {
-      if (token !== deployment.WETH.address) {
+      if (token !== chain.WETH) {
         const allowance = await readContract(config, {
           abi: erc20Abi,
           functionName: "allowance",
-          args: [account.address!, deployment.Size.address],
+          args: [account.address!, market!.address],
           address: token as Address,
         });
         if (allowance < amount) {
           const approve = await writeContract(config, {
             abi: erc20Abi,
             functionName: "approve",
-            args: [deployment.Size.address, amount],
+            args: [market!.address, amount],
             address: token as Address,
           });
           toast.success(
@@ -125,9 +120,9 @@ export function SizeProvider({ children }: Props) {
         }
       }
       const tx = await sendTransaction(config, {
-        to: deployment.Size.address,
+        to: market!.address,
         data,
-        value: token === deployment.WETH.address ? amount : BigInt(0),
+        value: token === chain.WETH ? amount : BigInt(0),
       });
       toast.success(
         <a target="_blank" href={`${BASESCAN}/tx/${tx}`}>
@@ -155,7 +150,7 @@ export function SizeProvider({ children }: Props) {
     console.log(data);
     try {
       const tx = await sendTransaction(config, {
-        to: deployment.Size.address,
+        to: market!.address,
         data,
       });
       toast.success(
@@ -170,9 +165,10 @@ export function SizeProvider({ children }: Props) {
 
   const buyCreditLimit = async (tenors: bigint[], aprs: bigint[]) => {
     const marketRateMultipliers = tenors.map(() => 0);
-    const maxDueDate = tenors.length === 0 ? 0 : Math.floor(
-      (new Date().getTime() + 1000 * 60 * 60 * 24 * 365) / 1000,
-    );
+    const maxDueDate =
+      tenors.length === 0
+        ? 0
+        : Math.floor((new Date().getTime() + 1000 * 60 * 60 * 24 * 365) / 1000);
     const arg = {
       maxDueDate,
       curveRelativeTime: {
@@ -190,7 +186,7 @@ export function SizeProvider({ children }: Props) {
     console.log(data);
     try {
       const tx = await sendTransaction(config, {
-        to: deployment.Size.address,
+        to: market!.address,
         data,
       });
       toast.success(
@@ -205,9 +201,10 @@ export function SizeProvider({ children }: Props) {
 
   const sellCreditLimit = async (tenors: bigint[], aprs: bigint[]) => {
     const marketRateMultipliers = tenors.map(() => 0);
-    const maxDueDate = tenors.length === 0 ? 0 : Math.floor(
-      (new Date().getTime() + 1000 * 60 * 60 * 24 * 365) / 1000,
-    );
+    const maxDueDate =
+      tenors.length === 0
+        ? 0
+        : Math.floor((new Date().getTime() + 1000 * 60 * 60 * 24 * 365) / 1000);
     const arg = {
       maxDueDate,
       curveRelativeTime: {
@@ -225,7 +222,7 @@ export function SizeProvider({ children }: Props) {
     console.log(data);
     try {
       const tx = await sendTransaction(config, {
-        to: deployment.Size.address,
+        to: market!.address,
         data,
       });
       toast.success(
@@ -267,7 +264,7 @@ export function SizeProvider({ children }: Props) {
     console.log(data);
     try {
       const tx = await sendTransaction(config, {
-        to: deployment.Size.address,
+        to: market!.address,
         data,
       });
       toast.success(
@@ -309,7 +306,7 @@ export function SizeProvider({ children }: Props) {
     console.log(data);
     try {
       const tx = await sendTransaction(config, {
-        to: deployment.Size.address,
+        to: market!.address,
         data,
       });
       toast.success(
@@ -341,7 +338,7 @@ export function SizeProvider({ children }: Props) {
     console.log(data);
     try {
       const tx = await sendTransaction(config, {
-        to: deployment.Size.address,
+        to: market!.address,
         data,
       });
       toast.success(
@@ -368,7 +365,7 @@ export function SizeProvider({ children }: Props) {
     console.log(data);
     try {
       const tx = await sendTransaction(config, {
-        to: deployment.Size.address,
+        to: market!.address,
         data,
       });
       toast.success(
@@ -389,8 +386,8 @@ export function SizeProvider({ children }: Props) {
     const minimumCollateralProfit =
       (0.98 *
         ((Number(debtPosition.futureValue) *
-          10 ** tokens.CollateralToken.decimals) /
-          10 ** tokens.BorrowAToken.decimals)) /
+          10 ** market!.tokens.collateralToken.decimals) /
+          10 ** market!.tokens.borrowAToken.decimals)) /
       price!;
     const deadline = Math.floor(Date.now() / 1000) + 60 * 60;
     const arg = {
@@ -407,7 +404,7 @@ export function SizeProvider({ children }: Props) {
     console.log(data);
     try {
       const tx = await sendTransaction(config, {
-        to: deployment.Size.address,
+        to: market!.address,
         data,
       });
       toast.success(

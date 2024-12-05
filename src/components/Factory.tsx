@@ -4,9 +4,8 @@ import { format } from "../services/format";
 import { ConfigContext } from "../contexts/ConfigContext";
 
 const Factory = () => {
+  const { BASESCAN } = useContext(ConfigContext);
   const { markets } = useContext(FactoryContext);
-  const { market } = useContext(ConfigContext);
-  const { tokens } = market;
 
   return (
     <>
@@ -16,92 +15,217 @@ const Factory = () => {
             <div key={market.address} className="market-entry">
               <h5>{market.description}</h5>
               <div>
-                <b>Address:</b> <code>{market.address}</code>
+                <b>Address:</b>{" "}
+                <a
+                  href={`${BASESCAN}/address/${market.address}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <code>{market.address}</code>
+                </a>
               </div>
               <div>
                 <b>Collateral Token:</b>{" "}
-                <code>{market.data.collateralToken.toString()}</code>
+                <a
+                  href={`${BASESCAN}/token/${market.data.collateralToken.toString()}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <code>{market.data.collateralToken.toString()}</code>
+                </a>
+              </div>
+              <div>
+                &nbsp;&nbsp; Total Supply:{" "}
+                {format(
+                  market.tokens.collateralToken.totalSupply,
+                  market.tokens.collateralToken.decimals,
+                  3,
+                  ",",
+                )}{" "}
+                {market.tokens.collateralToken.symbol}
               </div>
               <div>
                 <b>Borrow AToken:</b>{" "}
-                <code>{market.data.borrowAToken.toString()}</code>
+                <a
+                  href={`${BASESCAN}/token/${market.data.borrowAToken.toString()}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <code>{market.data.borrowAToken.toString()}</code>
+                </a>
+              </div>
+              <div>
+                &nbsp;&nbsp; Total Supply:{" "}
+                {format(
+                  market.tokens.borrowAToken.totalSupply,
+                  market.tokens.borrowAToken.decimals,
+                  3,
+                  ",",
+                )}{" "}
+                {market.tokens.borrowAToken.symbol}
               </div>
               <div>
                 <b>Debt Token:</b>{" "}
-                <code>{market.data.debtToken.toString()}</code>
+                <a
+                  href={`${BASESCAN}/token/${market.data.debtToken.toString()}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <code>{market.data.debtToken.toString()}</code>
+                </a>
+              </div>
+              <div>
+                &nbsp;&nbsp; Total Supply:{" "}
+                {format(
+                  market.tokens.debtToken.totalSupply,
+                  market.tokens.debtToken.decimals,
+                  3,
+                  ",",
+                )}{" "}
+                {market.tokens.debtToken.symbol}
               </div>
               <div>
                 <b>Underlying Collateral Token:</b>{" "}
-                <code>{market.data.underlyingCollateralToken.toString()}</code>
+                <a
+                  href={`${BASESCAN}/token/${market.data.underlyingCollateralToken.toString()}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <code>
+                    {market.data.underlyingCollateralToken.toString()}
+                  </code>
+                </a>
               </div>
               <div>
                 <b>Underlying Borrow Token:</b>{" "}
-                <code>{market.data.underlyingBorrowToken.toString()}</code>
+                <a
+                  href={`${BASESCAN}/token/${market.data.underlyingBorrowToken.toString()}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <code>{market.data.underlyingBorrowToken.toString()}</code>
+                </a>
               </div>
               <div>
                 <b>Swap Fee APR:</b>{" "}
-                {format(market.feeConfig.swapFeeAPR, 18 - 2)} %
+                {format(market.feeConfig.swapFeeAPR, 18 - 2)}%
               </div>
               <div>
                 <b>Fragmentation Fee:</b>{" "}
                 {format(market.feeConfig.fragmentationFee, 18)}{" "}
-                {tokens.UnderlyingBorrowToken.symbol}
+                {market.tokens.underlyingBorrowToken.symbol}
               </div>
               <div>
                 <b>Liquidation Reward:</b>{" "}
-                {format(market.feeConfig.liquidationRewardPercent, 18 - 2)} %
+                {format(market.feeConfig.liquidationRewardPercent, 18 - 2)}%
               </div>
               <div>
                 <b>Overdue Collateral Protocol:</b>{" "}
                 {format(
                   market.feeConfig.overdueCollateralProtocolPercent,
                   18 - 2,
-                )}{" "}
+                )}
                 %
               </div>
               <div>
                 <b>Liquidation Collateral Protocol:</b>{" "}
-                {format(market.feeConfig.collateralProtocolPercent, 18 - 2)} %
+                {format(market.feeConfig.collateralProtocolPercent, 18 - 2)}%
               </div>
               <div>
                 <b>Fee Recipient:</b>{" "}
-                <code>{market.feeConfig.feeRecipient.toString()}</code>
+                <a
+                  href={`${BASESCAN}/address/${market.feeConfig.feeRecipient.toString()}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <code>{market.feeConfig.feeRecipient.toString()}</code>
+                </a>
               </div>
               <div>
-                <b>CR Opening:</b> {format(market.riskConfig.crOpening, 18 - 2)}{" "}
+                &nbsp;&nbsp; Fees:{" "}
+                {format(
+                  market.tokens.borrowAToken.feeRecipientBalance,
+                  market.tokens.borrowAToken.decimals,
+                )}{" "}
+                {market.tokens.borrowAToken.symbol}
+              </div>
+              <div>
+                <b>CR Opening:</b> {format(market.riskConfig.crOpening, 18 - 2)}
                 %
               </div>
               <div>
                 <b>CR Liquidation:</b>{" "}
-                {format(market.riskConfig.crLiquidation, 18 - 2)} %
+                {format(market.riskConfig.crLiquidation, 18 - 2)}%
               </div>
               <div>
                 <b>Min Borrow A Token:</b>{" "}
                 {format(
                   market.riskConfig.minimumCreditBorrowAToken,
-                  tokens.BorrowAToken.decimals,
+                  market.tokens.borrowAToken.decimals,
                 )}{" "}
-                {tokens.UnderlyingBorrowToken.symbol}
+                {market.tokens.underlyingBorrowToken.symbol}
               </div>
               <div>
                 <b>Borrow A Token Cap:</b>{" "}
                 {format(
                   market.riskConfig.borrowATokenCap,
-                  tokens.BorrowAToken.decimals,
+                  market.tokens.borrowAToken.decimals,
+                  0,
+                  ",",
                 )}{" "}
-                {tokens.UnderlyingBorrowToken.symbol}
+                {market.tokens.underlyingBorrowToken.symbol}
               </div>
               <div>
                 <b>Min Tenor:</b> {market.riskConfig.minTenor.toString()}{" "}
-                seconds
+                seconds ({Number(market.riskConfig.minTenor) / 3600} hours)
               </div>
               <div>
                 <b>Max Tenor:</b> {market.riskConfig.maxTenor.toString()}{" "}
-                seconds
+                seconds ({Number(market.riskConfig.maxTenor) / 3600 / 24 / 365}{" "}
+                years)
               </div>
               <div>
-                <b>Oracle Price Feed:</b>{" "}
-                <code>{market.oracle.priceFeed.toString()}</code>
+                <b>Price Feed:</b>{" "}
+                <a
+                  href={`${BASESCAN}/address/${market.oracle.priceFeed.toString()}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <code>{market.oracle.priceFeed.toString()}</code>
+                </a>
+              </div>
+              <div>
+                <div>
+                  &nbsp;&nbsp; Price:{" "}
+                  {format(market.priceFeed.price, 18, 2, ",")}{" "}
+                  {market.tokens.underlyingCollateralToken.symbol} {"/"}{" "}
+                  {market.tokens.underlyingBorrowToken.symbol}
+                </div>
+                <div>
+                  &nbsp;&nbsp; Chainlink Base Aggregator:{" "}
+                  <a
+                    href={`${BASESCAN}/address/${market.priceFeed.base}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {market.priceFeed.baseDescription}
+                    {" ("}
+                    {market.priceFeed.baseStalePriceInterval} seconds
+                    {" stale interval)"}
+                  </a>
+                </div>
+                <div>
+                  &nbsp;&nbsp; Chainlink Quote Aggregator:{" "}
+                  <a
+                    href={`${BASESCAN}/address/${market.priceFeed.quote}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {market.priceFeed.quoteDescription} {" ("}
+                    {market.priceFeed.quoteStalePriceInterval} seconds
+                    {" stale interval)"}
+                  </a>
+                </div>
               </div>
               <div>
                 <b>Variable Pool Borrow Rate Stale Interval:</b>{" "}

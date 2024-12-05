@@ -1,10 +1,10 @@
 import { ReactNode, createContext, useContext } from "react";
 import { LimitOrdersContext } from "./LimitOrdersContext";
 import { getRate } from "../services/getRate";
-import { ConfigContext } from "./ConfigContext";
 import { PriceContext } from "./PriceContext";
 import { Address } from "viem";
 import { filterOffers } from "../services/filterOffers";
+import { FactoryContext } from "./FactoryContext";
 
 export interface Quote {
   user: Address;
@@ -25,13 +25,19 @@ type Props = {
 };
 
 export function SwapProvider({ children }: Props) {
-  const { market } = useContext(ConfigContext);
-  const { tokens } = market;
+  const { market } = useContext(FactoryContext);
   const { borrowOffers, loanOffers } = useContext(LimitOrdersContext);
   const { price } = useContext(PriceContext);
 
   const sellCreditQuote = (amount: number, tenor: number): Quote => {
-    const offers = filterOffers(tokens, loanOffers, amount, true, price, tenor);
+    const offers = filterOffers(
+      market!,
+      loanOffers,
+      amount,
+      true,
+      price,
+      tenor,
+    );
 
     const rates = offers.map((offer) => ({
       user: offer.user.account as Address,
@@ -47,7 +53,7 @@ export function SwapProvider({ children }: Props) {
   };
   const buyCreditQuote = (amount: number, tenor: number): Quote => {
     const offers = filterOffers(
-      tokens,
+      market!,
       borrowOffers,
       amount,
       false,

@@ -1,36 +1,21 @@
-import { createContext, Dispatch, ReactNode, useState } from "react";
-import { Abi } from "viem";
-import { type Chain } from "wagmi/chains";
-import baseMainnetWethUsdc from "../markets/base-mainnet-weth-usdc";
-import baseMainnetCbbtcUsdc from "../markets/base-mainnet-cbbtc-usdc";
-import baseSepoliaWethUsdc from "../markets/base-sepolia-weth-usdc";
-import baseSepoliaLinkUsdc from "../markets/base-sepolia-link-usdc";
+import { createContext, ReactNode, useState } from "react";
+import { Address } from "viem";
+import { base, type Chain } from "wagmi/chains";
 import baseSepolia from "../markets/base-sepolia";
 import baseMainnet from "../markets/base-mainnet";
-
-export type Token =
-  | "UnderlyingCollateralToken"
-  | "UnderlyingBorrowToken"
-  | "CollateralToken"
-  | "BorrowAToken"
-  | "DebtToken";
-
-export type Address = `0x${string}`;
+import { useAccount, useBlockNumber } from "wagmi";
+import { config } from "../wagmi";
 
 interface ConfigContext {
-  market: {
-    deployment: Record<string, { address: Address; abi: Abi; block: number }>;
-    tokens: Record<Token, { decimals: number; symbol: string }>;
-    minimumCreditAmount: number;
-  };
   chain: {
     chain: Chain;
-    SizeFactory: { address: Address; abi: Abi };
-    WETH: { address: Address; abi: Abi };
+    SizeFactory: Address;
+    WETH: Address;
   };
-  marketNames: string[];
-  marketName: string;
-  setMarketName: Dispatch<string>;
+  BASESCAN: string;
+  blockNumber?: bigint;
+  pastBlocks: bigint;
+  setPastBlocks: (value: bigint) => void;
 }
 
 export const ConfigContext = createContext<ConfigContext>({} as ConfigContext);
@@ -39,37 +24,28 @@ type Props = {
   children: ReactNode;
 };
 
-const DEFAULT_MARKET = "base-mainnet-weth-usdc";
-
 export function ConfigProvider({ children }: Props) {
-  const [marketName, setMarket] = useState(() => {
-    return localStorage.getItem("market") || DEFAULT_MARKET;
+  const account = useAccount({
+    config,
   });
-  const chain = marketName.includes("mainnet") ? baseMainnet : baseSepolia;
 
-  const markets = {
-    "base-mainnet-weth-usdc": baseMainnetWethUsdc,
-    "base-mainnet-cbbtc-usdc": baseMainnetCbbtcUsdc,
-    "base-sepolia-weth-usdc": baseSepoliaWethUsdc,
-    "base-sepolia-link-usdc": baseSepoliaLinkUsdc,
-  };
+  const chain = account.chain?.name === "Base" ? baseMainnet : baseSepolia;
+  const blockNumber = useBlockNumber({ config }).data;
+  const [pastBlocks, setPastBlocks] = useState<bigint>(10_000n);
 
-  const market = (markets as any)[marketName];
-  const marketNames = Object.keys(markets);
-
-  const setMarketName = (name: string) => {
-    setMarket(name);
-    localStorage.setItem("market", name);
-  };
+  const BASESCAN =
+    chain.chain.id === base.id
+      ? "https://basescan.org"
+      : "https://sepolia.basescan.org";
 
   return (
     <ConfigContext.Provider
       value={{
         chain,
-        market,
-        marketNames,
-        marketName,
-        setMarketName,
+        BASESCAN,
+        blockNumber,
+        pastBlocks,
+        setPastBlocks,
       }}
     >
       {children}
