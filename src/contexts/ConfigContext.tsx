@@ -31,7 +31,7 @@ export function ConfigProvider({ children }: Props) {
 
   const chain = account.chain?.name === "Base" ? baseMainnet : baseSepolia;
   const blockNumber = useBlockNumber({ config }).data;
-  const [pastBlocks, setPastBlocks] = useState<bigint>(10_000n);
+  const [pastBlocks, setPastBlocks] = useState<bigint>(100_000n);
 
   const BASESCAN =
     chain.chain.id === base.id
