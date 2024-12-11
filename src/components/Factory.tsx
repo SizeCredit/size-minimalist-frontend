@@ -162,6 +162,7 @@ const Factory = () => {
                 {format(
                   market.riskConfig.minimumCreditBorrowAToken,
                   market.tokens.borrowAToken.decimals,
+                  market.tokens.borrowAToken.decimals,
                 )}{" "}
                 {market.tokens.underlyingBorrowToken.symbol}
               </div>
