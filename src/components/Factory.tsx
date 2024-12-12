@@ -189,9 +189,13 @@ const Factory = () => {
                 <tr
                   key={key}
                   className={index % 2 === 0 ? "even-row" : "odd-row"}
-                  style={{
-                    backgroundColor: isValid[index] ? "white" : "lightpink",
-                  }}
+                  style={
+                    isValid[index]
+                      ? {}
+                      : {
+                          backgroundColor: "lightpink",
+                        }
+                  }
                 >
                   <td>{key}</td>
                   <td>
