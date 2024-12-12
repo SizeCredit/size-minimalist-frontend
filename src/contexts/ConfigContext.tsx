@@ -11,6 +11,7 @@ interface ConfigContext {
     chain: Chain;
     SizeFactory: Address;
     UniswapV3Factory: Address;
+    AaveV3Pool: Address;
     WETH: Address;
   };
   BASESCAN: string;
