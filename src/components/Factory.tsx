@@ -29,7 +29,7 @@ const Factory = () => {
   const [priceFeedParams, setPriceFeedParams] = useState<PriceFeedParamsStruct>(
     {
       uniswapV3Factory: chain.addresses.UniswapV3Factory,
-      pool: "",
+      uniswapV3Pool: "",
       twapWindow: 0,
       averageBlockTime: 0,
       baseToken: "",
