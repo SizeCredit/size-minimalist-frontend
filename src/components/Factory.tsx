@@ -28,7 +28,7 @@ const Factory = () => {
   const [action, setAction] = useState<string>(actions[0]);
   const [priceFeedParams, setPriceFeedParams] = useState<PriceFeedParamsStruct>(
     {
-      uniswapV3Factory: chain.UniswapV3Factory,
+      uniswapV3Factory: chain.addresses.UniswapV3Factory,
       pool: "",
       twapWindow: 0,
       averageBlockTime: 0,
@@ -38,12 +38,12 @@ const Factory = () => {
       quoteAggregator: "",
       baseStalePriceInterval: 0,
       quoteStalePriceInterval: 0,
-      sequencerUptimeFeed: "",
+      sequencerUptimeFeed: chain.addresses.ChainlinkSequencerUptimeFeed,
     } as PriceFeedParamsStruct,
   );
   const [createBorrowATokenV1_5Params, setCreateBorrowATokenV1_5Params] =
     useState<CreateBorrowATokenV1_5Params>({
-      variablePool: chain.AaveV3Pool as Address,
+      variablePool: chain.addresses.AaveV3Pool as Address,
       underlyingBorrowToken: "" as Address,
     });
   const [createMarketFeeConfigParams, setCreateMarketFeeConfigParams] =
@@ -71,10 +71,10 @@ const Factory = () => {
     } as InitializeOracleParamsStruct);
   const [createMarketDataParams, setCreateMarketDataParams] =
     useState<InitializeDataParamsStruct>({
-      weth: chain.WETH,
+      weth: chain.addresses.WETH,
       underlyingCollateralToken: "" as Address,
       underlyingBorrowToken: "" as Address,
-      variablePool: chain.AaveV3Pool as Address,
+      variablePool: chain.addresses.AaveV3Pool as Address,
       borrowATokenV1_5: "" as Address,
     } as InitializeDataParamsStruct);
   const actionParams = {

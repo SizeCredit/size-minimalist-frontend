@@ -97,7 +97,7 @@ export function SizeProvider({ children }: Props) {
     });
     console.log(data);
     try {
-      if (token !== chain.WETH) {
+      if (token !== chain.addresses.WETH) {
         const allowance = await readContract(config, {
           abi: erc20Abi,
           functionName: "allowance",
@@ -122,7 +122,7 @@ export function SizeProvider({ children }: Props) {
       const tx = await sendTransaction(config, {
         to: market!.address,
         data,
-        value: token === chain.WETH ? amount : BigInt(0),
+        value: token === chain.addresses.WETH ? amount : BigInt(0),
       });
       toast.success(
         <a target="_blank" href={`${BASESCAN}/tx/${tx}`}>

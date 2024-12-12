@@ -9,10 +9,7 @@ import { config } from "../wagmi";
 interface ConfigContext {
   chain: {
     chain: Chain;
-    SizeFactory: Address;
-    UniswapV3Factory: Address;
-    AaveV3Pool: Address;
-    WETH: Address;
+    addresses: Record<string, Address>;
   };
   BASESCAN: string;
   blockNumber?: bigint;

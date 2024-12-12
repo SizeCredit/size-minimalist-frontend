@@ -85,13 +85,13 @@ export function RegistryProvider({ children }: Props) {
 
     const addresses = (await readContract(config, {
       abi: SizeFactory.abi,
-      address: chain.SizeFactory,
+      address: chain.addresses.SizeFactory,
       functionName: "getMarkets",
     })) as Address[];
 
     const descriptions = (await readContract(config, {
       abi: SizeFactory.abi,
-      address: chain.SizeFactory,
+      address: chain.addresses.SizeFactory,
       functionName: "getMarketDescriptions",
     })) as string[];
 
