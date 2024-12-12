@@ -10,6 +10,7 @@ interface ConfigContext {
   chain: {
     chain: Chain;
     SizeFactory: Address;
+    UniswapV3Factory: Address;
     WETH: Address;
   };
   BASESCAN: string;

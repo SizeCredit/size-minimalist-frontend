@@ -13,7 +13,7 @@ import { filterOffers } from "../services/filterOffers";
 import { PriceContext } from "../contexts/PriceContext";
 import { getRate } from "../services/getRate";
 import { format } from "../services/format";
-import { FactoryContext } from "../contexts/FactoryContext";
+import { RegistryContext } from "../contexts/RegistryContext";
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
@@ -58,7 +58,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 const Charts = () => {
   const { borrowOffers: allBorrowOffers, loanOffers: allLoanOffers } =
     useContext(LimitOrdersContext);
-  const { market } = useContext(FactoryContext);
+  const { market } = useContext(RegistryContext);
   const { price } = useContext(PriceContext);
   const [amount, setAmount] = useState(
     market

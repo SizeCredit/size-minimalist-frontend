@@ -11,7 +11,7 @@ import { config } from "../wagmi";
 import { ethers } from "ethers";
 import { readContract } from "wagmi/actions";
 import { delayed } from "../services/delayed";
-import { FactoryContext } from "./FactoryContext";
+import { RegistryContext } from "./RegistryContext";
 
 const RPC_REQUESTS_PER_SECOND = 10;
 
@@ -50,7 +50,7 @@ type Props = {
 };
 
 export function PositionsProvider({ children }: Props) {
-  const { market } = useContext(FactoryContext);
+  const { market } = useContext(RegistryContext);
   const [context, setContext] = useState<DebtPositionsCreditPositionsContext>({
     debtPositions: [],
     creditPositions: [],

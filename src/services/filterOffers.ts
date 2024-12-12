@@ -1,4 +1,4 @@
-import { Market } from "../contexts/FactoryContext";
+import { Market } from "../contexts/RegistryContext";
 import { LimitOrder } from "../contexts/LimitOrdersContext";
 
 function collateralRatio(

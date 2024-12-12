@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { Quote } from "./SwapContext";
 import { ethers } from "ethers";
 import { PriceContext } from "./PriceContext";
-import { FactoryContext } from "./FactoryContext";
+import { RegistryContext } from "./RegistryContext";
 
 interface SizeContext {
   repay: (debtPositionId: string) => Promise<void>;
@@ -47,7 +47,7 @@ export function SizeProvider({ children }: Props) {
   const account = useAccount();
   const { updatePositions, debtPositions } = useContext(PositionsContext);
   const { chain, BASESCAN } = useContext(ConfigContext);
-  const { market } = useContext(FactoryContext);
+  const { market } = useContext(RegistryContext);
   const { price } = useContext(PriceContext);
 
   const repay = async (debtPositionId: string) => {

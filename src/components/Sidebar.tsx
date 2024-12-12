@@ -13,7 +13,7 @@ import { compensateCandidates } from "../services/compensateCandidates";
 import { PositionsContext } from "../contexts/PositionsContext";
 import { PriceContext } from "../contexts/PriceContext";
 import { SwapContext } from "../contexts/SwapContext";
-import { FactoryContext } from "../contexts/FactoryContext";
+import { RegistryContext } from "../contexts/RegistryContext";
 import { ConfigContext } from "../contexts/ConfigContext";
 
 const Sidebar = () => {
@@ -22,7 +22,7 @@ const Sidebar = () => {
   const { price } = useContext(PriceContext);
   const { pastBlocks, setPastBlocks } = useContext(ConfigContext);
   const { disconnect } = useDisconnect();
-  const { market, markets, setMarketName } = useContext(FactoryContext);
+  const { market, markets, setMarketName } = useContext(RegistryContext);
   const { creditPositions: allCreditPositions } = useContext(PositionsContext);
   const { user, creditPositions, debtPositions } = useContext(UserContext);
   const { repay, compensate, sellCreditMarket } = useContext(SizeContext);

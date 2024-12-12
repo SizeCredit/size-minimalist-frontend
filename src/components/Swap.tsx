@@ -4,14 +4,14 @@ import { format } from "../services/format";
 import { LimitOrdersContext } from "../contexts/LimitOrdersContext";
 import { parseUnits } from "ethers";
 import { SizeContext } from "../contexts/SizeContext";
-import { FactoryContext } from "../contexts/FactoryContext";
+import { RegistryContext } from "../contexts/RegistryContext";
 
 const actions = ["Buy", "Sell"];
 
 const DECIMALS = 4;
 
 const Swap = () => {
-  const { market } = useContext(FactoryContext);
+  const { market } = useContext(RegistryContext);
   const [buyAmount, setBuyAmount] = useState("");
   const [sellAmount, setSellAmount] = useState("");
   const [action, setAction] = useState(actions[0]);

@@ -4,7 +4,7 @@ import { getRate } from "../services/getRate";
 import { PriceContext } from "./PriceContext";
 import { Address } from "viem";
 import { filterOffers } from "../services/filterOffers";
-import { FactoryContext } from "./FactoryContext";
+import { RegistryContext } from "./RegistryContext";
 
 export interface Quote {
   user: Address;
@@ -25,7 +25,7 @@ type Props = {
 };
 
 export function SwapProvider({ children }: Props) {
-  const { market } = useContext(FactoryContext);
+  const { market } = useContext(RegistryContext);
   const { borrowOffers, loanOffers } = useContext(LimitOrdersContext);
   const { price } = useContext(PriceContext);
 

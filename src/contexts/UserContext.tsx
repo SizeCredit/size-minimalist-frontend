@@ -8,7 +8,7 @@ import {
   PositionsContext,
 } from "./PositionsContext";
 import { BigNumberish } from "ethers";
-import { FactoryContext } from "./FactoryContext";
+import { RegistryContext } from "./RegistryContext";
 import Size from "../abi/Size.json";
 import { Address, erc20Abi } from "viem";
 
@@ -32,7 +32,7 @@ type Props = {
 export function UserProvider({ children }: Props) {
   const account = useAccount();
   const { creditPositions, debtPositions } = useContext(PositionsContext);
-  const { market } = useContext(FactoryContext);
+  const { market } = useContext(RegistryContext);
   const getUserView = useReadContract({
     abi: Size.abi,
     address: market?.address,

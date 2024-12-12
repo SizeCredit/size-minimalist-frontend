@@ -17,6 +17,7 @@ import { SwapProvider } from "./contexts/SwapContext.tsx";
 import { SidebarProvider } from "./contexts/SidebarContext.tsx";
 import { SizeProvider } from "./contexts/SizeContext.tsx";
 import { FactoryProvider } from "./contexts/FactoryContext.tsx";
+import { RegistryProvider } from "./contexts/RegistryContext.tsx";
 
 globalThis.Buffer = Buffer;
 
@@ -27,23 +28,25 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <ConfigProvider>
-          <FactoryProvider>
-            <PriceProvider>
-              <PositionsProvider>
-                <LimitOrdersProvider>
-                  <UserProvider>
-                    <SwapProvider>
-                      <SidebarProvider>
-                        <SizeProvider>
-                          <App />
-                        </SizeProvider>
-                      </SidebarProvider>
-                    </SwapProvider>
-                  </UserProvider>
-                </LimitOrdersProvider>
-              </PositionsProvider>
-            </PriceProvider>
-          </FactoryProvider>
+          <RegistryProvider>
+            <FactoryProvider>
+              <PriceProvider>
+                <PositionsProvider>
+                  <LimitOrdersProvider>
+                    <UserProvider>
+                      <SwapProvider>
+                        <SidebarProvider>
+                          <SizeProvider>
+                            <App />
+                          </SizeProvider>
+                        </SidebarProvider>
+                      </SwapProvider>
+                    </UserProvider>
+                  </LimitOrdersProvider>
+                </PositionsProvider>
+              </PriceProvider>
+            </FactoryProvider>
+          </RegistryProvider>
         </ConfigProvider>
       </QueryClientProvider>
     </WagmiProvider>

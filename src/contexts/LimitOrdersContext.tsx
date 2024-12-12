@@ -13,7 +13,7 @@ import { deduplicate } from "../services/deduplicate";
 import { UserViewStruct } from "../typechain/Size";
 import { readContract } from "wagmi/actions";
 import { config } from "../wagmi";
-import { FactoryContext } from "./FactoryContext";
+import { RegistryContext } from "./RegistryContext";
 import Size from "../abi/Size.json";
 
 const RPC_REQUESTS_PER_SECOND = 10;
@@ -52,7 +52,7 @@ export function LimitOrdersProvider({ children }: Props) {
   const [progress, setProgress] = useState(0);
 
   const { blockNumber, pastBlocks } = useContext(ConfigContext);
-  const { market } = useContext(FactoryContext);
+  const { market } = useContext(RegistryContext);
 
   const publicClient = usePublicClient();
 

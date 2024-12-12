@@ -1,12 +1,12 @@
 import { useContext, useState } from "react";
 import { parseUnits } from "ethers";
 import { SizeContext } from "../contexts/SizeContext";
-import { FactoryContext, Token } from "../contexts/FactoryContext";
+import { RegistryContext, Token } from "../contexts/RegistryContext";
 
 const actions = ["Deposit", "Withdraw"];
 
 const Funding = () => {
-  const { market } = useContext(FactoryContext);
+  const { market } = useContext(RegistryContext);
   const [action, setAction] = useState(actions[0]);
 
   const depositTokens: Token[] = [

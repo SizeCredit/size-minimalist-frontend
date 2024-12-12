@@ -5,8 +5,17 @@ import Limit from "./Limit";
 import Charts from "./Charts";
 import Positions from "./Positions";
 import Factory from "./Factory";
+import Registry from "./Registry";
 
-const tabs = ["Factory", "Swap", "Limit", "Funding", "Charts", "Positions"];
+const tabs = [
+  "Registry",
+  "Factory",
+  "Swap",
+  "Limit",
+  "Funding",
+  "Charts",
+  "Positions",
+];
 
 const Tabs = () => {
   const [activeTab, setActiveTab] = useState(tabs[0]);
@@ -31,6 +40,7 @@ const Tabs = () => {
         {activeTab === "Charts" ? <Charts /> : null}
         {activeTab === "Positions" ? <Positions /> : null}
         {activeTab === "Factory" ? <Factory /> : null}
+        {activeTab === "Registry" ? <Registry /> : null}
       </div>
     </div>
   );
