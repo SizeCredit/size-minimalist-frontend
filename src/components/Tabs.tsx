@@ -6,6 +6,7 @@ import Charts from "./Charts";
 import Positions from "./Positions";
 import Factory from "./Factory";
 import Registry from "./Registry";
+import Tx from "./Tx";
 
 const tabs = [
   "Registry",
@@ -15,6 +16,7 @@ const tabs = [
   "Funding",
   "Charts",
   "Positions",
+  "Tx",
 ];
 
 const Tabs = () => {
@@ -41,6 +43,7 @@ const Tabs = () => {
         {activeTab === "Positions" ? <Positions /> : null}
         {activeTab === "Factory" ? <Factory /> : null}
         {activeTab === "Registry" ? <Registry /> : null}
+        {activeTab === "Tx" ? <Tx /> : null}
       </div>
     </div>
   );
