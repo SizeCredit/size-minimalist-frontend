@@ -459,3 +459,19 @@ select {
 .width-100 {
   width: 100%;
 }
+
+.tx-container {
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.tx-input {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  input {
+    font-family: monospace;
+    font-size: 14px;
+  }
+}

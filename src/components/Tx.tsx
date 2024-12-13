@@ -56,7 +56,9 @@ const Tx = () => {
           </div>
         </div>
         <div className="tx-button">
-          <button onClick={() => sendTx()}>Send</button>
+          <button className="action-button" onClick={() => sendTx()}>
+            Send
+          </button>
         </div>
         <div className="disclaimers">
           <small>*Unofficial Size application</small>
