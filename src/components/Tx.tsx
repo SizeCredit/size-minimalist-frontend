@@ -15,7 +15,7 @@ const Tx = () => {
   const [to, setTo] = useState(zeroAddress as `0x${string}`);
   const [amount, setAmount] = useState("0");
   const [calldataEncode1, setCalldataEncode1] = useState(
-    "transfer(address,uint256) 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045 1234567",
+    `transfer(address,uint256) ${zeroAddress} 1234567`,
   );
   const [calldata, setCalldata] = useState("0x");
   const [signatures, setSignatures] = useState("0x");
