@@ -32,7 +32,7 @@
 .tab-container {
   display: grid;
   grid-template-rows: auto auto;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   margin-bottom: 20px;
 }
 
@@ -461,9 +461,14 @@ select {
 }
 
 .tx-container {
-  width: 400px;
+  width: 600px;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+
+  input {
+    background-color: lightgray;
+  }
 }
 
 .tx-input {
