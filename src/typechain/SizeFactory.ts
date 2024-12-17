@@ -106,7 +106,6 @@ export type InitializeDataParamsStructOutput = [
 };
 
 export type PriceFeedParamsStruct = {
-  uniswapV3Factory: AddressLike;
   uniswapV3Pool: AddressLike;
   twapWindow: BigNumberish;
   averageBlockTime: BigNumberish;
@@ -120,7 +119,6 @@ export type PriceFeedParamsStruct = {
 };
 
 export type PriceFeedParamsStructOutput = [
-  uniswapV3Factory: string,
   uniswapV3Pool: string,
   twapWindow: bigint,
   averageBlockTime: bigint,
@@ -132,7 +130,6 @@ export type PriceFeedParamsStructOutput = [
   quoteStalePriceInterval: bigint,
   sequencerUptimeFeed: string,
 ] & {
-  uniswapV3Factory: string;
   uniswapV3Pool: string;
   twapWindow: bigint;
   averageBlockTime: bigint;
