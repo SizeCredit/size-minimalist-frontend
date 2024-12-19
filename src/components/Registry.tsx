@@ -227,6 +227,13 @@ const Registry = () => {
                     {" stale interval)"}
                   </a>
                 </div>
+                <div>
+                  &nbsp;&nbsp; Prices:{" "}
+                  {format(market.priceFeed.chainlinkPriceFeedPrice, 18, 2, ",")}
+                  {" (Chainlink) "}
+                  {format(market.priceFeed.uniswapV3PriceFeedPrice, 18, 2, ",")}
+                  {" (Uniswap V3)"}
+                </div>
               </div>
               <div>
                 <b>Variable Pool Borrow Rate Stale Interval:</b>{" "}

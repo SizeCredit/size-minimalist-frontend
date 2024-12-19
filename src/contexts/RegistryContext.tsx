@@ -43,6 +43,8 @@ interface PriceFeedInformation {
   baseStalePriceInterval: number;
   quoteStalePriceInterval: number;
   price: bigint;
+  chainlinkPriceFeedPrice: bigint;
+  uniswapV3PriceFeedPrice: bigint;
 }
 
 export interface Market {
@@ -147,6 +149,8 @@ export function RegistryProvider({ children }: Props) {
           baseStalePriceInterval,
           quoteStalePriceInterval,
           getPrice,
+          chainlinkPriceFeed,
+          uniswapV3PriceFeed,
         ] = await Promise.all(
           [
             "base",
@@ -154,6 +158,8 @@ export function RegistryProvider({ children }: Props) {
             "baseStalePriceInterval",
             "quoteStalePriceInterval",
             "getPrice",
+            "chainlinkPriceFeed",
+            "uniswapV3PriceFeed",
           ].map(
             async (param) =>
               readContract(config, {
@@ -180,6 +186,16 @@ export function RegistryProvider({ children }: Props) {
           baseStalePriceInterval: Number(baseStalePriceInterval as bigint),
           quoteStalePriceInterval: Number(quoteStalePriceInterval as bigint),
           price: getPrice as bigint,
+          chainlinkPriceFeedPrice: await readContract(config, {
+            abi: PriceFeed.abi,
+            address: chainlinkPriceFeed as Address,
+            functionName: "getPrice",
+          }),
+          uniswapV3PriceFeedPrice: await readContract(config, {
+            abi: PriceFeed.abi,
+            address: uniswapV3PriceFeed as Address,
+            functionName: "getPrice",
+          }),
         };
       }),
     );
