@@ -232,7 +232,7 @@ const Registry = () => {
                   {format(market.priceFeed.chainlinkPriceFeedPrice, 18, 2, ",")}
                   {" (Chainlink) "}
                   {format(market.priceFeed.uniswapV3PriceFeedPrice, 18, 2, ",")}
-                  {" (Uniswap V3)"}
+                  {` (Uniswap v3 ${market.priceFeed.uniswapV3PriceFeedTWAPWindow / 60}min TWAP)`}
                 </div>
               </div>
               <div>

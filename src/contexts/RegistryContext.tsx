@@ -10,6 +10,8 @@ import { config } from "../wagmi";
 import Size from "../abi/Size.json";
 import SizeFactory from "../abi/SizeFactory.json";
 import PriceFeed from "../abi/PriceFeed.json";
+import UniswapV3PriceFeed from "../abi/UniswapV3PriceFeed.json";
+import ChainlinkPriceFeed from "../abi/ChainlinkPriceFeed.json";
 import AggregatorV3Interface from "../abi/AggregatorV3Interface.json";
 import {
   DataViewStruct,
@@ -45,6 +47,7 @@ interface PriceFeedInformation {
   price: bigint;
   chainlinkPriceFeedPrice: bigint;
   uniswapV3PriceFeedPrice: bigint;
+  uniswapV3PriceFeedTWAPWindow: number;
 }
 
 export interface Market {
@@ -186,16 +189,21 @@ export function RegistryProvider({ children }: Props) {
           baseStalePriceInterval: Number(baseStalePriceInterval as bigint),
           quoteStalePriceInterval: Number(quoteStalePriceInterval as bigint),
           price: getPrice as bigint,
-          chainlinkPriceFeedPrice: await readContract(config, {
-            abi: PriceFeed.abi,
+          chainlinkPriceFeedPrice: (await readContract(config, {
+            abi: ChainlinkPriceFeed.abi,
             address: chainlinkPriceFeed as Address,
             functionName: "getPrice",
-          }),
-          uniswapV3PriceFeedPrice: await readContract(config, {
-            abi: PriceFeed.abi,
+          })) as bigint,
+          uniswapV3PriceFeedPrice: (await readContract(config, {
+            abi: UniswapV3PriceFeed.abi,
             address: uniswapV3PriceFeed as Address,
             functionName: "getPrice",
-          }),
+          })) as bigint,
+          uniswapV3PriceFeedTWAPWindow: (await readContract(config, {
+            abi: UniswapV3PriceFeed.abi,
+            address: uniswapV3PriceFeed as Address,
+            functionName: "twapWindow",
+          })) as number,
         };
       }),
     );
