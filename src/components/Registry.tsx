@@ -147,7 +147,12 @@ const Registry = () => {
                   market.tokens.borrowAToken.feeRecipientBalance,
                   market.tokens.borrowAToken.decimals,
                 )}{" "}
-                {market.tokens.borrowAToken.symbol}
+                {market.tokens.borrowAToken.symbol}{" "}
+                {format(
+                  market.tokens.collateralToken.feeRecipientBalance,
+                  market.tokens.collateralToken.decimals,
+                )}{" "}
+                {market.tokens.collateralToken.symbol}
               </div>
               <div>
                 <b>CR Opening:</b> {format(market.riskConfig.crOpening, 18 - 2)}
