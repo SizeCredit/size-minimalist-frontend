@@ -14,6 +14,9 @@ interface CreateBorrowATokenV1_5Params {
   underlyingBorrowToken: Address;
 }
 
+const HOURS = 60 * 60;
+const YEARS = 365 * 24 * HOURS;
+
 const Factory = () => {
   const { chain } = useContext(ConfigContext);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -60,8 +63,8 @@ const Factory = () => {
       crLiquidation: 0,
       minimumCreditBorrowAToken: 0,
       borrowATokenCap: 0,
-      minTenor: 0,
-      maxTenor: 0,
+      minTenor: 1 * HOURS,
+      maxTenor: 5 * YEARS,
     } as InitializeRiskConfigParamsStruct);
   const [createMarketOracleParams, setCreateMarketOracleParams] =
     useState<InitializeOracleParamsStruct>({
