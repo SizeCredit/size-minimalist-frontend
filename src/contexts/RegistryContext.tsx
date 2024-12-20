@@ -21,7 +21,8 @@ import {
 } from "../typechain/Size";
 import { readContract } from "wagmi/actions";
 import { ConfigContext } from "./ConfigContext";
-import { Address, erc20Abi } from "viem";
+import { Abi, Address, erc20Abi } from "viem";
+import { Config } from "wagmi";
 
 export type Token =
   | "underlyingCollateralToken"
@@ -38,16 +39,16 @@ interface TokenInformation {
 }
 
 interface PriceFeedInformation {
-  base: Address;
-  quote: Address;
-  baseDescription: string;
-  quoteDescription: string;
-  baseStalePriceInterval: number;
-  quoteStalePriceInterval: number;
+  base?: Address;
+  quote?: Address;
+  baseDescription?: string;
+  quoteDescription?: string;
+  baseStalePriceInterval?: number;
+  quoteStalePriceInterval?: number;
   price: bigint;
-  chainlinkPriceFeedPrice: bigint;
-  uniswapV3PriceFeedPrice: bigint;
-  uniswapV3PriceFeedTWAPWindow: number;
+  chainlinkPriceFeedPrice?: bigint;
+  uniswapV3PriceFeedPrice?: bigint;
+  uniswapV3PriceFeedTWAPWindow?: number;
 }
 
 export interface Market {
@@ -76,6 +77,29 @@ export const RegistryContext = createContext<RegistryContext>(
 type Props = {
   children: ReactNode;
 };
+
+async function readContractWithDefault<T>(
+  config: Config,
+  {
+    abi,
+    address,
+    functionName,
+    defaultValue,
+  }: {
+    abi: Abi;
+    address: Address;
+    functionName: string;
+    defaultValue: T;
+  },
+): Promise<T> {
+  return readContract(config, {
+    abi,
+    address,
+    functionName,
+  })
+    .then((value) => value as T)
+    .catch(() => defaultValue);
+}
 
 export function RegistryProvider({ children }: Props) {
   const { chain } = useContext(ConfigContext);
@@ -165,45 +189,50 @@ export function RegistryProvider({ children }: Props) {
             "uniswapV3PriceFeed",
           ].map(
             async (param) =>
-              readContract(config, {
-                abi: PriceFeed.abi,
+              readContractWithDefault(config, {
+                abi: PriceFeed.abi as Abi,
                 address: oracles[i].priceFeed as Address,
                 functionName: param,
+                defaultValue: undefined,
               }) as Promise<unknown>,
           ),
         );
-        console.log(baseStalePriceInterval);
         return {
           base: base as Address,
           quote: quote as Address,
-          baseDescription: (await readContract(config, {
-            abi: AggregatorV3Interface.abi,
+          baseDescription: (await readContractWithDefault(config, {
+            abi: AggregatorV3Interface.abi as Abi,
             address: base as Address,
             functionName: "description",
-          })) as string,
-          quoteDescription: (await readContract(config, {
-            abi: AggregatorV3Interface.abi,
+            defaultValue: undefined,
+          })) as string | undefined,
+          quoteDescription: (await readContractWithDefault(config, {
+            abi: AggregatorV3Interface.abi as Abi,
             address: quote as Address,
             functionName: "description",
-          })) as string,
+            defaultValue: undefined,
+          })) as string | undefined,
           baseStalePriceInterval: Number(baseStalePriceInterval as bigint),
           quoteStalePriceInterval: Number(quoteStalePriceInterval as bigint),
           price: getPrice as bigint,
-          chainlinkPriceFeedPrice: (await readContract(config, {
-            abi: ChainlinkPriceFeed.abi,
+          chainlinkPriceFeedPrice: (await readContractWithDefault(config, {
+            abi: ChainlinkPriceFeed.abi as Abi,
             address: chainlinkPriceFeed as Address,
             functionName: "getPrice",
-          })) as bigint,
-          uniswapV3PriceFeedPrice: (await readContract(config, {
-            abi: UniswapV3PriceFeed.abi,
+            defaultValue: undefined,
+          })) as bigint | undefined,
+          uniswapV3PriceFeedPrice: (await readContractWithDefault(config, {
+            abi: UniswapV3PriceFeed.abi as Abi,
             address: uniswapV3PriceFeed as Address,
             functionName: "getPrice",
-          })) as bigint,
-          uniswapV3PriceFeedTWAPWindow: (await readContract(config, {
-            abi: UniswapV3PriceFeed.abi,
+            defaultValue: undefined,
+          })) as bigint | undefined,
+          uniswapV3PriceFeedTWAPWindow: (await readContractWithDefault(config, {
+            abi: UniswapV3PriceFeed.abi as Abi,
             address: uniswapV3PriceFeed as Address,
             functionName: "twapWindow",
-          })) as number,
+            defaultValue: undefined,
+          })) as number | undefined,
         };
       }),
     );
