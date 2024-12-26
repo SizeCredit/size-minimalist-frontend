@@ -1,6 +1,7 @@
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { format, smallId } from "../services/format";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import { useContext, useEffect } from "react";
 import { UserContext } from "../contexts/UserContext";
@@ -15,9 +16,11 @@ import { PriceContext } from "../contexts/PriceContext";
 import { SwapContext } from "../contexts/SwapContext";
 import { RegistryContext } from "../contexts/RegistryContext";
 import { ConfigContext } from "../contexts/ConfigContext";
+import { pages } from "../App";
 
 const Sidebar = () => {
   const account = useAccount();
+  const navigate = useNavigate();
   const { connectors, connect, error } = useConnect();
   const { price } = useContext(PriceContext);
   const { pastBlocks, setPastBlocks } = useContext(ConfigContext);
@@ -153,6 +156,21 @@ const Sidebar = () => {
             </b>
           </span>
         </div>
+      </div>
+      <div className="tabs">
+        <div>Pages</div>
+      </div>
+      <div className="pages-list">
+        {pages.map((page) => (
+          <div key={page.path} className="page-item">
+            <button
+              className="page-button button"
+              onClick={() => navigate(page.path)}
+            >
+              {page.label}
+            </button>
+          </div>
+        ))}
       </div>
       <div className="tabs">
         <div>Positions</div>
