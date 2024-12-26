@@ -5,11 +5,14 @@ import {
   useEffect,
   useState,
 } from "react";
+import { delayed } from "../services/delayed";
 import { Address, decodeFunctionData, Transaction } from "viem";
 import { usePublicClient } from "wagmi";
 import { RegistryContext } from "./RegistryContext";
 import { ConfigContext } from "./ConfigContext";
 import Size from "../abi/Size.json";
+
+const RPC_REQUESTS_PER_SECOND = 10;
 
 interface Tx {
   hash: string;
@@ -33,25 +36,36 @@ export function TxProvider({ children }: Props) {
   const { blockNumber, pastBlocks } = useContext(ConfigContext);
   const { market } = useContext(RegistryContext);
 
+  console.log(market, blockNumber);
+
   const client = usePublicClient();
   async function getTransactions(
     address: Address,
     startBlock: bigint,
     endBlock: bigint,
   ) {
-    const txs: Transaction[] = [];
+    const blocks = Array.from(
+      { length: Number(endBlock) - Number(startBlock) },
+      (_, i) => startBlock + BigInt(i),
+    );
 
-    for (let blockNumber = startBlock; blockNumber <= endBlock; blockNumber++) {
-      const block = await client.getBlock({
-        blockNumber,
-        includeTransactions: true,
-      });
+    const allTxs = await delayed(
+      blocks.map(
+        (blockNumber) => () =>
+          client.getBlock({
+            blockNumber,
+            includeTransactions: true,
+          }),
+      ),
+      RPC_REQUESTS_PER_SECOND,
+      (finished) => setProgress(((finished - 1) * 100) / blocks.length),
+    );
 
-      const txs = block.transactions.filter(
+    const txs = allTxs.flatMap((block) =>
+      block.transactions.filter(
         (tx) => tx.to?.toLowerCase() === address.toLowerCase(),
-      );
-      txs.push(...txs);
-    }
+      ),
+    );
 
     return txs;
   }
@@ -91,7 +105,7 @@ export function TxProvider({ children }: Props) {
       setTransactions(decodedTxs);
       setProgress(100);
     })();
-  }, []);
+  }, [market, blockNumber]);
 
   return (
     <TxContext.Provider value={{ transactions, progress }}>
