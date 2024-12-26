@@ -300,7 +300,7 @@ export function RegistryProvider({ children }: Props) {
       })),
     );
 
-    setMarketName(descriptions[1]);
+    setMarketName(descriptions[descriptions.length - 1]);
 
     setProgress(100);
   };

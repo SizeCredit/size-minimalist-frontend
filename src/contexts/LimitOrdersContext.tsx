@@ -51,8 +51,7 @@ export function LimitOrdersProvider({ children }: Props) {
   });
   const [progress, setProgress] = useState(0);
 
-  const { blockNumber } = useContext(ConfigContext);
-  const pastBlocks = 1n;
+  const { blockNumber, pastBlocks } = useContext(ConfigContext);
   const { market } = useContext(RegistryContext);
 
   const publicClient = usePublicClient();

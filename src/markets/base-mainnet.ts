@@ -10,5 +10,7 @@ export default {
     WETH: "0x4200000000000000000000000000000000000006" as Address,
     ChainlinkSequencerUptimeFeed:
       "0xBCF85224fc0756B9Fa45aA7892530B47e10b6433" as Address,
+    ChainlinkETHUSDPriceFeed:
+      "0x71041dddad3595F9CEd3DcCFBe3D1F4b0a16Bb70" as Address,
   },
 };

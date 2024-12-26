@@ -193,7 +193,6 @@ const Sidebar = () => {
             const quote = sellCreditQuote(credit, tenor);
             const sellAmount =
               credit / (1 + (quote.rate * tenor) / 365 / 24 / 60 / 60);
-            console.log(sellAmount, quote, credit, tenor);
             return (
               <div key={index} className="position-item">
                 <div className="position-details">

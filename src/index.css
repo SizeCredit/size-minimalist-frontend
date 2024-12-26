@@ -461,22 +461,24 @@ select {
 }
 
 .tx-container {
-  width: 600px;
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-
-  input {
-    background-color: lightgray;
-  }
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow-x: auto;
 }
 
-.tx-input {
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  input {
-    font-family: monospace;
-    font-size: 14px;
-  }
+.tx-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.tx-table th,
+.tx-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  word-break: break-all; /* Allows text to break at any character */
+  white-space: normal; /* Allows text to wrap */
+  font-family: monospace;
 }

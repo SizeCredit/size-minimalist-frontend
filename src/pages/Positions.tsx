@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { PositionsContext } from "../contexts/PositionsContext";
 import { SizeContext } from "../contexts/SizeContext";
+import { toObject } from "../services/toObject";
 
 const Positions = () => {
   const { debtPositions, creditPositions } = useContext(PositionsContext);
@@ -14,15 +15,6 @@ const Positions = () => {
     creditPositions.find(
       (creditPosition) => creditPosition.creditPositionId === positionId,
     );
-
-  function toObject(obj: any) {
-    return JSON.parse(
-      JSON.stringify(
-        obj,
-        (_, value) => (typeof value === "bigint" ? value.toString() : value), // return everything else unchanged
-      ),
-    );
-  }
 
   return (
     <>

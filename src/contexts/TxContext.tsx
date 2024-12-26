@@ -1,22 +1,21 @@
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 import { delayed } from "../services/delayed";
-import { Address, decodeFunctionData, Transaction } from "viem";
+import {
+  Address,
+  decodeFunctionData,
+  Transaction,
+  TransactionReceipt,
+} from "viem";
 import { usePublicClient } from "wagmi";
-import { RegistryContext } from "./RegistryContext";
-import { ConfigContext } from "./ConfigContext";
 import Size from "../abi/Size.json";
+import txHashes from "../txs/txHash.json";
 
-const RPC_REQUESTS_PER_SECOND = 10;
+const RPC_REQUESTS_PER_SECOND = 4;
 
 interface Tx {
   hash: string;
   data: string;
+  gasUsed: bigint;
 }
 
 interface TxContext {
@@ -33,45 +32,34 @@ type Props = {
 export function TxProvider({ children }: Props) {
   const [transactions, setTransactions] = useState<Tx[]>([]);
   const [progress, setProgress] = useState(0);
-  const { blockNumber, pastBlocks } = useContext(ConfigContext);
-  const { market } = useContext(RegistryContext);
-
-  console.log(market, blockNumber);
 
   const client = usePublicClient();
-  async function getTransactions(
-    address: Address,
-    startBlock: bigint,
-    endBlock: bigint,
-  ) {
-    const blocks = Array.from(
-      { length: Number(endBlock) - Number(startBlock) },
-      (_, i) => startBlock + BigInt(i),
+  async function getTransactions(txHashes: Address[]): Promise<void> {
+    const txPromises = txHashes.map(
+      (hash) => () =>
+        Promise.all([
+          client.getTransaction({ hash }),
+          client.getTransactionReceipt({ hash }),
+        ]),
     );
 
-    const allTxs = await delayed(
-      blocks.map(
-        (blockNumber) => () =>
-          client.getBlock({
-            blockNumber,
-            includeTransactions: true,
-          }),
-      ),
-      RPC_REQUESTS_PER_SECOND,
-      (finished) => setProgress(((finished - 1) * 100) / blocks.length),
-    );
-
-    const txs = allTxs.flatMap((block) =>
-      block.transactions.filter(
-        (tx) => tx.to?.toLowerCase() === address.toLowerCase(),
-      ),
-    );
-
-    return txs;
+    await delayed(txPromises, RPC_REQUESTS_PER_SECOND, (_, partialResults) => {
+      getTxs(partialResults as [Transaction, TransactionReceipt][]);
+    });
   }
 
-  function getTxs(txs: Transaction[]): Tx[] {
-    const calldatas = txs.map((tx) => tx.input);
+  function decode(arg: string[]): string {
+    return arg
+      .map(
+        (a) =>
+          decodeFunctionData({ abi: Size.abi, data: a as `0x${string}` })
+            .functionName,
+      )
+      .join(", ");
+  }
+
+  function getTxs(txInfo: [Transaction, TransactionReceipt][]): void {
+    const calldatas = txInfo.map((tx) => tx[0].input);
     const decodedCalldatas = calldatas
       .map((calldata) => {
         const decoded = decodeFunctionData({
@@ -80,32 +68,30 @@ export function TxProvider({ children }: Props) {
         });
         return decoded;
       })
-      .map(
-        (functionData) =>
-          `${functionData.functionName}(${functionData.args?.map((arg) => (arg as string).toString()).join(", ")})`,
+      .map((functionData) =>
+        functionData.functionName === "multicall"
+          ? `${functionData.functionName}([${functionData.args?.map((arg) => decode(arg as unknown as string[])).join(",")}])`
+          : functionData.functionName,
       );
 
-    return txs.map((tx, index) => ({
-      hash: tx.hash,
+    const decodedTxs = txInfo.map((tx, index) => ({
+      hash: tx[0].hash,
       data: decodedCalldatas[index],
+      gasUsed: tx[1].gasUsed,
     }));
+
+    setProgress((100 * decodedTxs.length) / txHashes.length);
+
+    setTransactions(decodedTxs);
   }
 
   useEffect(() => {
-    if (!market || !blockNumber) return;
-
     (async () => {
       setProgress(0);
-      const txs = await getTransactions(
-        market.address,
-        blockNumber - pastBlocks,
-        blockNumber,
-      );
-      const decodedTxs = getTxs(txs);
-      setTransactions(decodedTxs);
+      await getTransactions(txHashes as Address[]);
       setProgress(100);
     })();
-  }, [market, blockNumber]);
+  }, []);
 
   return (
     <TxContext.Provider value={{ transactions, progress }}>

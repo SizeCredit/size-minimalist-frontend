@@ -1,7 +1,7 @@
 export async function delayed<T>(
   promises: Array<() => Promise<T>>,
   N: number,
-  callback?: (finished: number) => void,
+  callback?: (finished: number, partialResults: T[]) => void,
 ): Promise<T[]> {
   const results: T[] = [];
   let index = 0;
@@ -13,7 +13,7 @@ export async function delayed<T>(
     // Wait for the batch to resolve
     const batchResults = await Promise.all(batch);
     results.push(...batchResults);
-    if (callback) callback(results.length);
+    if (callback) callback(results.length, results);
 
     // Increment the index to process the next batch
     index += N;
