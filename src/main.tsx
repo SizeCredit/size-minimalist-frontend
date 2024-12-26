@@ -18,6 +18,7 @@ import { SidebarProvider } from "./contexts/SidebarContext.tsx";
 import { SizeProvider } from "./contexts/SizeContext.tsx";
 import { FactoryProvider } from "./contexts/FactoryContext.tsx";
 import { RegistryProvider } from "./contexts/RegistryContext.tsx";
+import { TxProvider } from "./contexts/TxContext.tsx";
 
 globalThis.Buffer = Buffer;
 
@@ -30,21 +31,23 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <ConfigProvider>
           <RegistryProvider>
             <FactoryProvider>
-              <PriceProvider>
-                <PositionsProvider>
-                  <LimitOrdersProvider>
-                    <UserProvider>
-                      <SwapProvider>
-                        <SidebarProvider>
-                          <SizeProvider>
-                            <App />
-                          </SizeProvider>
-                        </SidebarProvider>
-                      </SwapProvider>
-                    </UserProvider>
-                  </LimitOrdersProvider>
-                </PositionsProvider>
-              </PriceProvider>
+              <TxProvider>
+                <PriceProvider>
+                  <PositionsProvider>
+                    <LimitOrdersProvider>
+                      <UserProvider>
+                        <SwapProvider>
+                          <SidebarProvider>
+                            <SizeProvider>
+                              <App />
+                            </SizeProvider>
+                          </SidebarProvider>
+                        </SwapProvider>
+                      </UserProvider>
+                    </LimitOrdersProvider>
+                  </PositionsProvider>
+                </PriceProvider>
+              </TxProvider>
             </FactoryProvider>
           </RegistryProvider>
         </ConfigProvider>
