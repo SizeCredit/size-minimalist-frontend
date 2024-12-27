@@ -4,6 +4,8 @@ import { useReadContract } from "wagmi";
 import { parseAbi } from "viem";
 import { format } from "../services/format";
 import { ConfigContext } from "../contexts/ConfigContext";
+import TxStats from "../components/TxStats";
+import { gasCost } from "../services/gasCost";
 
 const Tx = () => {
   const { BASESCAN, chain } = useContext(ConfigContext);
@@ -19,6 +21,7 @@ const Tx = () => {
   return (
     <>
       <div className="tx-container">
+        <TxStats price={price} gasPrice={gasPrice} />
         <div className="tx-list">
           <div>
             <label>Gas price (Gwei)</label>
@@ -50,9 +53,7 @@ const Tx = () => {
                     </a>
                   </td>
                   <td>{tx.data}</td>
-                  <td>
-                    {format((Number(tx.gasUsed) * gasPrice * price) / 1e9)}
-                  </td>
+                  <td>{format(gasCost(tx.gasUsed, gasPrice, price))}</td>
                 </tr>
               ))}
             </tbody>

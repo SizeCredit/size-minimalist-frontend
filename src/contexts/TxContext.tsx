@@ -12,7 +12,7 @@ import txHashes from "../txs/txHash.json";
 
 const RPC_REQUESTS_PER_SECOND = 4;
 
-interface Tx {
+export interface Tx {
   hash: string;
   data: string;
   gasUsed: bigint;
