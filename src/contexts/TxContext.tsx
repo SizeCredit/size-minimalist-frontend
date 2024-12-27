@@ -8,6 +8,7 @@ import {
 } from "viem";
 import { usePublicClient } from "wagmi";
 import Size from "../abi/Size.json";
+import FlashLoanLiquidator from "../abi/FlashLoanLiquidator.json";
 import txHashes from "../txs/txHash.json";
 
 const RPC_REQUESTS_PER_SECOND = 4;
@@ -52,8 +53,10 @@ export function TxProvider({ children }: Props) {
     return arg
       .map(
         (a) =>
-          decodeFunctionData({ abi: Size.abi, data: a as `0x${string}` })
-            .functionName,
+          decodeFunctionData({
+            abi: [...Size.abi, ...FlashLoanLiquidator.abi],
+            data: a as `0x${string}`,
+          }).functionName,
       )
       .join(", ");
   }
@@ -63,7 +66,7 @@ export function TxProvider({ children }: Props) {
     const decodedCalldatas = calldatas
       .map((calldata) => {
         const decoded = decodeFunctionData({
-          abi: Size.abi,
+          abi: [...Size.abi, ...FlashLoanLiquidator.abi],
           data: calldata,
         });
         return decoded;
