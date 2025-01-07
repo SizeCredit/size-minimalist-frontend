@@ -15,7 +15,6 @@ interface ConfigContext {
     explorer: string;
     addresses: Record<string, Address>;
   };
-  BASESCAN: string;
   blockNumber?: bigint;
   pastBlocks: bigint;
   setPastBlocks: (value: bigint) => void;
@@ -32,17 +31,14 @@ export function ConfigProvider({ children }: Props) {
     config,
   });
 
-  const chain = chains[account.chain?.id || 1];
+  const chain = chains.find((c) => c.chain.id === account.chain?.id) || mainnet;
   const blockNumber = useBlockNumber({ config }).data;
   const [pastBlocks, setPastBlocks] = useState<bigint>(10_000n);
-
-  const BASESCAN = chain.explorer;
 
   return (
     <ConfigContext.Provider
       value={{
         chain,
-        BASESCAN,
         blockNumber,
         pastBlocks,
         setPastBlocks,

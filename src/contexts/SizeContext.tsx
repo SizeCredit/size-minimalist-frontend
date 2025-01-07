@@ -46,7 +46,7 @@ type Props = {
 export function SizeProvider({ children }: Props) {
   const account = useAccount();
   const { updatePositions, debtPositions } = useContext(PositionsContext);
-  const { chain, BASESCAN } = useContext(ConfigContext);
+  const { chain } = useContext(ConfigContext);
   const { market } = useContext(RegistryContext);
   const { price } = useContext(PriceContext);
 
@@ -69,7 +69,7 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`${BASESCAN}/tx/${tx}`}>
+        <a target="_blank" href={`${chain.explorer}/tx/${tx}`}>
           {tx}
         </a>,
       );
@@ -112,7 +112,7 @@ export function SizeProvider({ children }: Props) {
             address: token as Address,
           });
           toast.success(
-            <a target="_blank" href={`${BASESCAN}/tx/${approve}`}>
+            <a target="_blank" href={`${chain.explorer}/tx/${approve}`}>
               {approve}
             </a>,
           );
@@ -125,7 +125,7 @@ export function SizeProvider({ children }: Props) {
         value: token === chain.addresses.WETH ? amount : BigInt(0),
       });
       toast.success(
-        <a target="_blank" href={`${BASESCAN}/tx/${tx}`}>
+        <a target="_blank" href={`${chain.explorer}/tx/${tx}`}>
           {tx}
         </a>,
       );
@@ -154,7 +154,7 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`${BASESCAN}/tx/${tx}`}>
+        <a target="_blank" href={`${chain.explorer}/tx/${tx}`}>
           {tx}
         </a>,
       );
@@ -190,7 +190,7 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`${BASESCAN}/tx/${tx}`}>
+        <a target="_blank" href={`${chain.explorer}/tx/${tx}`}>
           {tx}
         </a>,
       );
@@ -226,7 +226,7 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`${BASESCAN}/tx/${tx}`}>
+        <a target="_blank" href={`${chain.explorer}/tx/${tx}`}>
           {tx}
         </a>,
       );
@@ -268,7 +268,7 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`${BASESCAN}/tx/${tx}`}>
+        <a target="_blank" href={`${chain.explorer}/tx/${tx}`}>
           {tx}
         </a>,
       );
@@ -310,7 +310,7 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`${BASESCAN}/tx/${tx}`}>
+        <a target="_blank" href={`${chain.explorer}/tx/${tx}`}>
           {tx}
         </a>,
       );
@@ -342,7 +342,7 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`${BASESCAN}/tx/${tx}`}>
+        <a target="_blank" href={`${chain.explorer}/tx/${tx}`}>
           {tx}
         </a>,
       );
@@ -369,7 +369,7 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`${BASESCAN}/tx/${tx}`}>
+        <a target="_blank" href={`${chain.explorer}/tx/${tx}`}>
           {tx}
         </a>,
       );
@@ -408,7 +408,7 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`${BASESCAN}/tx/${tx}`}>
+        <a target="_blank" href={`${chain.explorer}/tx/${tx}`}>
           {tx}
         </a>,
       );

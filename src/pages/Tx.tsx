@@ -8,7 +8,7 @@ import TxStats from "../components/TxStats";
 import { gasCost } from "../services/gasCost";
 
 const Tx = () => {
-  const { BASESCAN, chain } = useContext(ConfigContext);
+  const { chain } = useContext(ConfigContext);
   const { transactions } = useContext(TxContext);
   const [gasPrice, setGasPrice] = useState(8);
   const latestAnswer = useReadContract({
@@ -45,7 +45,7 @@ const Tx = () => {
                 <tr key={index}>
                   <td>
                     <a
-                      href={`${BASESCAN}/tx/${tx.hash}`}
+                      href={`${chain.explorer}/tx/${tx.hash}`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >

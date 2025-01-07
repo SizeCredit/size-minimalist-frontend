@@ -4,7 +4,7 @@ import { format } from "../services/format";
 import { ConfigContext } from "../contexts/ConfigContext";
 
 const Registry = () => {
-  const { BASESCAN } = useContext(ConfigContext);
+  const { chain } = useContext(ConfigContext);
   const { markets } = useContext(RegistryContext);
 
   return (
@@ -17,7 +17,7 @@ const Registry = () => {
               <div>
                 <b>Address:</b>{" "}
                 <a
-                  href={`${BASESCAN}/address/${market.address}`}
+                  href={`${chain.explorer}/address/${market.address}`}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -27,7 +27,7 @@ const Registry = () => {
               <div>
                 <b>Collateral Token:</b>{" "}
                 <a
-                  href={`${BASESCAN}/token/${market.data.collateralToken.toString()}`}
+                  href={`${chain.explorer}/token/${market.data.collateralToken.toString()}`}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -47,7 +47,7 @@ const Registry = () => {
               <div>
                 <b>Borrow AToken:</b>{" "}
                 <a
-                  href={`${BASESCAN}/token/${market.data.borrowAToken.toString()}`}
+                  href={`${chain.explorer}/token/${market.data.borrowAToken.toString()}`}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -67,7 +67,7 @@ const Registry = () => {
               <div>
                 <b>Debt Token:</b>{" "}
                 <a
-                  href={`${BASESCAN}/token/${market.data.debtToken.toString()}`}
+                  href={`${chain.explorer}/token/${market.data.debtToken.toString()}`}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -87,7 +87,7 @@ const Registry = () => {
               <div>
                 <b>Underlying Collateral Token:</b>{" "}
                 <a
-                  href={`${BASESCAN}/token/${market.data.underlyingCollateralToken.toString()}`}
+                  href={`${chain.explorer}/token/${market.data.underlyingCollateralToken.toString()}`}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -99,7 +99,7 @@ const Registry = () => {
               <div>
                 <b>Underlying Borrow Token:</b>{" "}
                 <a
-                  href={`${BASESCAN}/token/${market.data.underlyingBorrowToken.toString()}`}
+                  href={`${chain.explorer}/token/${market.data.underlyingBorrowToken.toString()}`}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -134,7 +134,7 @@ const Registry = () => {
               <div>
                 <b>Fee Recipient:</b>{" "}
                 <a
-                  href={`${BASESCAN}/address/${market.feeConfig.feeRecipient.toString()}`}
+                  href={`${chain.explorer}/address/${market.feeConfig.feeRecipient.toString()}`}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -193,7 +193,7 @@ const Registry = () => {
               <div>
                 <b>Price Feed:</b>{" "}
                 <a
-                  href={`${BASESCAN}/address/${market.oracle.priceFeed.toString()}`}
+                  href={`${chain.explorer}/address/${market.oracle.priceFeed.toString()}`}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -210,7 +210,7 @@ const Registry = () => {
                 <div>
                   &nbsp;&nbsp; Chainlink Base Aggregator:{" "}
                   <a
-                    href={`${BASESCAN}/address/${market.priceFeed.base}`}
+                    href={`${chain.explorer}/address/${market.priceFeed.base}`}
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -223,7 +223,7 @@ const Registry = () => {
                 <div>
                   &nbsp;&nbsp; Chainlink Quote Aggregator:{" "}
                   <a
-                    href={`${BASESCAN}/address/${market.priceFeed.quote}`}
+                    href={`${chain.explorer}/address/${market.priceFeed.quote}`}
                     target="_blank"
                     rel="noreferrer"
                   >
