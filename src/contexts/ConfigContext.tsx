@@ -3,11 +3,12 @@ import { Address } from "viem";
 import { type Chain } from "wagmi/chains";
 import baseSepolia from "../markets/base-sepolia";
 import baseMainnet from "../markets/base-mainnet";
+import sepolia from "../markets/sepolia";
 import mainnet from "../markets/mainnet";
 import { useAccount, useBlockNumber } from "wagmi";
 import { config } from "../wagmi";
 
-const chains = [baseSepolia, baseMainnet, mainnet];
+const chains = [baseSepolia, baseMainnet, sepolia, mainnet];
 
 interface ConfigContext {
   chain: {
