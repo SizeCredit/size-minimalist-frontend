@@ -3,8 +3,11 @@ import { Address } from "viem";
 import { type Chain } from "wagmi/chains";
 import baseSepolia from "../markets/base-sepolia";
 import baseMainnet from "../markets/base-mainnet";
+import mainnet from "../markets/mainnet";
 import { useAccount, useBlockNumber } from "wagmi";
 import { config } from "../wagmi";
+
+const chains = [baseSepolia, baseMainnet, mainnet];
 
 interface ConfigContext {
   chain: {
@@ -29,8 +32,7 @@ export function ConfigProvider({ children }: Props) {
     config,
   });
 
-  const chain =
-    account.chain?.id === baseSepolia.chain.id ? baseSepolia : baseMainnet;
+  const chain = chains[account.chain?.id || 1];
   const blockNumber = useBlockNumber({ config }).data;
   const [pastBlocks, setPastBlocks] = useState<bigint>(10_000n);
 
