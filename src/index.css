@@ -372,7 +372,6 @@ select {
   width: 100%;
   overflow-x: hidden;
   overflow-y: auto;
-  max-height: 600px;
 }
 
 .registry-grid {
