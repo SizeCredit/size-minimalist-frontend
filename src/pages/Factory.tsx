@@ -19,6 +19,8 @@ const YEARS = 365 * 24 * HOURS;
 
 const Factory = () => {
   const { chain } = useContext(ConfigContext);
+  if (!chain) return <div>Loading...</div>;
+
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const actions = [
     "createBorrowATokenV1_5",

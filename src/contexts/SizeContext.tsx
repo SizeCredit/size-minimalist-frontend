@@ -51,6 +51,8 @@ export function SizeProvider({ children }: Props) {
   const { price } = useContext(PriceContext);
 
   const repay = async (debtPositionId: string) => {
+    if (!chain) return;
+
     const borrower = account.address;
     const arg = {
       debtPositionId,
@@ -83,6 +85,8 @@ export function SizeProvider({ children }: Props) {
   };
 
   const deposit = async (token: string, amount: bigint) => {
+    if (!chain) return;
+
     const to = account.address;
     const arg = {
       to,
@@ -135,6 +139,8 @@ export function SizeProvider({ children }: Props) {
   };
 
   const withdraw = async (token: string, amount: bigint) => {
+    if (!chain) return;
+
     const to = account.address;
     const arg = {
       to,
@@ -164,6 +170,8 @@ export function SizeProvider({ children }: Props) {
   };
 
   const buyCreditLimit = async (tenors: bigint[], aprs: bigint[]) => {
+    if (!chain) return;
+
     const marketRateMultipliers = tenors.map(() => 0);
     const maxDueDate =
       tenors.length === 0
@@ -200,6 +208,8 @@ export function SizeProvider({ children }: Props) {
   };
 
   const sellCreditLimit = async (tenors: bigint[], aprs: bigint[]) => {
+    if (!chain) return;
+
     const marketRateMultipliers = tenors.map(() => 0);
     const maxDueDate =
       tenors.length === 0
@@ -241,6 +251,8 @@ export function SizeProvider({ children }: Props) {
     tenor: number,
     creditPositionId?: bigint,
   ): Promise<void> => {
+    if (!chain) return;
+
     const { user: lender, rate } = quote;
     const deadline = Math.floor(Date.now() / 1000) + 60 * 60;
     const maxAPR = Math.floor(rate * 1.05 * 1e18);
@@ -283,6 +295,8 @@ export function SizeProvider({ children }: Props) {
     amount: bigint,
     tenor: number,
   ): Promise<void> => {
+    if (!chain) return;
+
     const { user: borrower, rate } = quote;
     const deadline = Math.floor(Date.now() / 1000) + 60 * 60;
     const minAPR = Math.floor((rate * 1e18) / 1.05);
@@ -324,6 +338,8 @@ export function SizeProvider({ children }: Props) {
     creditPositionWithDebtToRepayId: string,
     creditPositionToCompensateId: string,
   ) => {
+    if (!chain) return;
+
     const arg = {
       creditPositionWithDebtToRepayId,
       creditPositionToCompensateId,
@@ -353,6 +369,8 @@ export function SizeProvider({ children }: Props) {
   };
 
   const claim = async (creditPositionId: string) => {
+    if (!chain) return;
+
     const arg = {
       creditPositionId,
     };
@@ -380,6 +398,8 @@ export function SizeProvider({ children }: Props) {
   };
 
   const liquidate = async (debtPositionId: string) => {
+    if (!chain) return;
+
     const debtPosition = debtPositions.find(
       (e) => e.debtPositionId === debtPositionId,
     )!;

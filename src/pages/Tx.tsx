@@ -9,6 +9,8 @@ import { gasCost } from "../services/gasCost";
 
 const Tx = () => {
   const { chain } = useContext(ConfigContext);
+  if (!chain) return <div>Loading...</div>;
+
   const { transactions } = useContext(TxContext);
   const [gasPrice, setGasPrice] = useState(8);
   const latestAnswer = useReadContract({

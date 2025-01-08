@@ -110,6 +110,8 @@ export function RegistryProvider({ children }: Props) {
   const market = markets.find((m) => m.description === marketName);
 
   const updateMarkets = async () => {
+    if (!chain) return;
+
     setProgress(0);
 
     const addresses = (await readContract(config, {
@@ -118,10 +120,11 @@ export function RegistryProvider({ children }: Props) {
       functionName: "getMarkets",
     })) as Address[];
 
-    const descriptions = (await readContract(config, {
-      abi: SizeFactory.abi,
+    const descriptions = (await readContractWithDefault(config, {
+      abi: SizeFactory.abi as Abi,
       address: chain.addresses.SizeFactory,
       functionName: "getMarketDescriptions",
+      defaultValue: Array.from({ length: addresses.length }, () => "N/A"),
     })) as string[];
 
     const datas = await Promise.all(
@@ -306,6 +309,8 @@ export function RegistryProvider({ children }: Props) {
   };
 
   useEffect(() => {
+    if (!chain) return;
+
     updateMarkets();
   }, [chain]);
 

@@ -7,6 +7,8 @@ const Registry = () => {
   const { chain } = useContext(ConfigContext);
   const { markets } = useContext(RegistryContext);
 
+  if (!chain) return <div>Loading...</div>;
+
   return (
     <>
       <div className="registry-container">

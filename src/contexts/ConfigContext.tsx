@@ -11,7 +11,7 @@ import { config } from "../wagmi";
 const chains = [baseSepolia, baseMainnet, sepolia, mainnet];
 
 interface ConfigContext {
-  chain: {
+  chain?: {
     chain: Chain;
     explorer: string;
     addresses: Record<string, Address>;
@@ -32,7 +32,8 @@ export function ConfigProvider({ children }: Props) {
     config,
   });
 
-  const chain = chains.find((c) => c.chain.id === account.chain?.id) || mainnet;
+  const chain = chains.find((c) => c.chain.id === account.chain?.id);
+  console.log(account.chain);
   const blockNumber = useBlockNumber({ config }).data;
   const [pastBlocks, setPastBlocks] = useState<bigint>(10_000n);
 
