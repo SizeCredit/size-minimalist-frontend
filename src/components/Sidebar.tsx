@@ -23,7 +23,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const { connectors, connect, error } = useConnect();
   const { price } = useContext(PriceContext);
-  const { pastBlocks, setPastBlocks } = useContext(ConfigContext);
+  const { pastBlocks, setPastBlocks, chain } = useContext(ConfigContext);
   const { disconnect } = useDisconnect();
   const { market, markets, setMarketName } = useContext(RegistryContext);
   const { creditPositions: allCreditPositions } = useContext(PositionsContext);
@@ -66,6 +66,10 @@ const Sidebar = () => {
             &nbsp;
             <code className="address">
               {format(account.address) || "Connect wallet"}
+            </code>
+            &nbsp;&nbsp;
+            <code className="chain">
+              {chain?.chain.name ? `${chain.chain.name}` : ""}
             </code>
           </button>
         </div>
