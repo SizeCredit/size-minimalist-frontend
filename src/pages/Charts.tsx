@@ -174,19 +174,6 @@ const Charts = () => {
     [30, 60],
   );
 
-  useEffect(() => {
-    const el = document.getElementsByClassName("swap-container")[0];
-    const style = (el as any).style;
-    const original = { ...style };
-    style.width = "100%";
-    style.height = "calc(100% - 20px)";
-    return () => {
-      Object.keys(original).forEach((key) => {
-        style[key] = original[key];
-      });
-    };
-  }, []);
-
   const copyOrders = () => {
     const orders = {
       borrowOffers: allBorrowOffers.map((offer) => ({
