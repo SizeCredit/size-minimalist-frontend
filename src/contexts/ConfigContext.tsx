@@ -8,7 +8,7 @@ import mainnet from "../markets/mainnet";
 import { useAccount, useBlockNumber } from "wagmi";
 import { config } from "../wagmi";
 
-const chains = [baseSepolia, baseMainnet, sepolia, mainnet];
+const chains = [baseMainnet, mainnet, baseSepolia, sepolia];
 
 interface ConfigContext {
   chain?: {
@@ -32,7 +32,7 @@ export function ConfigProvider({ children }: Props) {
     config,
   });
 
-  const chain = chains.find((c) => c.chain.id === account.chain?.id);
+  const chain = chains.find((c) => c.chain.id === account.chain?.id) || chains[0];
   console.log(account.chain);
   const blockNumber = useBlockNumber({ config }).data;
   const [pastBlocks, setPastBlocks] = useState<bigint>(10_000n);

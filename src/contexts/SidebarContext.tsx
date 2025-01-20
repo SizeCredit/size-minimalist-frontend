@@ -14,7 +14,7 @@ type Props = {
 };
 
 export function SidebarProvider({ children }: Props) {
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
 
   return (
     <SidebarContext.Provider
