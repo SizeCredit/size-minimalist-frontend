@@ -32,7 +32,7 @@ export type YieldCurveStruct = {
 export type YieldCurveStructOutput = [
   tenors: bigint[],
   aprs: bigint[],
-  marketRateMultipliers: bigint[],
+  marketRateMultipliers: bigint[]
 ] & { tenors: bigint[]; aprs: bigint[]; marketRateMultipliers: bigint[] };
 
 export type BuyCreditLimitParamsStruct = {
@@ -42,7 +42,7 @@ export type BuyCreditLimitParamsStruct = {
 
 export type BuyCreditLimitParamsStructOutput = [
   maxDueDate: bigint,
-  curveRelativeTime: YieldCurveStructOutput,
+  curveRelativeTime: YieldCurveStructOutput
 ] & { maxDueDate: bigint; curveRelativeTime: YieldCurveStructOutput };
 
 export type BuyCreditMarketParamsStruct = {
@@ -62,7 +62,7 @@ export type BuyCreditMarketParamsStructOutput = [
   tenor: bigint,
   deadline: bigint,
   minAPR: bigint,
-  exactAmountIn: boolean,
+  exactAmountIn: boolean
 ] & {
   borrower: string;
   creditPositionId: bigint;
@@ -88,7 +88,7 @@ export type CompensateParamsStruct = {
 export type CompensateParamsStructOutput = [
   creditPositionWithDebtToRepayId: bigint,
   creditPositionToCompensateId: bigint,
-  amount: bigint,
+  amount: bigint
 ] & {
   creditPositionWithDebtToRepayId: bigint;
   creditPositionToCompensateId: bigint;
@@ -114,7 +114,7 @@ export type DataViewStructOutput = [
   collateralToken: string,
   borrowAToken: string,
   debtToken: string,
-  variablePool: string,
+  variablePool: string
 ] & {
   nextDebtPositionId: bigint;
   nextCreditPositionId: bigint;
@@ -135,7 +135,7 @@ export type DepositParamsStruct = {
 export type DepositParamsStructOutput = [
   token: string,
   amount: bigint,
-  to: string,
+  to: string
 ] & { token: string; amount: bigint; to: string };
 
 export type InitializeFeeConfigParamsStruct = {
@@ -153,7 +153,7 @@ export type InitializeFeeConfigParamsStructOutput = [
   liquidationRewardPercent: bigint,
   overdueCollateralProtocolPercent: bigint,
   collateralProtocolPercent: bigint,
-  feeRecipient: string,
+  feeRecipient: string
 ] & {
   swapFeeAPR: bigint;
   fragmentationFee: bigint;
@@ -174,7 +174,7 @@ export type CreditPositionStructOutput = [
   lender: string,
   forSale: boolean,
   credit: bigint,
-  debtPositionId: bigint,
+  debtPositionId: bigint
 ] & {
   lender: string;
   forSale: boolean;
@@ -193,12 +193,40 @@ export type DebtPositionStructOutput = [
   borrower: string,
   futureValue: bigint,
   dueDate: bigint,
-  liquidityIndexAtRepayment: bigint,
+  liquidityIndexAtRepayment: bigint
 ] & {
   borrower: string;
   futureValue: bigint;
   dueDate: bigint;
   liquidityIndexAtRepayment: bigint;
+};
+
+export type SellCreditMarketParamsStruct = {
+  lender: AddressLike;
+  creditPositionId: BigNumberish;
+  amount: BigNumberish;
+  tenor: BigNumberish;
+  deadline: BigNumberish;
+  maxAPR: BigNumberish;
+  exactAmountIn: boolean;
+};
+
+export type SellCreditMarketParamsStructOutput = [
+  lender: string,
+  creditPositionId: bigint,
+  amount: bigint,
+  tenor: bigint,
+  deadline: bigint,
+  maxAPR: bigint,
+  exactAmountIn: boolean
+] & {
+  lender: string;
+  creditPositionId: bigint;
+  amount: bigint;
+  tenor: bigint;
+  deadline: bigint;
+  maxAPR: bigint;
+  exactAmountIn: boolean;
 };
 
 export type LimitOrderStruct = {
@@ -208,7 +236,7 @@ export type LimitOrderStruct = {
 
 export type LimitOrderStructOutput = [
   maxDueDate: bigint,
-  curveRelativeTime: YieldCurveStructOutput,
+  curveRelativeTime: YieldCurveStructOutput
 ] & { maxDueDate: bigint; curveRelativeTime: YieldCurveStructOutput };
 
 export type UserStruct = {
@@ -222,7 +250,7 @@ export type UserStructOutput = [
   loanOffer: LimitOrderStructOutput,
   borrowOffer: LimitOrderStructOutput,
   openingLimitBorrowCR: bigint,
-  allCreditPositionsForSaleDisabled: boolean,
+  allCreditPositionsForSaleDisabled: boolean
 ] & {
   loanOffer: LimitOrderStructOutput;
   borrowOffer: LimitOrderStructOutput;
@@ -243,7 +271,7 @@ export type UserViewStructOutput = [
   account: string,
   collateralTokenBalance: bigint,
   borrowATokenBalance: bigint,
-  debtBalance: bigint,
+  debtBalance: bigint
 ] & {
   user: UserStructOutput;
   account: string;
@@ -267,7 +295,7 @@ export type InitializeRiskConfigParamsStructOutput = [
   minimumCreditBorrowAToken: bigint,
   borrowATokenCap: bigint,
   minTenor: bigint,
-  maxTenor: bigint,
+  maxTenor: bigint
 ] & {
   crOpening: bigint;
   crLiquidation: bigint;
@@ -284,7 +312,7 @@ export type InitializeOracleParamsStruct = {
 
 export type InitializeOracleParamsStructOutput = [
   priceFeed: string,
-  variablePoolBorrowRateStaleRateInterval: bigint,
+  variablePoolBorrowRateStaleRateInterval: bigint
 ] & { priceFeed: string; variablePoolBorrowRateStaleRateInterval: bigint };
 
 export type InitializeDataParamsStruct = {
@@ -292,6 +320,7 @@ export type InitializeDataParamsStruct = {
   underlyingCollateralToken: AddressLike;
   underlyingBorrowToken: AddressLike;
   variablePool: AddressLike;
+  borrowATokenV1_5: AddressLike;
 };
 
 export type InitializeDataParamsStructOutput = [
@@ -299,11 +328,13 @@ export type InitializeDataParamsStructOutput = [
   underlyingCollateralToken: string,
   underlyingBorrowToken: string,
   variablePool: string,
+  borrowATokenV1_5: string
 ] & {
   weth: string;
   underlyingCollateralToken: string;
   underlyingBorrowToken: string;
   variablePool: string;
+  borrowATokenV1_5: string;
 };
 
 export type LiquidateParamsStruct = {
@@ -315,7 +346,7 @@ export type LiquidateParamsStruct = {
 export type LiquidateParamsStructOutput = [
   debtPositionId: bigint,
   minimumCollateralProfit: bigint,
-  deadline: bigint,
+  deadline: bigint
 ] & {
   debtPositionId: bigint;
   minimumCollateralProfit: bigint;
@@ -335,7 +366,7 @@ export type LiquidateWithReplacementParamsStructOutput = [
   borrower: string,
   minimumCollateralProfit: bigint,
   deadline: bigint,
-  minAPR: bigint,
+  minAPR: bigint
 ] & {
   debtPositionId: bigint;
   borrower: string;
@@ -351,7 +382,7 @@ export type RepayParamsStruct = {
 
 export type RepayParamsStructOutput = [
   debtPositionId: bigint,
-  borrower: string,
+  borrower: string
 ] & { debtPositionId: bigint; borrower: string };
 
 export type SelfLiquidateParamsStruct = { creditPositionId: BigNumberish };
@@ -367,36 +398,8 @@ export type SellCreditLimitParamsStruct = {
 
 export type SellCreditLimitParamsStructOutput = [
   maxDueDate: bigint,
-  curveRelativeTime: YieldCurveStructOutput,
+  curveRelativeTime: YieldCurveStructOutput
 ] & { maxDueDate: bigint; curveRelativeTime: YieldCurveStructOutput };
-
-export type SellCreditMarketParamsStruct = {
-  lender: AddressLike;
-  creditPositionId: BigNumberish;
-  amount: BigNumberish;
-  tenor: BigNumberish;
-  deadline: BigNumberish;
-  maxAPR: BigNumberish;
-  exactAmountIn: boolean;
-};
-
-export type SellCreditMarketParamsStructOutput = [
-  lender: string,
-  creditPositionId: bigint,
-  amount: bigint,
-  tenor: bigint,
-  deadline: bigint,
-  maxAPR: bigint,
-  exactAmountIn: boolean,
-] & {
-  lender: string;
-  creditPositionId: bigint;
-  amount: bigint;
-  tenor: bigint;
-  deadline: bigint;
-  maxAPR: bigint;
-  exactAmountIn: boolean;
-};
 
 export type SetUserConfigurationParamsStruct = {
   openingLimitBorrowCR: BigNumberish;
@@ -409,7 +412,7 @@ export type SetUserConfigurationParamsStructOutput = [
   openingLimitBorrowCR: bigint,
   allCreditPositionsForSaleDisabled: boolean,
   creditPositionIdsForSale: boolean,
-  creditPositionIds: bigint[],
+  creditPositionIds: bigint[]
 ] & {
   openingLimitBorrowCR: bigint;
   allCreditPositionsForSaleDisabled: boolean;
@@ -433,8 +436,65 @@ export type WithdrawParamsStruct = {
 export type WithdrawParamsStructOutput = [
   token: string,
   amount: bigint,
-  to: string,
+  to: string
 ] & { token: string; amount: bigint; to: string };
+
+export declare namespace BuyCreditMarket {
+  export type SwapDataBuyCreditMarketStruct = {
+    creditPosition: CreditPositionStruct;
+    borrower: AddressLike;
+    creditAmountOut: BigNumberish;
+    cashAmountIn: BigNumberish;
+    swapFee: BigNumberish;
+    fragmentationFee: BigNumberish;
+    tenor: BigNumberish;
+  };
+
+  export type SwapDataBuyCreditMarketStructOutput = [
+    creditPosition: CreditPositionStructOutput,
+    borrower: string,
+    creditAmountOut: bigint,
+    cashAmountIn: bigint,
+    swapFee: bigint,
+    fragmentationFee: bigint,
+    tenor: bigint
+  ] & {
+    creditPosition: CreditPositionStructOutput;
+    borrower: string;
+    creditAmountOut: bigint;
+    cashAmountIn: bigint;
+    swapFee: bigint;
+    fragmentationFee: bigint;
+    tenor: bigint;
+  };
+}
+
+export declare namespace SellCreditMarket {
+  export type SwapDataSellCreditMarketStruct = {
+    creditPosition: CreditPositionStruct;
+    creditAmountIn: BigNumberish;
+    cashAmountOut: BigNumberish;
+    swapFee: BigNumberish;
+    fragmentationFee: BigNumberish;
+    tenor: BigNumberish;
+  };
+
+  export type SwapDataSellCreditMarketStructOutput = [
+    creditPosition: CreditPositionStructOutput,
+    creditAmountIn: bigint,
+    cashAmountOut: bigint,
+    swapFee: bigint,
+    fragmentationFee: bigint,
+    tenor: bigint
+  ] & {
+    creditPosition: CreditPositionStructOutput;
+    creditAmountIn: bigint;
+    cashAmountOut: bigint;
+    swapFee: bigint;
+    fragmentationFee: bigint;
+    tenor: bigint;
+  };
+}
 
 export interface SizeInterface extends Interface {
   getFunction(
@@ -451,6 +511,7 @@ export interface SizeInterface extends Interface {
       | "deposit"
       | "feeConfig"
       | "getBorrowOfferAPR"
+      | "getBuyCreditMarketSwapData"
       | "getCreditPosition"
       | "getDebtPosition"
       | "getDebtPositionAssignedCollateral"
@@ -458,6 +519,7 @@ export interface SizeInterface extends Interface {
       | "getLoanStatus"
       | "getPositionsCount"
       | "getRoleAdmin"
+      | "getSellCreditMarketSwapData"
       | "getSwapFee"
       | "getUserView"
       | "grantRole"
@@ -488,7 +550,7 @@ export interface SizeInterface extends Interface {
       | "updateConfig"
       | "upgradeToAndCall"
       | "version"
-      | "withdraw",
+      | "withdraw"
   ): FunctionFragment;
 
   getEvent(
@@ -500,94 +562,102 @@ export interface SizeInterface extends Interface {
       | "RoleRevoked"
       | "Unpaused"
       | "Upgraded"
-      | "VariablePoolBorrowRateUpdated",
+      | "VariablePoolBorrowRateUpdated"
   ): EventFragment;
 
   encodeFunctionData(
     functionFragment: "DEFAULT_ADMIN_ROLE",
-    values?: undefined,
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "UPGRADE_INTERFACE_VERSION",
-    values?: undefined,
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "buyCreditLimit",
-    values: [BuyCreditLimitParamsStruct],
+    values: [BuyCreditLimitParamsStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "buyCreditMarket",
-    values: [BuyCreditMarketParamsStruct],
+    values: [BuyCreditMarketParamsStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "claim",
-    values: [ClaimParamsStruct],
+    values: [ClaimParamsStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "collateralRatio",
-    values: [AddressLike],
+    values: [AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "compensate",
-    values: [CompensateParamsStruct],
+    values: [CompensateParamsStruct]
   ): string;
   encodeFunctionData(functionFragment: "data", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "debtTokenAmountToCollateralTokenAmount",
-    values: [BigNumberish],
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "deposit",
-    values: [DepositParamsStruct],
+    values: [DepositParamsStruct]
   ): string;
   encodeFunctionData(functionFragment: "feeConfig", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "getBorrowOfferAPR",
-    values: [AddressLike, BigNumberish],
+    values: [AddressLike, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getBuyCreditMarketSwapData",
+    values: [BuyCreditMarketParamsStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "getCreditPosition",
-    values: [BigNumberish],
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getDebtPosition",
-    values: [BigNumberish],
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getDebtPositionAssignedCollateral",
-    values: [BigNumberish],
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getLoanOfferAPR",
-    values: [AddressLike, BigNumberish],
+    values: [AddressLike, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getLoanStatus",
-    values: [BigNumberish],
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getPositionsCount",
-    values?: undefined,
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "getRoleAdmin",
-    values: [BytesLike],
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getSellCreditMarketSwapData",
+    values: [SellCreditMarketParamsStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "getSwapFee",
-    values: [BigNumberish, BigNumberish],
+    values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getUserView",
-    values: [AddressLike],
+    values: [AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "grantRole",
-    values: [BytesLike, AddressLike],
+    values: [BytesLike, AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "hasRole",
-    values: [BytesLike, AddressLike],
+    values: [BytesLike, AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
@@ -596,188 +666,196 @@ export interface SizeInterface extends Interface {
       InitializeFeeConfigParamsStruct,
       InitializeRiskConfigParamsStruct,
       InitializeOracleParamsStruct,
-      InitializeDataParamsStruct,
-    ],
+      InitializeDataParamsStruct
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "isCreditPositionId",
-    values: [BigNumberish],
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "isDebtPositionId",
-    values: [BigNumberish],
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "isDebtPositionLiquidatable",
-    values: [BigNumberish],
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "isUserUnderwater",
-    values: [AddressLike],
+    values: [AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "liquidate",
-    values: [LiquidateParamsStruct],
+    values: [LiquidateParamsStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "liquidateWithReplacement",
-    values: [LiquidateWithReplacementParamsStruct],
+    values: [LiquidateWithReplacementParamsStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "multicall",
-    values: [BytesLike[]],
+    values: [BytesLike[]]
   ): string;
   encodeFunctionData(functionFragment: "oracle", values?: undefined): string;
   encodeFunctionData(functionFragment: "pause", values?: undefined): string;
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "proxiableUUID",
-    values?: undefined,
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "renounceRole",
-    values: [BytesLike, AddressLike],
+    values: [BytesLike, AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "repay",
-    values: [RepayParamsStruct],
+    values: [RepayParamsStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "revokeRole",
-    values: [BytesLike, AddressLike],
+    values: [BytesLike, AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "riskConfig",
-    values?: undefined,
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "selfLiquidate",
-    values: [SelfLiquidateParamsStruct],
+    values: [SelfLiquidateParamsStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "sellCreditLimit",
-    values: [SellCreditLimitParamsStruct],
+    values: [SellCreditLimitParamsStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "sellCreditMarket",
-    values: [SellCreditMarketParamsStruct],
+    values: [SellCreditMarketParamsStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "setUserConfiguration",
-    values: [SetUserConfigurationParamsStruct],
+    values: [SetUserConfigurationParamsStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "setVariablePoolBorrowRate",
-    values: [BigNumberish],
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
-    values: [BytesLike],
+    values: [BytesLike]
   ): string;
   encodeFunctionData(functionFragment: "unpause", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "updateConfig",
-    values: [UpdateConfigParamsStruct],
+    values: [UpdateConfigParamsStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "upgradeToAndCall",
-    values: [AddressLike, BytesLike],
+    values: [AddressLike, BytesLike]
   ): string;
   encodeFunctionData(functionFragment: "version", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "withdraw",
-    values: [WithdrawParamsStruct],
+    values: [WithdrawParamsStruct]
   ): string;
 
   decodeFunctionResult(
     functionFragment: "DEFAULT_ADMIN_ROLE",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "UPGRADE_INTERFACE_VERSION",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "buyCreditLimit",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "buyCreditMarket",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "claim", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "collateralRatio",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "compensate", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "data", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "debtTokenAmountToCollateralTokenAmount",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "feeConfig", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getBorrowOfferAPR",
-    data: BytesLike,
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getBuyCreditMarketSwapData",
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "getCreditPosition",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "getDebtPosition",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "getDebtPositionAssignedCollateral",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "getLoanOfferAPR",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "getLoanStatus",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "getPositionsCount",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "getRoleAdmin",
-    data: BytesLike,
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getSellCreditMarketSwapData",
+    data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "getSwapFee", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getUserView",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "isCreditPositionId",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "isDebtPositionId",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "isDebtPositionLiquidatable",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "isUserUnderwater",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "liquidate", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "liquidateWithReplacement",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "multicall", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "oracle", data: BytesLike): Result;
@@ -785,47 +863,47 @@ export interface SizeInterface extends Interface {
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "proxiableUUID",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "renounceRole",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "repay", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "riskConfig", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "selfLiquidate",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "sellCreditLimit",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "sellCreditMarket",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "setUserConfiguration",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "setVariablePoolBorrowRate",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "supportsInterface",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "unpause", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "updateConfig",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "upgradeToAndCall",
-    data: BytesLike,
+    data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "version", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
@@ -859,12 +937,12 @@ export namespace RoleAdminChangedEvent {
   export type InputTuple = [
     role: BytesLike,
     previousAdminRole: BytesLike,
-    newAdminRole: BytesLike,
+    newAdminRole: BytesLike
   ];
   export type OutputTuple = [
     role: string,
     previousAdminRole: string,
-    newAdminRole: string,
+    newAdminRole: string
   ];
   export interface OutputObject {
     role: string;
@@ -881,7 +959,7 @@ export namespace RoleGrantedEvent {
   export type InputTuple = [
     role: BytesLike,
     account: AddressLike,
-    sender: AddressLike,
+    sender: AddressLike
   ];
   export type OutputTuple = [role: string, account: string, sender: string];
   export interface OutputObject {
@@ -899,7 +977,7 @@ export namespace RoleRevokedEvent {
   export type InputTuple = [
     role: BytesLike,
     account: AddressLike,
-    sender: AddressLike,
+    sender: AddressLike
   ];
   export type OutputTuple = [role: string, account: string, sender: string];
   export interface OutputObject {
@@ -939,11 +1017,17 @@ export namespace UpgradedEvent {
 
 export namespace VariablePoolBorrowRateUpdatedEvent {
   export type InputTuple = [
+    sender: AddressLike,
     oldBorrowRate: BigNumberish,
-    newBorrowRate: BigNumberish,
+    newBorrowRate: BigNumberish
   ];
-  export type OutputTuple = [oldBorrowRate: bigint, newBorrowRate: bigint];
+  export type OutputTuple = [
+    sender: string,
+    oldBorrowRate: bigint,
+    newBorrowRate: bigint
+  ];
   export interface OutputObject {
+    sender: string;
     oldBorrowRate: bigint;
     newBorrowRate: bigint;
   }
@@ -962,38 +1046,38 @@ export interface Size extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent,
+    event: TCEvent
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
   removeAllListeners<TCEvent extends TypedContractEvent>(
-    event?: TCEvent,
+    event?: TCEvent
   ): Promise<this>;
 
   DEFAULT_ADMIN_ROLE: TypedContractMethod<[], [string], "view">;
@@ -1048,6 +1132,12 @@ export interface Size extends BaseContract {
     "view"
   >;
 
+  getBuyCreditMarketSwapData: TypedContractMethod<
+    [params: BuyCreditMarketParamsStruct],
+    [BuyCreditMarket.SwapDataBuyCreditMarketStructOutput],
+    "view"
+  >;
+
   getCreditPosition: TypedContractMethod<
     [creditPositionId: BigNumberish],
     [CreditPositionStructOutput],
@@ -1082,6 +1172,12 @@ export interface Size extends BaseContract {
 
   getRoleAdmin: TypedContractMethod<[role: BytesLike], [string], "view">;
 
+  getSellCreditMarketSwapData: TypedContractMethod<
+    [params: SellCreditMarketParamsStruct],
+    [SellCreditMarket.SwapDataSellCreditMarketStructOutput],
+    "view"
+  >;
+
   getSwapFee: TypedContractMethod<
     [cash: BigNumberish, tenor: BigNumberish],
     [bigint],
@@ -1112,7 +1208,7 @@ export interface Size extends BaseContract {
       f: InitializeFeeConfigParamsStruct,
       r: InitializeRiskConfigParamsStruct,
       o: InitializeOracleParamsStruct,
-      d: InitializeDataParamsStruct,
+      d: InitializeDataParamsStruct
     ],
     [void],
     "nonpayable"
@@ -1150,7 +1246,7 @@ export interface Size extends BaseContract {
       [bigint, bigint] & {
         liquidatorProfitCollateralToken: bigint;
         liquidatorProfitBorrowToken: bigint;
-      },
+      }
     ],
     "payable"
   >;
@@ -1244,296 +1340,312 @@ export interface Size extends BaseContract {
   >;
 
   getFunction<T extends ContractMethod = ContractMethod>(
-    key: string | FunctionFragment,
+    key: string | FunctionFragment
   ): T;
 
   getFunction(
-    nameOrSignature: "DEFAULT_ADMIN_ROLE",
+    nameOrSignature: "DEFAULT_ADMIN_ROLE"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "UPGRADE_INTERFACE_VERSION",
+    nameOrSignature: "UPGRADE_INTERFACE_VERSION"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "buyCreditLimit",
+    nameOrSignature: "buyCreditLimit"
   ): TypedContractMethod<
     [params: BuyCreditLimitParamsStruct],
     [void],
     "payable"
   >;
   getFunction(
-    nameOrSignature: "buyCreditMarket",
+    nameOrSignature: "buyCreditMarket"
   ): TypedContractMethod<
     [params: BuyCreditMarketParamsStruct],
     [void],
     "payable"
   >;
   getFunction(
-    nameOrSignature: "claim",
+    nameOrSignature: "claim"
   ): TypedContractMethod<[params: ClaimParamsStruct], [void], "payable">;
   getFunction(
-    nameOrSignature: "collateralRatio",
+    nameOrSignature: "collateralRatio"
   ): TypedContractMethod<[user: AddressLike], [bigint], "view">;
   getFunction(
-    nameOrSignature: "compensate",
+    nameOrSignature: "compensate"
   ): TypedContractMethod<[params: CompensateParamsStruct], [void], "payable">;
   getFunction(
-    nameOrSignature: "data",
+    nameOrSignature: "data"
   ): TypedContractMethod<[], [DataViewStructOutput], "view">;
   getFunction(
-    nameOrSignature: "debtTokenAmountToCollateralTokenAmount",
+    nameOrSignature: "debtTokenAmountToCollateralTokenAmount"
   ): TypedContractMethod<[borrowATokenAmount: BigNumberish], [bigint], "view">;
   getFunction(
-    nameOrSignature: "deposit",
+    nameOrSignature: "deposit"
   ): TypedContractMethod<[params: DepositParamsStruct], [void], "payable">;
   getFunction(
-    nameOrSignature: "feeConfig",
+    nameOrSignature: "feeConfig"
   ): TypedContractMethod<[], [InitializeFeeConfigParamsStructOutput], "view">;
   getFunction(
-    nameOrSignature: "getBorrowOfferAPR",
+    nameOrSignature: "getBorrowOfferAPR"
   ): TypedContractMethod<
     [borrower: AddressLike, tenor: BigNumberish],
     [bigint],
     "view"
   >;
   getFunction(
-    nameOrSignature: "getCreditPosition",
+    nameOrSignature: "getBuyCreditMarketSwapData"
+  ): TypedContractMethod<
+    [params: BuyCreditMarketParamsStruct],
+    [BuyCreditMarket.SwapDataBuyCreditMarketStructOutput],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "getCreditPosition"
   ): TypedContractMethod<
     [creditPositionId: BigNumberish],
     [CreditPositionStructOutput],
     "view"
   >;
   getFunction(
-    nameOrSignature: "getDebtPosition",
+    nameOrSignature: "getDebtPosition"
   ): TypedContractMethod<
     [debtPositionId: BigNumberish],
     [DebtPositionStructOutput],
     "view"
   >;
   getFunction(
-    nameOrSignature: "getDebtPositionAssignedCollateral",
+    nameOrSignature: "getDebtPositionAssignedCollateral"
   ): TypedContractMethod<[debtPositionId: BigNumberish], [bigint], "view">;
   getFunction(
-    nameOrSignature: "getLoanOfferAPR",
+    nameOrSignature: "getLoanOfferAPR"
   ): TypedContractMethod<
     [lender: AddressLike, tenor: BigNumberish],
     [bigint],
     "view"
   >;
   getFunction(
-    nameOrSignature: "getLoanStatus",
+    nameOrSignature: "getLoanStatus"
   ): TypedContractMethod<[positionId: BigNumberish], [bigint], "view">;
   getFunction(
-    nameOrSignature: "getPositionsCount",
+    nameOrSignature: "getPositionsCount"
   ): TypedContractMethod<[], [[bigint, bigint]], "view">;
   getFunction(
-    nameOrSignature: "getRoleAdmin",
+    nameOrSignature: "getRoleAdmin"
   ): TypedContractMethod<[role: BytesLike], [string], "view">;
   getFunction(
-    nameOrSignature: "getSwapFee",
+    nameOrSignature: "getSellCreditMarketSwapData"
+  ): TypedContractMethod<
+    [params: SellCreditMarketParamsStruct],
+    [SellCreditMarket.SwapDataSellCreditMarketStructOutput],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "getSwapFee"
   ): TypedContractMethod<
     [cash: BigNumberish, tenor: BigNumberish],
     [bigint],
     "view"
   >;
   getFunction(
-    nameOrSignature: "getUserView",
+    nameOrSignature: "getUserView"
   ): TypedContractMethod<[user: AddressLike], [UserViewStructOutput], "view">;
   getFunction(
-    nameOrSignature: "grantRole",
+    nameOrSignature: "grantRole"
   ): TypedContractMethod<
     [role: BytesLike, account: AddressLike],
     [void],
     "nonpayable"
   >;
   getFunction(
-    nameOrSignature: "hasRole",
+    nameOrSignature: "hasRole"
   ): TypedContractMethod<
     [role: BytesLike, account: AddressLike],
     [boolean],
     "view"
   >;
   getFunction(
-    nameOrSignature: "initialize",
+    nameOrSignature: "initialize"
   ): TypedContractMethod<
     [
       owner: AddressLike,
       f: InitializeFeeConfigParamsStruct,
       r: InitializeRiskConfigParamsStruct,
       o: InitializeOracleParamsStruct,
-      d: InitializeDataParamsStruct,
+      d: InitializeDataParamsStruct
     ],
     [void],
     "nonpayable"
   >;
   getFunction(
-    nameOrSignature: "isCreditPositionId",
+    nameOrSignature: "isCreditPositionId"
   ): TypedContractMethod<[creditPositionId: BigNumberish], [boolean], "view">;
   getFunction(
-    nameOrSignature: "isDebtPositionId",
+    nameOrSignature: "isDebtPositionId"
   ): TypedContractMethod<[debtPositionId: BigNumberish], [boolean], "view">;
   getFunction(
-    nameOrSignature: "isDebtPositionLiquidatable",
+    nameOrSignature: "isDebtPositionLiquidatable"
   ): TypedContractMethod<[debtPositionId: BigNumberish], [boolean], "view">;
   getFunction(
-    nameOrSignature: "isUserUnderwater",
+    nameOrSignature: "isUserUnderwater"
   ): TypedContractMethod<[user: AddressLike], [boolean], "view">;
   getFunction(
-    nameOrSignature: "liquidate",
+    nameOrSignature: "liquidate"
   ): TypedContractMethod<[params: LiquidateParamsStruct], [bigint], "payable">;
-  getFunction(nameOrSignature: "liquidateWithReplacement"): TypedContractMethod<
+  getFunction(
+    nameOrSignature: "liquidateWithReplacement"
+  ): TypedContractMethod<
     [params: LiquidateWithReplacementParamsStruct],
     [
       [bigint, bigint] & {
         liquidatorProfitCollateralToken: bigint;
         liquidatorProfitBorrowToken: bigint;
-      },
+      }
     ],
     "payable"
   >;
   getFunction(
-    nameOrSignature: "multicall",
+    nameOrSignature: "multicall"
   ): TypedContractMethod<[_data: BytesLike[]], [string[]], "payable">;
   getFunction(
-    nameOrSignature: "oracle",
+    nameOrSignature: "oracle"
   ): TypedContractMethod<[], [InitializeOracleParamsStructOutput], "view">;
   getFunction(
-    nameOrSignature: "pause",
+    nameOrSignature: "pause"
   ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: "paused",
+    nameOrSignature: "paused"
   ): TypedContractMethod<[], [boolean], "view">;
   getFunction(
-    nameOrSignature: "proxiableUUID",
+    nameOrSignature: "proxiableUUID"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "renounceRole",
+    nameOrSignature: "renounceRole"
   ): TypedContractMethod<
     [role: BytesLike, callerConfirmation: AddressLike],
     [void],
     "nonpayable"
   >;
   getFunction(
-    nameOrSignature: "repay",
+    nameOrSignature: "repay"
   ): TypedContractMethod<[params: RepayParamsStruct], [void], "payable">;
   getFunction(
-    nameOrSignature: "revokeRole",
+    nameOrSignature: "revokeRole"
   ): TypedContractMethod<
     [role: BytesLike, account: AddressLike],
     [void],
     "nonpayable"
   >;
   getFunction(
-    nameOrSignature: "riskConfig",
+    nameOrSignature: "riskConfig"
   ): TypedContractMethod<[], [InitializeRiskConfigParamsStructOutput], "view">;
   getFunction(
-    nameOrSignature: "selfLiquidate",
+    nameOrSignature: "selfLiquidate"
   ): TypedContractMethod<
     [params: SelfLiquidateParamsStruct],
     [void],
     "payable"
   >;
   getFunction(
-    nameOrSignature: "sellCreditLimit",
+    nameOrSignature: "sellCreditLimit"
   ): TypedContractMethod<
     [params: SellCreditLimitParamsStruct],
     [void],
     "payable"
   >;
   getFunction(
-    nameOrSignature: "sellCreditMarket",
+    nameOrSignature: "sellCreditMarket"
   ): TypedContractMethod<
     [params: SellCreditMarketParamsStruct],
     [void],
     "payable"
   >;
   getFunction(
-    nameOrSignature: "setUserConfiguration",
+    nameOrSignature: "setUserConfiguration"
   ): TypedContractMethod<
     [params: SetUserConfigurationParamsStruct],
     [void],
     "payable"
   >;
   getFunction(
-    nameOrSignature: "setVariablePoolBorrowRate",
+    nameOrSignature: "setVariablePoolBorrowRate"
   ): TypedContractMethod<[borrowRate: BigNumberish], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: "supportsInterface",
+    nameOrSignature: "supportsInterface"
   ): TypedContractMethod<[interfaceId: BytesLike], [boolean], "view">;
   getFunction(
-    nameOrSignature: "unpause",
+    nameOrSignature: "unpause"
   ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: "updateConfig",
+    nameOrSignature: "updateConfig"
   ): TypedContractMethod<
     [params: UpdateConfigParamsStruct],
     [void],
     "nonpayable"
   >;
   getFunction(
-    nameOrSignature: "upgradeToAndCall",
+    nameOrSignature: "upgradeToAndCall"
   ): TypedContractMethod<
     [newImplementation: AddressLike, data: BytesLike],
     [void],
     "payable"
   >;
   getFunction(
-    nameOrSignature: "version",
+    nameOrSignature: "version"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "withdraw",
+    nameOrSignature: "withdraw"
   ): TypedContractMethod<[params: WithdrawParamsStruct], [void], "payable">;
 
   getEvent(
-    key: "Initialized",
+    key: "Initialized"
   ): TypedContractEvent<
     InitializedEvent.InputTuple,
     InitializedEvent.OutputTuple,
     InitializedEvent.OutputObject
   >;
   getEvent(
-    key: "Paused",
+    key: "Paused"
   ): TypedContractEvent<
     PausedEvent.InputTuple,
     PausedEvent.OutputTuple,
     PausedEvent.OutputObject
   >;
   getEvent(
-    key: "RoleAdminChanged",
+    key: "RoleAdminChanged"
   ): TypedContractEvent<
     RoleAdminChangedEvent.InputTuple,
     RoleAdminChangedEvent.OutputTuple,
     RoleAdminChangedEvent.OutputObject
   >;
   getEvent(
-    key: "RoleGranted",
+    key: "RoleGranted"
   ): TypedContractEvent<
     RoleGrantedEvent.InputTuple,
     RoleGrantedEvent.OutputTuple,
     RoleGrantedEvent.OutputObject
   >;
   getEvent(
-    key: "RoleRevoked",
+    key: "RoleRevoked"
   ): TypedContractEvent<
     RoleRevokedEvent.InputTuple,
     RoleRevokedEvent.OutputTuple,
     RoleRevokedEvent.OutputObject
   >;
   getEvent(
-    key: "Unpaused",
+    key: "Unpaused"
   ): TypedContractEvent<
     UnpausedEvent.InputTuple,
     UnpausedEvent.OutputTuple,
     UnpausedEvent.OutputObject
   >;
   getEvent(
-    key: "Upgraded",
+    key: "Upgraded"
   ): TypedContractEvent<
     UpgradedEvent.InputTuple,
     UpgradedEvent.OutputTuple,
     UpgradedEvent.OutputObject
   >;
   getEvent(
-    key: "VariablePoolBorrowRateUpdated",
+    key: "VariablePoolBorrowRateUpdated"
   ): TypedContractEvent<
     VariablePoolBorrowRateUpdatedEvent.InputTuple,
     VariablePoolBorrowRateUpdatedEvent.OutputTuple,
@@ -1618,7 +1730,7 @@ export interface Size extends BaseContract {
       UpgradedEvent.OutputObject
     >;
 
-    "VariablePoolBorrowRateUpdated(uint128,uint128)": TypedContractEvent<
+    "VariablePoolBorrowRateUpdated(address,uint128,uint128)": TypedContractEvent<
       VariablePoolBorrowRateUpdatedEvent.InputTuple,
       VariablePoolBorrowRateUpdatedEvent.OutputTuple,
       VariablePoolBorrowRateUpdatedEvent.OutputObject

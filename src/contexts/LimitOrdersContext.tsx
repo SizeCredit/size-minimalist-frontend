@@ -7,7 +7,7 @@ import {
 } from "react";
 import { ConfigContext } from "./ConfigContext";
 import { usePublicClient } from "wagmi";
-import { parseAbiItem } from "viem";
+import { AbiEvent, parseAbiItem } from "viem";
 import { delayed } from "../services/delayed";
 import { deduplicate } from "../services/deduplicate";
 import { UserViewStruct } from "../typechain/Size";
@@ -15,6 +15,7 @@ import { readContract } from "wagmi/actions";
 import { config } from "../wagmi";
 import { RegistryContext } from "./RegistryContext";
 import Size from "../abi/Size.json";
+import Events from "../abi/Events.json";
 
 const RPC_REQUESTS_PER_SECOND = 10;
 
@@ -61,19 +62,25 @@ export function LimitOrdersProvider({ children }: Props) {
       if (!market || !blockNumber) return;
 
       setProgress(0);
+      const sellCreditLimitAbi = Events.abi.find(
+        (e) => e.name === "SellCreditLimit",
+      )!;
+      const buyCreditLimitAbi = Events.abi.find(
+        (e) => e.name === "BuyCreditLimit",
+      )!;
       const [sellCreditLimit, buyCreditLimit] = await Promise.all([
         publicClient.getLogs({
           address: market.address,
           event: parseAbiItem(
-            "event SellCreditLimit(uint256 indexed maxDueDate, uint256[] curveRelativeTimeTenors, int256[] curveRelativeTimeAprs, uint256[] curveRelativeTimeMarketRateMultipliers)",
-          ),
+            `event ${sellCreditLimitAbi.name}(${sellCreditLimitAbi.inputs.map((i) => `${i.name} ${i.type}`).join(", ")})`,
+          ) as AbiEvent,
           fromBlock: blockNumber - pastBlocks,
         }),
         publicClient.getLogs({
           address: market.address,
           event: parseAbiItem(
-            "event BuyCreditLimit(uint256 indexed maxDueDate, uint256[] curveRelativeTimeTenors, int256[] curveRelativeTimeAprs, uint256[] curveRelativeTimeMarketRateMultipliers)",
-          ),
+            `event ${buyCreditLimitAbi.name}(${buyCreditLimitAbi.inputs.map((i) => `${i.name} ${i.type}`).join(", ")})`,
+          ) as AbiEvent,
           fromBlock: blockNumber - pastBlocks,
         }),
       ]);

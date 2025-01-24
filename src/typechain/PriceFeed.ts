@@ -3,10 +3,12 @@
 /* eslint-disable */
 import type {
   BaseContract,
+  BigNumberish,
   BytesLike,
   FunctionFragment,
   Result,
   Interface,
+  AddressLike,
   ContractRunner,
   ContractMethod,
   Listener,
@@ -19,41 +21,105 @@ import type {
   TypedContractMethod,
 } from "./common";
 
+export type PriceFeedParamsStruct = {
+  uniswapV3Pool: AddressLike;
+  twapWindow: BigNumberish;
+  averageBlockTime: BigNumberish;
+  baseToken: AddressLike;
+  quoteToken: AddressLike;
+  baseAggregator: AddressLike;
+  quoteAggregator: AddressLike;
+  baseStalePriceInterval: BigNumberish;
+  quoteStalePriceInterval: BigNumberish;
+  sequencerUptimeFeed: AddressLike;
+};
+
+export type PriceFeedParamsStructOutput = [
+  uniswapV3Pool: string,
+  twapWindow: bigint,
+  averageBlockTime: bigint,
+  baseToken: string,
+  quoteToken: string,
+  baseAggregator: string,
+  quoteAggregator: string,
+  baseStalePriceInterval: bigint,
+  quoteStalePriceInterval: bigint,
+  sequencerUptimeFeed: string
+] & {
+  uniswapV3Pool: string;
+  twapWindow: bigint;
+  averageBlockTime: bigint;
+  baseToken: string;
+  quoteToken: string;
+  baseAggregator: string;
+  quoteAggregator: string;
+  baseStalePriceInterval: bigint;
+  quoteStalePriceInterval: bigint;
+  sequencerUptimeFeed: string;
+};
+
 export interface PriceFeedInterface extends Interface {
   getFunction(
     nameOrSignature:
       | "base"
       | "baseStalePriceInterval"
+      | "chainlinkPriceFeed"
+      | "chainlinkSequencerUptimeFeed"
       | "decimals"
       | "getPrice"
       | "quote"
-      | "quoteStalePriceInterval",
+      | "quoteStalePriceInterval"
+      | "uniswapV3PriceFeed"
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: "base", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "baseStalePriceInterval",
-    values?: undefined,
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "chainlinkPriceFeed",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "chainlinkSequencerUptimeFeed",
+    values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
   encodeFunctionData(functionFragment: "getPrice", values?: undefined): string;
   encodeFunctionData(functionFragment: "quote", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "quoteStalePriceInterval",
-    values?: undefined,
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "uniswapV3PriceFeed",
+    values?: undefined
   ): string;
 
   decodeFunctionResult(functionFragment: "base", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "baseStalePriceInterval",
-    data: BytesLike,
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "chainlinkPriceFeed",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "chainlinkSequencerUptimeFeed",
+    data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getPrice", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "quote", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "quoteStalePriceInterval",
-    data: BytesLike,
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "uniswapV3PriceFeed",
+    data: BytesLike
   ): Result;
 }
 
@@ -66,43 +132,47 @@ export interface PriceFeed extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>,
+    listener: TypedListener<TCEvent>
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent,
+    event: TCEvent
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
   removeAllListeners<TCEvent extends TypedContractEvent>(
-    event?: TCEvent,
+    event?: TCEvent
   ): Promise<this>;
 
   base: TypedContractMethod<[], [string], "view">;
 
   baseStalePriceInterval: TypedContractMethod<[], [bigint], "view">;
+
+  chainlinkPriceFeed: TypedContractMethod<[], [string], "view">;
+
+  chainlinkSequencerUptimeFeed: TypedContractMethod<[], [string], "view">;
 
   decimals: TypedContractMethod<[], [bigint], "view">;
 
@@ -112,28 +182,39 @@ export interface PriceFeed extends BaseContract {
 
   quoteStalePriceInterval: TypedContractMethod<[], [bigint], "view">;
 
+  uniswapV3PriceFeed: TypedContractMethod<[], [string], "view">;
+
   getFunction<T extends ContractMethod = ContractMethod>(
-    key: string | FunctionFragment,
+    key: string | FunctionFragment
   ): T;
 
   getFunction(
-    nameOrSignature: "base",
+    nameOrSignature: "base"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "baseStalePriceInterval",
+    nameOrSignature: "baseStalePriceInterval"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
-    nameOrSignature: "decimals",
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "getPrice",
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "quote",
+    nameOrSignature: "chainlinkPriceFeed"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "quoteStalePriceInterval",
+    nameOrSignature: "chainlinkSequencerUptimeFeed"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "decimals"
   ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "getPrice"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "quote"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "quoteStalePriceInterval"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "uniswapV3PriceFeed"
+  ): TypedContractMethod<[], [string], "view">;
 
   filters: {};
 }
