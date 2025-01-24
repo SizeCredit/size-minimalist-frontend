@@ -1,1 +1,1532 @@
-{"abi":[{"type":"event","name":"BuyCreditLimit","inputs":[{"name":"sender","type":"address","indexed":true,"internalType":"address"},{"name":"maxDueDate","type":"uint256","indexed":false,"internalType":"uint256"},{"name":"curveRelativeTimeTenors","type":"uint256[]","indexed":false,"internalType":"uint256[]"},{"name":"curveRelativeTimeAprs","type":"int256[]","indexed":false,"internalType":"int256[]"},{"name":"curveRelativeTimeMarketRateMultipliers","type":"uint256[]","indexed":false,"internalType":"uint256[]"}],"anonymous":false},{"type":"event","name":"BuyCreditMarket","inputs":[{"name":"lender","type":"address","indexed":true,"internalType":"address"},{"name":"borrower","type":"address","indexed":true,"internalType":"address"},{"name":"creditPositionId","type":"uint256","indexed":true,"internalType":"uint256"},{"name":"amount","type":"uint256","indexed":false,"internalType":"uint256"},{"name":"tenor","type":"uint256","indexed":false,"internalType":"uint256"},{"name":"deadline","type":"uint256","indexed":false,"internalType":"uint256"},{"name":"minAPR","type":"uint256","indexed":false,"internalType":"uint256"},{"name":"exactAmountIn","type":"bool","indexed":false,"internalType":"bool"}],"anonymous":false},{"type":"event","name":"Claim","inputs":[{"name":"sender","type":"address","indexed":true,"internalType":"address"},{"name":"creditPositionId","type":"uint256","indexed":true,"internalType":"uint256"}],"anonymous":false},{"type":"event","name":"Compensate","inputs":[{"name":"sender","type":"address","indexed":true,"internalType":"address"},{"name":"creditPositionWithDebtToRepayId","type":"uint256","indexed":true,"internalType":"uint256"},{"name":"creditPositionToCompensateId","type":"uint256","indexed":true,"internalType":"uint256"},{"name":"amount","type":"uint256","indexed":false,"internalType":"uint256"}],"anonymous":false},{"type":"event","name":"CreateCreditPosition","inputs":[{"name":"creditPositionId","type":"uint256","indexed":true,"internalType":"uint256"},{"name":"lender","type":"address","indexed":true,"internalType":"address"},{"name":"debtPositionId","type":"uint256","indexed":true,"internalType":"uint256"},{"name":"exitPositionId","type":"uint256","indexed":false,"internalType":"uint256"},{"name":"credit","type":"uint256","indexed":false,"internalType":"uint256"},{"name":"forSale","type":"bool","indexed":false,"internalType":"bool"}],"anonymous":false},{"type":"event","name":"CreateDebtPosition","inputs":[{"name":"debtPositionId","type":"uint256","indexed":true,"internalType":"uint256"},{"name":"borrower","type":"address","indexed":true,"internalType":"address"},{"name":"lender","type":"address","indexed":true,"internalType":"address"},{"name":"futureValue","type":"uint256","indexed":false,"internalType":"uint256"},{"name":"dueDate","type":"uint256","indexed":false,"internalType":"uint256"}],"anonymous":false},{"type":"event","name":"Deposit","inputs":[{"name":"sender","type":"address","indexed":true,"internalType":"address"},{"name":"token","type":"address","indexed":true,"internalType":"address"},{"name":"to","type":"address","indexed":true,"internalType":"address"},{"name":"amount","type":"uint256","indexed":false,"internalType":"uint256"}],"anonymous":false},{"type":"event","name":"Initialize","inputs":[{"name":"sender","type":"address","indexed":true,"internalType":"address"}],"anonymous":false},{"type":"event","name":"Liquidate","inputs":[{"name":"sender","type":"address","indexed":true,"internalType":"address"},{"name":"debtPositionId","type":"uint256","indexed":true,"internalType":"uint256"},{"name":"minimumCollateralProfit","type":"uint256","indexed":false,"internalType":"uint256"},{"name":"deadline","type":"uint256","indexed":false,"internalType":"uint256"},{"name":"collateralRatio","type":"uint256","indexed":false,"internalType":"uint256"},{"name":"loanStatus","type":"uint8","indexed":false,"internalType":"uint8"}],"anonymous":false},{"type":"event","name":"LiquidateWithReplacement","inputs":[{"name":"sender","type":"address","indexed":true,"internalType":"address"},{"name":"debtPositionId","type":"uint256","indexed":true,"internalType":"uint256"},{"name":"borrower","type":"address","indexed":true,"internalType":"address"},{"name":"minimumCollateralProfit","type":"uint256","indexed":false,"internalType":"uint256"},{"name":"deadline","type":"uint256","indexed":false,"internalType":"uint256"},{"name":"minAPR","type":"uint256","indexed":false,"internalType":"uint256"}],"anonymous":false},{"type":"event","name":"Repay","inputs":[{"name":"sender","type":"address","indexed":true,"internalType":"address"},{"name":"debtPositionId","type":"uint256","indexed":true,"internalType":"uint256"},{"name":"borrower","type":"address","indexed":true,"internalType":"address"}],"anonymous":false},{"type":"event","name":"SelfLiquidate","inputs":[{"name":"sender","type":"address","indexed":true,"internalType":"address"},{"name":"creditPositionId","type":"uint256","indexed":true,"internalType":"uint256"}],"anonymous":false},{"type":"event","name":"SellCreditLimit","inputs":[{"name":"sender","type":"address","indexed":true,"internalType":"address"},{"name":"maxDueDate","type":"uint256","indexed":false,"internalType":"uint256"},{"name":"curveRelativeTimeTenors","type":"uint256[]","indexed":false,"internalType":"uint256[]"},{"name":"curveRelativeTimeAprs","type":"int256[]","indexed":false,"internalType":"int256[]"},{"name":"curveRelativeTimeMarketRateMultipliers","type":"uint256[]","indexed":false,"internalType":"uint256[]"}],"anonymous":false},{"type":"event","name":"SellCreditMarket","inputs":[{"name":"borrower","type":"address","indexed":true,"internalType":"address"},{"name":"lender","type":"address","indexed":true,"internalType":"address"},{"name":"creditPositionId","type":"uint256","indexed":true,"internalType":"uint256"},{"name":"amount","type":"uint256","indexed":false,"internalType":"uint256"},{"name":"tenor","type":"uint256","indexed":false,"internalType":"uint256"},{"name":"deadline","type":"uint256","indexed":false,"internalType":"uint256"},{"name":"maxAPR","type":"uint256","indexed":false,"internalType":"uint256"},{"name":"exactAmountIn","type":"bool","indexed":false,"internalType":"bool"}],"anonymous":false},{"type":"event","name":"SetUserConfiguration","inputs":[{"name":"sender","type":"address","indexed":true,"internalType":"address"},{"name":"openingLimitBorrowCR","type":"uint256","indexed":false,"internalType":"uint256"},{"name":"allCreditPositionsForSaleDisabled","type":"bool","indexed":false,"internalType":"bool"},{"name":"creditPositionIdsForSale","type":"bool","indexed":false,"internalType":"bool"},{"name":"creditPositionIds","type":"uint256[]","indexed":false,"internalType":"uint256[]"}],"anonymous":false},{"type":"event","name":"SwapData","inputs":[{"name":"creditPositionId","type":"uint256","indexed":true,"internalType":"uint256"},{"name":"borrower","type":"address","indexed":true,"internalType":"address"},{"name":"lender","type":"address","indexed":true,"internalType":"address"},{"name":"credit","type":"uint256","indexed":false,"internalType":"uint256"},{"name":"cashIn","type":"uint256","indexed":false,"internalType":"uint256"},{"name":"cashOut","type":"uint256","indexed":false,"internalType":"uint256"},{"name":"swapFee","type":"uint256","indexed":false,"internalType":"uint256"},{"name":"fragmentationFee","type":"uint256","indexed":false,"internalType":"uint256"},{"name":"tenor","type":"uint256","indexed":false,"internalType":"uint256"}],"anonymous":false},{"type":"event","name":"UpdateConfig","inputs":[{"name":"sender","type":"address","indexed":true,"internalType":"address"},{"name":"key","type":"string","indexed":true,"internalType":"string"},{"name":"value","type":"uint256","indexed":false,"internalType":"uint256"}],"anonymous":false},{"type":"event","name":"UpdateCreditPosition","inputs":[{"name":"creditPositionId","type":"uint256","indexed":true,"internalType":"uint256"},{"name":"lender","type":"address","indexed":true,"internalType":"address"},{"name":"credit","type":"uint256","indexed":false,"internalType":"uint256"},{"name":"forSale","type":"bool","indexed":false,"internalType":"bool"}],"anonymous":false},{"type":"event","name":"UpdateDebtPosition","inputs":[{"name":"debtPositionId","type":"uint256","indexed":true,"internalType":"uint256"},{"name":"borrower","type":"address","indexed":true,"internalType":"address"},{"name":"futureValue","type":"uint256","indexed":false,"internalType":"uint256"},{"name":"liquidityIndexAtRepayment","type":"uint256","indexed":false,"internalType":"uint256"}],"anonymous":false},{"type":"event","name":"VariablePoolBorrowRateUpdated","inputs":[{"name":"sender","type":"address","indexed":true,"internalType":"address"},{"name":"oldBorrowRate","type":"uint128","indexed":false,"internalType":"uint128"},{"name":"newBorrowRate","type":"uint128","indexed":false,"internalType":"uint128"}],"anonymous":false},{"type":"event","name":"Withdraw","inputs":[{"name":"sender","type":"address","indexed":true,"internalType":"address"},{"name":"token","type":"address","indexed":true,"internalType":"address"},{"name":"to","type":"address","indexed":true,"internalType":"address"},{"name":"amount","type":"uint256","indexed":false,"internalType":"uint256"}],"anonymous":false}],"bytecode":{"object":"0x60556032600b8282823980515f1a607314602657634e487b7160e01b5f525f60045260245ffd5b305f52607381538281f3fe730000000000000000000000000000000000000000301460806040525f80fdfea26469706673582212201a366d1373c05d603565693c7904d13c5c9ea8413dc2e51bccf824a27d2cccda64736f6c63430008170033","sourceMap":"165:3673:122:-:0;;;;;;;;;;;;;;;-1:-1:-1;;;165:3673:122;;;;;;;;;;;;;;;;;","linkReferences":{}},"deployedBytecode":{"object":"0x730000000000000000000000000000000000000000301460806040525f80fdfea26469706673582212201a366d1373c05d603565693c7904d13c5c9ea8413dc2e51bccf824a27d2cccda64736f6c63430008170033","sourceMap":"165:3673:122:-:0;;;;;;;;","linkReferences":{}},"methodIdentifiers":{},"rawMetadata":"{\"compiler\":{\"version\":\"0.8.23+commit.f704f362\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"maxDueDate\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"curveRelativeTimeTenors\",\"type\":\"uint256[]\"},{\"indexed\":false,\"internalType\":\"int256[]\",\"name\":\"curveRelativeTimeAprs\",\"type\":\"int256[]\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"curveRelativeTimeMarketRateMultipliers\",\"type\":\"uint256[]\"}],\"name\":\"BuyCreditLimit\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"lender\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"borrower\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"creditPositionId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"tenor\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"minAPR\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"exactAmountIn\",\"type\":\"bool\"}],\"name\":\"BuyCreditMarket\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"creditPositionId\",\"type\":\"uint256\"}],\"name\":\"Claim\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"creditPositionWithDebtToRepayId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"creditPositionToCompensateId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Compensate\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"creditPositionId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"lender\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"debtPositionId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"exitPositionId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"credit\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"forSale\",\"type\":\"bool\"}],\"name\":\"CreateCreditPosition\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"debtPositionId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"borrower\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"lender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"futureValue\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"dueDate\",\"type\":\"uint256\"}],\"name\":\"CreateDebtPosition\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Deposit\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"Initialize\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"debtPositionId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"minimumCollateralProfit\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"collateralRatio\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"loanStatus\",\"type\":\"uint8\"}],\"name\":\"Liquidate\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"debtPositionId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"borrower\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"minimumCollateralProfit\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"minAPR\",\"type\":\"uint256\"}],\"name\":\"LiquidateWithReplacement\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"debtPositionId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"borrower\",\"type\":\"address\"}],\"name\":\"Repay\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"creditPositionId\",\"type\":\"uint256\"}],\"name\":\"SelfLiquidate\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"maxDueDate\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"curveRelativeTimeTenors\",\"type\":\"uint256[]\"},{\"indexed\":false,\"internalType\":\"int256[]\",\"name\":\"curveRelativeTimeAprs\",\"type\":\"int256[]\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"curveRelativeTimeMarketRateMultipliers\",\"type\":\"uint256[]\"}],\"name\":\"SellCreditLimit\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"borrower\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"lender\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"creditPositionId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"tenor\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"maxAPR\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"exactAmountIn\",\"type\":\"bool\"}],\"name\":\"SellCreditMarket\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"openingLimitBorrowCR\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"allCreditPositionsForSaleDisabled\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"creditPositionIdsForSale\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"creditPositionIds\",\"type\":\"uint256[]\"}],\"name\":\"SetUserConfiguration\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"creditPositionId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"borrower\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"lender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"credit\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"cashIn\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"cashOut\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"swapFee\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"fragmentationFee\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"tenor\",\"type\":\"uint256\"}],\"name\":\"SwapData\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"UpdateConfig\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"creditPositionId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"lender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"credit\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"forSale\",\"type\":\"bool\"}],\"name\":\"UpdateCreditPosition\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"debtPositionId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"borrower\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"futureValue\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"liquidityIndexAtRepayment\",\"type\":\"uint256\"}],\"name\":\"UpdateDebtPosition\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint128\",\"name\":\"oldBorrowRate\",\"type\":\"uint128\"},{\"indexed\":false,\"internalType\":\"uint128\",\"name\":\"newBorrowRate\",\"type\":\"uint128\"}],\"name\":\"VariablePoolBorrowRateUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Withdraw\",\"type\":\"event\"}],\"devdoc\":{\"author\":\"Size (https://size.credit/)\",\"custom:security-contact\":\"security@size.credit\",\"kind\":\"dev\",\"methods\":{},\"title\":\"Events\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/libraries/Events.sol\":\"Events\"},\"evmVersion\":\"shanghai\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":@aave/=lib/aave-v3-core/contracts/\",\":@chainlink/=lib/chainlink/\",\":@chimera/=lib/chimera/src/\",\":@crytic/properties/=lib/properties/\",\":@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/\",\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@script/=script/\",\":@solady/=lib/solady/src/\",\":@src/=src/\",\":@test/=test/\",\":@uniswap/v3-core/=lib/v3-core/\",\":@uniswap/v3-periphery/=lib/v3-periphery/\",\":ERC4626/=lib/properties/lib/ERC4626/contracts/\",\":aave-v3-core/=lib/aave-v3-core/\",\":chainlink/=lib/chainlink/contracts/\",\":chimera/=lib/chimera/src/\",\":ds-test/=lib/solady/lib/ds-test/src/\",\":erc4626-tests/=lib/openzeppelin-contracts-upgradeable/lib/erc4626-tests/\",\":forge-std/=lib/forge-std/src/\",\":halmos-cheatcodes/=lib/halmos-cheatcodes/src/\",\":openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/\",\":openzeppelin-contracts/=lib/openzeppelin-contracts/\",\":properties/=lib/properties/contracts/\",\":solady/=lib/solady/\",\":solmate/=lib/properties/lib/solmate/src/\",\":v3-core/=lib/v3-core/contracts/\",\":v3-periphery/=lib/v3-periphery/contracts/\"]},\"sources\":{\"src/libraries/Events.sol\":{\"keccak256\":\"0xe58f0a32179a1ca958ced1592ebfba53ba4f1904f142b9e95154f28eedbddd5a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8988228c053196f8ba3315c080dd83e41821dfec6361d8bcfe71d64291cc9b77\",\"dweb:/ipfs/QmQfnDQFYu1TdmT52wjLrV3AmmwLo7mmeQV6rxtBLYvgus\"]}},\"version\":1}","metadata":{"compiler":{"version":"0.8.23+commit.f704f362"},"language":"Solidity","output":{"abi":[{"inputs":[{"internalType":"address","name":"sender","type":"address","indexed":true},{"internalType":"uint256","name":"maxDueDate","type":"uint256","indexed":false},{"internalType":"uint256[]","name":"curveRelativeTimeTenors","type":"uint256[]","indexed":false},{"internalType":"int256[]","name":"curveRelativeTimeAprs","type":"int256[]","indexed":false},{"internalType":"uint256[]","name":"curveRelativeTimeMarketRateMultipliers","type":"uint256[]","indexed":false}],"type":"event","name":"BuyCreditLimit","anonymous":false},{"inputs":[{"internalType":"address","name":"lender","type":"address","indexed":true},{"internalType":"address","name":"borrower","type":"address","indexed":true},{"internalType":"uint256","name":"creditPositionId","type":"uint256","indexed":true},{"internalType":"uint256","name":"amount","type":"uint256","indexed":false},{"internalType":"uint256","name":"tenor","type":"uint256","indexed":false},{"internalType":"uint256","name":"deadline","type":"uint256","indexed":false},{"internalType":"uint256","name":"minAPR","type":"uint256","indexed":false},{"internalType":"bool","name":"exactAmountIn","type":"bool","indexed":false}],"type":"event","name":"BuyCreditMarket","anonymous":false},{"inputs":[{"internalType":"address","name":"sender","type":"address","indexed":true},{"internalType":"uint256","name":"creditPositionId","type":"uint256","indexed":true}],"type":"event","name":"Claim","anonymous":false},{"inputs":[{"internalType":"address","name":"sender","type":"address","indexed":true},{"internalType":"uint256","name":"creditPositionWithDebtToRepayId","type":"uint256","indexed":true},{"internalType":"uint256","name":"creditPositionToCompensateId","type":"uint256","indexed":true},{"internalType":"uint256","name":"amount","type":"uint256","indexed":false}],"type":"event","name":"Compensate","anonymous":false},{"inputs":[{"internalType":"uint256","name":"creditPositionId","type":"uint256","indexed":true},{"internalType":"address","name":"lender","type":"address","indexed":true},{"internalType":"uint256","name":"debtPositionId","type":"uint256","indexed":true},{"internalType":"uint256","name":"exitPositionId","type":"uint256","indexed":false},{"internalType":"uint256","name":"credit","type":"uint256","indexed":false},{"internalType":"bool","name":"forSale","type":"bool","indexed":false}],"type":"event","name":"CreateCreditPosition","anonymous":false},{"inputs":[{"internalType":"uint256","name":"debtPositionId","type":"uint256","indexed":true},{"internalType":"address","name":"borrower","type":"address","indexed":true},{"internalType":"address","name":"lender","type":"address","indexed":true},{"internalType":"uint256","name":"futureValue","type":"uint256","indexed":false},{"internalType":"uint256","name":"dueDate","type":"uint256","indexed":false}],"type":"event","name":"CreateDebtPosition","anonymous":false},{"inputs":[{"internalType":"address","name":"sender","type":"address","indexed":true},{"internalType":"address","name":"token","type":"address","indexed":true},{"internalType":"address","name":"to","type":"address","indexed":true},{"internalType":"uint256","name":"amount","type":"uint256","indexed":false}],"type":"event","name":"Deposit","anonymous":false},{"inputs":[{"internalType":"address","name":"sender","type":"address","indexed":true}],"type":"event","name":"Initialize","anonymous":false},{"inputs":[{"internalType":"address","name":"sender","type":"address","indexed":true},{"internalType":"uint256","name":"debtPositionId","type":"uint256","indexed":true},{"internalType":"uint256","name":"minimumCollateralProfit","type":"uint256","indexed":false},{"internalType":"uint256","name":"deadline","type":"uint256","indexed":false},{"internalType":"uint256","name":"collateralRatio","type":"uint256","indexed":false},{"internalType":"uint8","name":"loanStatus","type":"uint8","indexed":false}],"type":"event","name":"Liquidate","anonymous":false},{"inputs":[{"internalType":"address","name":"sender","type":"address","indexed":true},{"internalType":"uint256","name":"debtPositionId","type":"uint256","indexed":true},{"internalType":"address","name":"borrower","type":"address","indexed":true},{"internalType":"uint256","name":"minimumCollateralProfit","type":"uint256","indexed":false},{"internalType":"uint256","name":"deadline","type":"uint256","indexed":false},{"internalType":"uint256","name":"minAPR","type":"uint256","indexed":false}],"type":"event","name":"LiquidateWithReplacement","anonymous":false},{"inputs":[{"internalType":"address","name":"sender","type":"address","indexed":true},{"internalType":"uint256","name":"debtPositionId","type":"uint256","indexed":true},{"internalType":"address","name":"borrower","type":"address","indexed":true}],"type":"event","name":"Repay","anonymous":false},{"inputs":[{"internalType":"address","name":"sender","type":"address","indexed":true},{"internalType":"uint256","name":"creditPositionId","type":"uint256","indexed":true}],"type":"event","name":"SelfLiquidate","anonymous":false},{"inputs":[{"internalType":"address","name":"sender","type":"address","indexed":true},{"internalType":"uint256","name":"maxDueDate","type":"uint256","indexed":false},{"internalType":"uint256[]","name":"curveRelativeTimeTenors","type":"uint256[]","indexed":false},{"internalType":"int256[]","name":"curveRelativeTimeAprs","type":"int256[]","indexed":false},{"internalType":"uint256[]","name":"curveRelativeTimeMarketRateMultipliers","type":"uint256[]","indexed":false}],"type":"event","name":"SellCreditLimit","anonymous":false},{"inputs":[{"internalType":"address","name":"borrower","type":"address","indexed":true},{"internalType":"address","name":"lender","type":"address","indexed":true},{"internalType":"uint256","name":"creditPositionId","type":"uint256","indexed":true},{"internalType":"uint256","name":"amount","type":"uint256","indexed":false},{"internalType":"uint256","name":"tenor","type":"uint256","indexed":false},{"internalType":"uint256","name":"deadline","type":"uint256","indexed":false},{"internalType":"uint256","name":"maxAPR","type":"uint256","indexed":false},{"internalType":"bool","name":"exactAmountIn","type":"bool","indexed":false}],"type":"event","name":"SellCreditMarket","anonymous":false},{"inputs":[{"internalType":"address","name":"sender","type":"address","indexed":true},{"internalType":"uint256","name":"openingLimitBorrowCR","type":"uint256","indexed":false},{"internalType":"bool","name":"allCreditPositionsForSaleDisabled","type":"bool","indexed":false},{"internalType":"bool","name":"creditPositionIdsForSale","type":"bool","indexed":false},{"internalType":"uint256[]","name":"creditPositionIds","type":"uint256[]","indexed":false}],"type":"event","name":"SetUserConfiguration","anonymous":false},{"inputs":[{"internalType":"uint256","name":"creditPositionId","type":"uint256","indexed":true},{"internalType":"address","name":"borrower","type":"address","indexed":true},{"internalType":"address","name":"lender","type":"address","indexed":true},{"internalType":"uint256","name":"credit","type":"uint256","indexed":false},{"internalType":"uint256","name":"cashIn","type":"uint256","indexed":false},{"internalType":"uint256","name":"cashOut","type":"uint256","indexed":false},{"internalType":"uint256","name":"swapFee","type":"uint256","indexed":false},{"internalType":"uint256","name":"fragmentationFee","type":"uint256","indexed":false},{"internalType":"uint256","name":"tenor","type":"uint256","indexed":false}],"type":"event","name":"SwapData","anonymous":false},{"inputs":[{"internalType":"address","name":"sender","type":"address","indexed":true},{"internalType":"string","name":"key","type":"string","indexed":true},{"internalType":"uint256","name":"value","type":"uint256","indexed":false}],"type":"event","name":"UpdateConfig","anonymous":false},{"inputs":[{"internalType":"uint256","name":"creditPositionId","type":"uint256","indexed":true},{"internalType":"address","name":"lender","type":"address","indexed":true},{"internalType":"uint256","name":"credit","type":"uint256","indexed":false},{"internalType":"bool","name":"forSale","type":"bool","indexed":false}],"type":"event","name":"UpdateCreditPosition","anonymous":false},{"inputs":[{"internalType":"uint256","name":"debtPositionId","type":"uint256","indexed":true},{"internalType":"address","name":"borrower","type":"address","indexed":true},{"internalType":"uint256","name":"futureValue","type":"uint256","indexed":false},{"internalType":"uint256","name":"liquidityIndexAtRepayment","type":"uint256","indexed":false}],"type":"event","name":"UpdateDebtPosition","anonymous":false},{"inputs":[{"internalType":"address","name":"sender","type":"address","indexed":true},{"internalType":"uint128","name":"oldBorrowRate","type":"uint128","indexed":false},{"internalType":"uint128","name":"newBorrowRate","type":"uint128","indexed":false}],"type":"event","name":"VariablePoolBorrowRateUpdated","anonymous":false},{"inputs":[{"internalType":"address","name":"sender","type":"address","indexed":true},{"internalType":"address","name":"token","type":"address","indexed":true},{"internalType":"address","name":"to","type":"address","indexed":true},{"internalType":"uint256","name":"amount","type":"uint256","indexed":false}],"type":"event","name":"Withdraw","anonymous":false}],"devdoc":{"kind":"dev","methods":{},"version":1},"userdoc":{"kind":"user","methods":{},"version":1}},"settings":{"remappings":["@aave/=lib/aave-v3-core/contracts/","@chainlink/=lib/chainlink/","@chimera/=lib/chimera/src/","@crytic/properties/=lib/properties/","@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/","@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/","@script/=script/","@solady/=lib/solady/src/","@src/=src/","@test/=test/","@uniswap/v3-core/=lib/v3-core/","@uniswap/v3-periphery/=lib/v3-periphery/","ERC4626/=lib/properties/lib/ERC4626/contracts/","aave-v3-core/=lib/aave-v3-core/","chainlink/=lib/chainlink/contracts/","chimera/=lib/chimera/src/","ds-test/=lib/solady/lib/ds-test/src/","erc4626-tests/=lib/openzeppelin-contracts-upgradeable/lib/erc4626-tests/","forge-std/=lib/forge-std/src/","halmos-cheatcodes/=lib/halmos-cheatcodes/src/","openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/","openzeppelin-contracts/=lib/openzeppelin-contracts/","properties/=lib/properties/contracts/","solady/=lib/solady/","solmate/=lib/properties/lib/solmate/src/","v3-core/=lib/v3-core/contracts/","v3-periphery/=lib/v3-periphery/contracts/"],"optimizer":{"enabled":true,"runs":200},"metadata":{"bytecodeHash":"ipfs"},"compilationTarget":{"src/libraries/Events.sol":"Events"},"evmVersion":"shanghai","libraries":{}},"sources":{"src/libraries/Events.sol":{"keccak256":"0xe58f0a32179a1ca958ced1592ebfba53ba4f1904f142b9e95154f28eedbddd5a","urls":["bzz-raw://8988228c053196f8ba3315c080dd83e41821dfec6361d8bcfe71d64291cc9b77","dweb:/ipfs/QmQfnDQFYu1TdmT52wjLrV3AmmwLo7mmeQV6rxtBLYvgus"],"license":"MIT"}},"version":1},"id":122}
+{
+  "abi": [
+    {
+      "type": "event",
+      "name": "BuyCreditLimit",
+      "inputs": [
+        {
+          "name": "sender",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "maxDueDate",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "curveRelativeTimeTenors",
+          "type": "uint256[]",
+          "indexed": false,
+          "internalType": "uint256[]"
+        },
+        {
+          "name": "curveRelativeTimeAprs",
+          "type": "int256[]",
+          "indexed": false,
+          "internalType": "int256[]"
+        },
+        {
+          "name": "curveRelativeTimeMarketRateMultipliers",
+          "type": "uint256[]",
+          "indexed": false,
+          "internalType": "uint256[]"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "BuyCreditMarket",
+      "inputs": [
+        {
+          "name": "lender",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "borrower",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "creditPositionId",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        },
+        {
+          "name": "amount",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "tenor",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "deadline",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "minAPR",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "exactAmountIn",
+          "type": "bool",
+          "indexed": false,
+          "internalType": "bool"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "Claim",
+      "inputs": [
+        {
+          "name": "sender",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "creditPositionId",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "Compensate",
+      "inputs": [
+        {
+          "name": "sender",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "creditPositionWithDebtToRepayId",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        },
+        {
+          "name": "creditPositionToCompensateId",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        },
+        {
+          "name": "amount",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "CreateCreditPosition",
+      "inputs": [
+        {
+          "name": "creditPositionId",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        },
+        {
+          "name": "lender",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "debtPositionId",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        },
+        {
+          "name": "exitPositionId",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "credit",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "forSale",
+          "type": "bool",
+          "indexed": false,
+          "internalType": "bool"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "CreateDebtPosition",
+      "inputs": [
+        {
+          "name": "debtPositionId",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        },
+        {
+          "name": "borrower",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "lender",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "futureValue",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "dueDate",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "Deposit",
+      "inputs": [
+        {
+          "name": "sender",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "token",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "to",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "amount",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "Initialize",
+      "inputs": [
+        {
+          "name": "sender",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "Liquidate",
+      "inputs": [
+        {
+          "name": "sender",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "debtPositionId",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        },
+        {
+          "name": "minimumCollateralProfit",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "deadline",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "collateralRatio",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "loanStatus",
+          "type": "uint8",
+          "indexed": false,
+          "internalType": "uint8"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "LiquidateWithReplacement",
+      "inputs": [
+        {
+          "name": "sender",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "debtPositionId",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        },
+        {
+          "name": "borrower",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "minimumCollateralProfit",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "deadline",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "minAPR",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "Repay",
+      "inputs": [
+        {
+          "name": "sender",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "debtPositionId",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        },
+        {
+          "name": "borrower",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "SelfLiquidate",
+      "inputs": [
+        {
+          "name": "sender",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "creditPositionId",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "SellCreditLimit",
+      "inputs": [
+        {
+          "name": "sender",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "maxDueDate",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "curveRelativeTimeTenors",
+          "type": "uint256[]",
+          "indexed": false,
+          "internalType": "uint256[]"
+        },
+        {
+          "name": "curveRelativeTimeAprs",
+          "type": "int256[]",
+          "indexed": false,
+          "internalType": "int256[]"
+        },
+        {
+          "name": "curveRelativeTimeMarketRateMultipliers",
+          "type": "uint256[]",
+          "indexed": false,
+          "internalType": "uint256[]"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "SellCreditMarket",
+      "inputs": [
+        {
+          "name": "borrower",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "lender",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "creditPositionId",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        },
+        {
+          "name": "amount",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "tenor",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "deadline",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "maxAPR",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "exactAmountIn",
+          "type": "bool",
+          "indexed": false,
+          "internalType": "bool"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "SetUserConfiguration",
+      "inputs": [
+        {
+          "name": "sender",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "openingLimitBorrowCR",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "allCreditPositionsForSaleDisabled",
+          "type": "bool",
+          "indexed": false,
+          "internalType": "bool"
+        },
+        {
+          "name": "creditPositionIdsForSale",
+          "type": "bool",
+          "indexed": false,
+          "internalType": "bool"
+        },
+        {
+          "name": "creditPositionIds",
+          "type": "uint256[]",
+          "indexed": false,
+          "internalType": "uint256[]"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "SwapData",
+      "inputs": [
+        {
+          "name": "creditPositionId",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        },
+        {
+          "name": "borrower",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "lender",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "credit",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "cashIn",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "cashOut",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "swapFee",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "fragmentationFee",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "tenor",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "UpdateConfig",
+      "inputs": [
+        {
+          "name": "sender",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "indexed": true,
+          "internalType": "string"
+        },
+        {
+          "name": "value",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "UpdateCreditPosition",
+      "inputs": [
+        {
+          "name": "creditPositionId",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        },
+        {
+          "name": "lender",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "credit",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "forSale",
+          "type": "bool",
+          "indexed": false,
+          "internalType": "bool"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "UpdateDebtPosition",
+      "inputs": [
+        {
+          "name": "debtPositionId",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        },
+        {
+          "name": "borrower",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "futureValue",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "liquidityIndexAtRepayment",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "VariablePoolBorrowRateUpdated",
+      "inputs": [
+        {
+          "name": "sender",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "oldBorrowRate",
+          "type": "uint128",
+          "indexed": false,
+          "internalType": "uint128"
+        },
+        {
+          "name": "newBorrowRate",
+          "type": "uint128",
+          "indexed": false,
+          "internalType": "uint128"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "Withdraw",
+      "inputs": [
+        {
+          "name": "sender",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "token",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "to",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "amount",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    }
+  ],
+  "bytecode": {
+    "object": "0x60556032600b8282823980515f1a607314602657634e487b7160e01b5f525f60045260245ffd5b305f52607381538281f3fe730000000000000000000000000000000000000000301460806040525f80fdfea26469706673582212201a366d1373c05d603565693c7904d13c5c9ea8413dc2e51bccf824a27d2cccda64736f6c63430008170033",
+    "sourceMap": "165:3673:122:-:0;;;;;;;;;;;;;;;-1:-1:-1;;;165:3673:122;;;;;;;;;;;;;;;;;",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x730000000000000000000000000000000000000000301460806040525f80fdfea26469706673582212201a366d1373c05d603565693c7904d13c5c9ea8413dc2e51bccf824a27d2cccda64736f6c63430008170033",
+    "sourceMap": "165:3673:122:-:0;;;;;;;;",
+    "linkReferences": {}
+  },
+  "methodIdentifiers": {},
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.23+commit.f704f362\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"maxDueDate\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"curveRelativeTimeTenors\",\"type\":\"uint256[]\"},{\"indexed\":false,\"internalType\":\"int256[]\",\"name\":\"curveRelativeTimeAprs\",\"type\":\"int256[]\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"curveRelativeTimeMarketRateMultipliers\",\"type\":\"uint256[]\"}],\"name\":\"BuyCreditLimit\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"lender\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"borrower\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"creditPositionId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"tenor\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"minAPR\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"exactAmountIn\",\"type\":\"bool\"}],\"name\":\"BuyCreditMarket\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"creditPositionId\",\"type\":\"uint256\"}],\"name\":\"Claim\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"creditPositionWithDebtToRepayId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"creditPositionToCompensateId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Compensate\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"creditPositionId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"lender\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"debtPositionId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"exitPositionId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"credit\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"forSale\",\"type\":\"bool\"}],\"name\":\"CreateCreditPosition\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"debtPositionId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"borrower\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"lender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"futureValue\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"dueDate\",\"type\":\"uint256\"}],\"name\":\"CreateDebtPosition\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Deposit\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"Initialize\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"debtPositionId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"minimumCollateralProfit\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"collateralRatio\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"loanStatus\",\"type\":\"uint8\"}],\"name\":\"Liquidate\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"debtPositionId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"borrower\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"minimumCollateralProfit\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"minAPR\",\"type\":\"uint256\"}],\"name\":\"LiquidateWithReplacement\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"debtPositionId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"borrower\",\"type\":\"address\"}],\"name\":\"Repay\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"creditPositionId\",\"type\":\"uint256\"}],\"name\":\"SelfLiquidate\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"maxDueDate\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"curveRelativeTimeTenors\",\"type\":\"uint256[]\"},{\"indexed\":false,\"internalType\":\"int256[]\",\"name\":\"curveRelativeTimeAprs\",\"type\":\"int256[]\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"curveRelativeTimeMarketRateMultipliers\",\"type\":\"uint256[]\"}],\"name\":\"SellCreditLimit\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"borrower\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"lender\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"creditPositionId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"tenor\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"maxAPR\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"exactAmountIn\",\"type\":\"bool\"}],\"name\":\"SellCreditMarket\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"openingLimitBorrowCR\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"allCreditPositionsForSaleDisabled\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"creditPositionIdsForSale\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"creditPositionIds\",\"type\":\"uint256[]\"}],\"name\":\"SetUserConfiguration\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"creditPositionId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"borrower\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"lender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"credit\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"cashIn\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"cashOut\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"swapFee\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"fragmentationFee\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"tenor\",\"type\":\"uint256\"}],\"name\":\"SwapData\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"UpdateConfig\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"creditPositionId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"lender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"credit\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"forSale\",\"type\":\"bool\"}],\"name\":\"UpdateCreditPosition\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"debtPositionId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"borrower\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"futureValue\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"liquidityIndexAtRepayment\",\"type\":\"uint256\"}],\"name\":\"UpdateDebtPosition\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint128\",\"name\":\"oldBorrowRate\",\"type\":\"uint128\"},{\"indexed\":false,\"internalType\":\"uint128\",\"name\":\"newBorrowRate\",\"type\":\"uint128\"}],\"name\":\"VariablePoolBorrowRateUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Withdraw\",\"type\":\"event\"}],\"devdoc\":{\"author\":\"Size (https://size.credit/)\",\"custom:security-contact\":\"security@size.credit\",\"kind\":\"dev\",\"methods\":{},\"title\":\"Events\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/libraries/Events.sol\":\"Events\"},\"evmVersion\":\"shanghai\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":@aave/=lib/aave-v3-core/contracts/\",\":@chainlink/=lib/chainlink/\",\":@chimera/=lib/chimera/src/\",\":@crytic/properties/=lib/properties/\",\":@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/\",\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@script/=script/\",\":@solady/=lib/solady/src/\",\":@src/=src/\",\":@test/=test/\",\":@uniswap/v3-core/=lib/v3-core/\",\":@uniswap/v3-periphery/=lib/v3-periphery/\",\":ERC4626/=lib/properties/lib/ERC4626/contracts/\",\":aave-v3-core/=lib/aave-v3-core/\",\":chainlink/=lib/chainlink/contracts/\",\":chimera/=lib/chimera/src/\",\":ds-test/=lib/solady/lib/ds-test/src/\",\":erc4626-tests/=lib/openzeppelin-contracts-upgradeable/lib/erc4626-tests/\",\":forge-std/=lib/forge-std/src/\",\":halmos-cheatcodes/=lib/halmos-cheatcodes/src/\",\":openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/\",\":openzeppelin-contracts/=lib/openzeppelin-contracts/\",\":properties/=lib/properties/contracts/\",\":solady/=lib/solady/\",\":solmate/=lib/properties/lib/solmate/src/\",\":v3-core/=lib/v3-core/contracts/\",\":v3-periphery/=lib/v3-periphery/contracts/\"]},\"sources\":{\"src/libraries/Events.sol\":{\"keccak256\":\"0xe58f0a32179a1ca958ced1592ebfba53ba4f1904f142b9e95154f28eedbddd5a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8988228c053196f8ba3315c080dd83e41821dfec6361d8bcfe71d64291cc9b77\",\"dweb:/ipfs/QmQfnDQFYu1TdmT52wjLrV3AmmwLo7mmeQV6rxtBLYvgus\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": { "version": "0.8.23+commit.f704f362" },
+    "language": "Solidity",
+    "output": {
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "sender",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "maxDueDate",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256[]",
+              "name": "curveRelativeTimeTenors",
+              "type": "uint256[]",
+              "indexed": false
+            },
+            {
+              "internalType": "int256[]",
+              "name": "curveRelativeTimeAprs",
+              "type": "int256[]",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256[]",
+              "name": "curveRelativeTimeMarketRateMultipliers",
+              "type": "uint256[]",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "BuyCreditLimit",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "lender",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "borrower",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "creditPositionId",
+              "type": "uint256",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "tenor",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "deadline",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "minAPR",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "bool",
+              "name": "exactAmountIn",
+              "type": "bool",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "BuyCreditMarket",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "sender",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "creditPositionId",
+              "type": "uint256",
+              "indexed": true
+            }
+          ],
+          "type": "event",
+          "name": "Claim",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "sender",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "creditPositionWithDebtToRepayId",
+              "type": "uint256",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "creditPositionToCompensateId",
+              "type": "uint256",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "Compensate",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "creditPositionId",
+              "type": "uint256",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "lender",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "debtPositionId",
+              "type": "uint256",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "exitPositionId",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "credit",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "bool",
+              "name": "forSale",
+              "type": "bool",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "CreateCreditPosition",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "debtPositionId",
+              "type": "uint256",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "borrower",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "lender",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "futureValue",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "dueDate",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "CreateDebtPosition",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "sender",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "token",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "to",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "Deposit",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "sender",
+              "type": "address",
+              "indexed": true
+            }
+          ],
+          "type": "event",
+          "name": "Initialize",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "sender",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "debtPositionId",
+              "type": "uint256",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "minimumCollateralProfit",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "deadline",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "collateralRatio",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint8",
+              "name": "loanStatus",
+              "type": "uint8",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "Liquidate",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "sender",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "debtPositionId",
+              "type": "uint256",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "borrower",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "minimumCollateralProfit",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "deadline",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "minAPR",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "LiquidateWithReplacement",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "sender",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "debtPositionId",
+              "type": "uint256",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "borrower",
+              "type": "address",
+              "indexed": true
+            }
+          ],
+          "type": "event",
+          "name": "Repay",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "sender",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "creditPositionId",
+              "type": "uint256",
+              "indexed": true
+            }
+          ],
+          "type": "event",
+          "name": "SelfLiquidate",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "sender",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "maxDueDate",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256[]",
+              "name": "curveRelativeTimeTenors",
+              "type": "uint256[]",
+              "indexed": false
+            },
+            {
+              "internalType": "int256[]",
+              "name": "curveRelativeTimeAprs",
+              "type": "int256[]",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256[]",
+              "name": "curveRelativeTimeMarketRateMultipliers",
+              "type": "uint256[]",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "SellCreditLimit",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "borrower",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "lender",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "creditPositionId",
+              "type": "uint256",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "tenor",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "deadline",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "maxAPR",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "bool",
+              "name": "exactAmountIn",
+              "type": "bool",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "SellCreditMarket",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "sender",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "openingLimitBorrowCR",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "bool",
+              "name": "allCreditPositionsForSaleDisabled",
+              "type": "bool",
+              "indexed": false
+            },
+            {
+              "internalType": "bool",
+              "name": "creditPositionIdsForSale",
+              "type": "bool",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256[]",
+              "name": "creditPositionIds",
+              "type": "uint256[]",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "SetUserConfiguration",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "creditPositionId",
+              "type": "uint256",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "borrower",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "lender",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "credit",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "cashIn",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "cashOut",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "swapFee",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "fragmentationFee",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "tenor",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "SwapData",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "sender",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "string",
+              "name": "key",
+              "type": "string",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "value",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "UpdateConfig",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "creditPositionId",
+              "type": "uint256",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "lender",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "credit",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "bool",
+              "name": "forSale",
+              "type": "bool",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "UpdateCreditPosition",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "debtPositionId",
+              "type": "uint256",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "borrower",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "futureValue",
+              "type": "uint256",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "liquidityIndexAtRepayment",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "UpdateDebtPosition",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "sender",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint128",
+              "name": "oldBorrowRate",
+              "type": "uint128",
+              "indexed": false
+            },
+            {
+              "internalType": "uint128",
+              "name": "newBorrowRate",
+              "type": "uint128",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "VariablePoolBorrowRateUpdated",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "sender",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "token",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "address",
+              "name": "to",
+              "type": "address",
+              "indexed": true
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "Withdraw",
+          "anonymous": false
+        }
+      ],
+      "devdoc": { "kind": "dev", "methods": {}, "version": 1 },
+      "userdoc": { "kind": "user", "methods": {}, "version": 1 }
+    },
+    "settings": {
+      "remappings": [
+        "@aave/=lib/aave-v3-core/contracts/",
+        "@chainlink/=lib/chainlink/",
+        "@chimera/=lib/chimera/src/",
+        "@crytic/properties/=lib/properties/",
+        "@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/",
+        "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+        "@script/=script/",
+        "@solady/=lib/solady/src/",
+        "@src/=src/",
+        "@test/=test/",
+        "@uniswap/v3-core/=lib/v3-core/",
+        "@uniswap/v3-periphery/=lib/v3-periphery/",
+        "ERC4626/=lib/properties/lib/ERC4626/contracts/",
+        "aave-v3-core/=lib/aave-v3-core/",
+        "chainlink/=lib/chainlink/contracts/",
+        "chimera/=lib/chimera/src/",
+        "ds-test/=lib/solady/lib/ds-test/src/",
+        "erc4626-tests/=lib/openzeppelin-contracts-upgradeable/lib/erc4626-tests/",
+        "forge-std/=lib/forge-std/src/",
+        "halmos-cheatcodes/=lib/halmos-cheatcodes/src/",
+        "openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/",
+        "openzeppelin-contracts/=lib/openzeppelin-contracts/",
+        "properties/=lib/properties/contracts/",
+        "solady/=lib/solady/",
+        "solmate/=lib/properties/lib/solmate/src/",
+        "v3-core/=lib/v3-core/contracts/",
+        "v3-periphery/=lib/v3-periphery/contracts/"
+      ],
+      "optimizer": { "enabled": true, "runs": 200 },
+      "metadata": { "bytecodeHash": "ipfs" },
+      "compilationTarget": { "src/libraries/Events.sol": "Events" },
+      "evmVersion": "shanghai",
+      "libraries": {}
+    },
+    "sources": {
+      "src/libraries/Events.sol": {
+        "keccak256": "0xe58f0a32179a1ca958ced1592ebfba53ba4f1904f142b9e95154f28eedbddd5a",
+        "urls": [
+          "bzz-raw://8988228c053196f8ba3315c080dd83e41821dfec6361d8bcfe71d64291cc9b77",
+          "dweb:/ipfs/QmQfnDQFYu1TdmT52wjLrV3AmmwLo7mmeQV6rxtBLYvgus"
+        ],
+        "license": "MIT"
+      }
+    },
+    "version": 1
+  },
+  "id": 122
+}

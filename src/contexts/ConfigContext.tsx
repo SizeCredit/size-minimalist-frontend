@@ -31,7 +31,8 @@ export function ConfigProvider({ children }: Props) {
     config,
   });
 
-  const chain = chains.find((c) => c.chain.id === account.chain?.id) || chains[0];
+  const chain =
+    chains.find((c) => c.chain.id === account.chain?.id) || chains[0];
   console.log(account.chain);
   const blockNumber = useBlockNumber({ config }).data;
   const [pastBlocks, setPastBlocks] = useState<bigint>(10_000n);

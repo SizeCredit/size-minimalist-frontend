@@ -43,7 +43,7 @@ export interface EventsInterface extends Interface {
       | "UpdateCreditPosition"
       | "UpdateDebtPosition"
       | "VariablePoolBorrowRateUpdated"
-      | "Withdraw"
+      | "Withdraw",
   ): EventFragment;
 }
 
@@ -53,14 +53,14 @@ export namespace BuyCreditLimitEvent {
     maxDueDate: BigNumberish,
     curveRelativeTimeTenors: BigNumberish[],
     curveRelativeTimeAprs: BigNumberish[],
-    curveRelativeTimeMarketRateMultipliers: BigNumberish[]
+    curveRelativeTimeMarketRateMultipliers: BigNumberish[],
   ];
   export type OutputTuple = [
     sender: string,
     maxDueDate: bigint,
     curveRelativeTimeTenors: bigint[],
     curveRelativeTimeAprs: bigint[],
-    curveRelativeTimeMarketRateMultipliers: bigint[]
+    curveRelativeTimeMarketRateMultipliers: bigint[],
   ];
   export interface OutputObject {
     sender: string;
@@ -84,7 +84,7 @@ export namespace BuyCreditMarketEvent {
     tenor: BigNumberish,
     deadline: BigNumberish,
     minAPR: BigNumberish,
-    exactAmountIn: boolean
+    exactAmountIn: boolean,
   ];
   export type OutputTuple = [
     lender: string,
@@ -94,7 +94,7 @@ export namespace BuyCreditMarketEvent {
     tenor: bigint,
     deadline: bigint,
     minAPR: bigint,
-    exactAmountIn: boolean
+    exactAmountIn: boolean,
   ];
   export interface OutputObject {
     lender: string;
@@ -115,7 +115,7 @@ export namespace BuyCreditMarketEvent {
 export namespace ClaimEvent {
   export type InputTuple = [
     sender: AddressLike,
-    creditPositionId: BigNumberish
+    creditPositionId: BigNumberish,
   ];
   export type OutputTuple = [sender: string, creditPositionId: bigint];
   export interface OutputObject {
@@ -133,13 +133,13 @@ export namespace CompensateEvent {
     sender: AddressLike,
     creditPositionWithDebtToRepayId: BigNumberish,
     creditPositionToCompensateId: BigNumberish,
-    amount: BigNumberish
+    amount: BigNumberish,
   ];
   export type OutputTuple = [
     sender: string,
     creditPositionWithDebtToRepayId: bigint,
     creditPositionToCompensateId: bigint,
-    amount: bigint
+    amount: bigint,
   ];
   export interface OutputObject {
     sender: string;
@@ -160,7 +160,7 @@ export namespace CreateCreditPositionEvent {
     debtPositionId: BigNumberish,
     exitPositionId: BigNumberish,
     credit: BigNumberish,
-    forSale: boolean
+    forSale: boolean,
   ];
   export type OutputTuple = [
     creditPositionId: bigint,
@@ -168,7 +168,7 @@ export namespace CreateCreditPositionEvent {
     debtPositionId: bigint,
     exitPositionId: bigint,
     credit: bigint,
-    forSale: boolean
+    forSale: boolean,
   ];
   export interface OutputObject {
     creditPositionId: bigint;
@@ -190,14 +190,14 @@ export namespace CreateDebtPositionEvent {
     borrower: AddressLike,
     lender: AddressLike,
     futureValue: BigNumberish,
-    dueDate: BigNumberish
+    dueDate: BigNumberish,
   ];
   export type OutputTuple = [
     debtPositionId: bigint,
     borrower: string,
     lender: string,
     futureValue: bigint,
-    dueDate: bigint
+    dueDate: bigint,
   ];
   export interface OutputObject {
     debtPositionId: bigint;
@@ -217,13 +217,13 @@ export namespace DepositEvent {
     sender: AddressLike,
     token: AddressLike,
     to: AddressLike,
-    amount: BigNumberish
+    amount: BigNumberish,
   ];
   export type OutputTuple = [
     sender: string,
     token: string,
     to: string,
-    amount: bigint
+    amount: bigint,
   ];
   export interface OutputObject {
     sender: string;
@@ -256,7 +256,7 @@ export namespace LiquidateEvent {
     minimumCollateralProfit: BigNumberish,
     deadline: BigNumberish,
     collateralRatio: BigNumberish,
-    loanStatus: BigNumberish
+    loanStatus: BigNumberish,
   ];
   export type OutputTuple = [
     sender: string,
@@ -264,7 +264,7 @@ export namespace LiquidateEvent {
     minimumCollateralProfit: bigint,
     deadline: bigint,
     collateralRatio: bigint,
-    loanStatus: bigint
+    loanStatus: bigint,
   ];
   export interface OutputObject {
     sender: string;
@@ -287,7 +287,7 @@ export namespace LiquidateWithReplacementEvent {
     borrower: AddressLike,
     minimumCollateralProfit: BigNumberish,
     deadline: BigNumberish,
-    minAPR: BigNumberish
+    minAPR: BigNumberish,
   ];
   export type OutputTuple = [
     sender: string,
@@ -295,7 +295,7 @@ export namespace LiquidateWithReplacementEvent {
     borrower: string,
     minimumCollateralProfit: bigint,
     deadline: bigint,
-    minAPR: bigint
+    minAPR: bigint,
   ];
   export interface OutputObject {
     sender: string;
@@ -315,12 +315,12 @@ export namespace RepayEvent {
   export type InputTuple = [
     sender: AddressLike,
     debtPositionId: BigNumberish,
-    borrower: AddressLike
+    borrower: AddressLike,
   ];
   export type OutputTuple = [
     sender: string,
     debtPositionId: bigint,
-    borrower: string
+    borrower: string,
   ];
   export interface OutputObject {
     sender: string;
@@ -336,7 +336,7 @@ export namespace RepayEvent {
 export namespace SelfLiquidateEvent {
   export type InputTuple = [
     sender: AddressLike,
-    creditPositionId: BigNumberish
+    creditPositionId: BigNumberish,
   ];
   export type OutputTuple = [sender: string, creditPositionId: bigint];
   export interface OutputObject {
@@ -355,14 +355,14 @@ export namespace SellCreditLimitEvent {
     maxDueDate: BigNumberish,
     curveRelativeTimeTenors: BigNumberish[],
     curveRelativeTimeAprs: BigNumberish[],
-    curveRelativeTimeMarketRateMultipliers: BigNumberish[]
+    curveRelativeTimeMarketRateMultipliers: BigNumberish[],
   ];
   export type OutputTuple = [
     sender: string,
     maxDueDate: bigint,
     curveRelativeTimeTenors: bigint[],
     curveRelativeTimeAprs: bigint[],
-    curveRelativeTimeMarketRateMultipliers: bigint[]
+    curveRelativeTimeMarketRateMultipliers: bigint[],
   ];
   export interface OutputObject {
     sender: string;
@@ -386,7 +386,7 @@ export namespace SellCreditMarketEvent {
     tenor: BigNumberish,
     deadline: BigNumberish,
     maxAPR: BigNumberish,
-    exactAmountIn: boolean
+    exactAmountIn: boolean,
   ];
   export type OutputTuple = [
     borrower: string,
@@ -396,7 +396,7 @@ export namespace SellCreditMarketEvent {
     tenor: bigint,
     deadline: bigint,
     maxAPR: bigint,
-    exactAmountIn: boolean
+    exactAmountIn: boolean,
   ];
   export interface OutputObject {
     borrower: string;
@@ -420,14 +420,14 @@ export namespace SetUserConfigurationEvent {
     openingLimitBorrowCR: BigNumberish,
     allCreditPositionsForSaleDisabled: boolean,
     creditPositionIdsForSale: boolean,
-    creditPositionIds: BigNumberish[]
+    creditPositionIds: BigNumberish[],
   ];
   export type OutputTuple = [
     sender: string,
     openingLimitBorrowCR: bigint,
     allCreditPositionsForSaleDisabled: boolean,
     creditPositionIdsForSale: boolean,
-    creditPositionIds: bigint[]
+    creditPositionIds: bigint[],
   ];
   export interface OutputObject {
     sender: string;
@@ -452,7 +452,7 @@ export namespace SwapDataEvent {
     cashOut: BigNumberish,
     swapFee: BigNumberish,
     fragmentationFee: BigNumberish,
-    tenor: BigNumberish
+    tenor: BigNumberish,
   ];
   export type OutputTuple = [
     creditPositionId: bigint,
@@ -463,7 +463,7 @@ export namespace SwapDataEvent {
     cashOut: bigint,
     swapFee: bigint,
     fragmentationFee: bigint,
-    tenor: bigint
+    tenor: bigint,
   ];
   export interface OutputObject {
     creditPositionId: bigint;
@@ -486,7 +486,7 @@ export namespace UpdateConfigEvent {
   export type InputTuple = [
     sender: AddressLike,
     key: string,
-    value: BigNumberish
+    value: BigNumberish,
   ];
   export type OutputTuple = [sender: string, key: string, value: bigint];
   export interface OutputObject {
@@ -505,13 +505,13 @@ export namespace UpdateCreditPositionEvent {
     creditPositionId: BigNumberish,
     lender: AddressLike,
     credit: BigNumberish,
-    forSale: boolean
+    forSale: boolean,
   ];
   export type OutputTuple = [
     creditPositionId: bigint,
     lender: string,
     credit: bigint,
-    forSale: boolean
+    forSale: boolean,
   ];
   export interface OutputObject {
     creditPositionId: bigint;
@@ -530,13 +530,13 @@ export namespace UpdateDebtPositionEvent {
     debtPositionId: BigNumberish,
     borrower: AddressLike,
     futureValue: BigNumberish,
-    liquidityIndexAtRepayment: BigNumberish
+    liquidityIndexAtRepayment: BigNumberish,
   ];
   export type OutputTuple = [
     debtPositionId: bigint,
     borrower: string,
     futureValue: bigint,
-    liquidityIndexAtRepayment: bigint
+    liquidityIndexAtRepayment: bigint,
   ];
   export interface OutputObject {
     debtPositionId: bigint;
@@ -554,12 +554,12 @@ export namespace VariablePoolBorrowRateUpdatedEvent {
   export type InputTuple = [
     sender: AddressLike,
     oldBorrowRate: BigNumberish,
-    newBorrowRate: BigNumberish
+    newBorrowRate: BigNumberish,
   ];
   export type OutputTuple = [
     sender: string,
     oldBorrowRate: bigint,
-    newBorrowRate: bigint
+    newBorrowRate: bigint,
   ];
   export interface OutputObject {
     sender: string;
@@ -577,13 +577,13 @@ export namespace WithdrawEvent {
     sender: AddressLike,
     token: AddressLike,
     to: AddressLike,
-    amount: BigNumberish
+    amount: BigNumberish,
   ];
   export type OutputTuple = [
     sender: string,
     token: string,
     to: string,
-    amount: bigint
+    amount: bigint,
   ];
   export interface OutputObject {
     sender: string;
@@ -606,186 +606,186 @@ export interface Events extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent
+    event: TCEvent,
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
   removeAllListeners<TCEvent extends TypedContractEvent>(
-    event?: TCEvent
+    event?: TCEvent,
   ): Promise<this>;
 
   getFunction<T extends ContractMethod = ContractMethod>(
-    key: string | FunctionFragment
+    key: string | FunctionFragment,
   ): T;
 
   getEvent(
-    key: "BuyCreditLimit"
+    key: "BuyCreditLimit",
   ): TypedContractEvent<
     BuyCreditLimitEvent.InputTuple,
     BuyCreditLimitEvent.OutputTuple,
     BuyCreditLimitEvent.OutputObject
   >;
   getEvent(
-    key: "BuyCreditMarket"
+    key: "BuyCreditMarket",
   ): TypedContractEvent<
     BuyCreditMarketEvent.InputTuple,
     BuyCreditMarketEvent.OutputTuple,
     BuyCreditMarketEvent.OutputObject
   >;
   getEvent(
-    key: "Claim"
+    key: "Claim",
   ): TypedContractEvent<
     ClaimEvent.InputTuple,
     ClaimEvent.OutputTuple,
     ClaimEvent.OutputObject
   >;
   getEvent(
-    key: "Compensate"
+    key: "Compensate",
   ): TypedContractEvent<
     CompensateEvent.InputTuple,
     CompensateEvent.OutputTuple,
     CompensateEvent.OutputObject
   >;
   getEvent(
-    key: "CreateCreditPosition"
+    key: "CreateCreditPosition",
   ): TypedContractEvent<
     CreateCreditPositionEvent.InputTuple,
     CreateCreditPositionEvent.OutputTuple,
     CreateCreditPositionEvent.OutputObject
   >;
   getEvent(
-    key: "CreateDebtPosition"
+    key: "CreateDebtPosition",
   ): TypedContractEvent<
     CreateDebtPositionEvent.InputTuple,
     CreateDebtPositionEvent.OutputTuple,
     CreateDebtPositionEvent.OutputObject
   >;
   getEvent(
-    key: "Deposit"
+    key: "Deposit",
   ): TypedContractEvent<
     DepositEvent.InputTuple,
     DepositEvent.OutputTuple,
     DepositEvent.OutputObject
   >;
   getEvent(
-    key: "Initialize"
+    key: "Initialize",
   ): TypedContractEvent<
     InitializeEvent.InputTuple,
     InitializeEvent.OutputTuple,
     InitializeEvent.OutputObject
   >;
   getEvent(
-    key: "Liquidate"
+    key: "Liquidate",
   ): TypedContractEvent<
     LiquidateEvent.InputTuple,
     LiquidateEvent.OutputTuple,
     LiquidateEvent.OutputObject
   >;
   getEvent(
-    key: "LiquidateWithReplacement"
+    key: "LiquidateWithReplacement",
   ): TypedContractEvent<
     LiquidateWithReplacementEvent.InputTuple,
     LiquidateWithReplacementEvent.OutputTuple,
     LiquidateWithReplacementEvent.OutputObject
   >;
   getEvent(
-    key: "Repay"
+    key: "Repay",
   ): TypedContractEvent<
     RepayEvent.InputTuple,
     RepayEvent.OutputTuple,
     RepayEvent.OutputObject
   >;
   getEvent(
-    key: "SelfLiquidate"
+    key: "SelfLiquidate",
   ): TypedContractEvent<
     SelfLiquidateEvent.InputTuple,
     SelfLiquidateEvent.OutputTuple,
     SelfLiquidateEvent.OutputObject
   >;
   getEvent(
-    key: "SellCreditLimit"
+    key: "SellCreditLimit",
   ): TypedContractEvent<
     SellCreditLimitEvent.InputTuple,
     SellCreditLimitEvent.OutputTuple,
     SellCreditLimitEvent.OutputObject
   >;
   getEvent(
-    key: "SellCreditMarket"
+    key: "SellCreditMarket",
   ): TypedContractEvent<
     SellCreditMarketEvent.InputTuple,
     SellCreditMarketEvent.OutputTuple,
     SellCreditMarketEvent.OutputObject
   >;
   getEvent(
-    key: "SetUserConfiguration"
+    key: "SetUserConfiguration",
   ): TypedContractEvent<
     SetUserConfigurationEvent.InputTuple,
     SetUserConfigurationEvent.OutputTuple,
     SetUserConfigurationEvent.OutputObject
   >;
   getEvent(
-    key: "SwapData"
+    key: "SwapData",
   ): TypedContractEvent<
     SwapDataEvent.InputTuple,
     SwapDataEvent.OutputTuple,
     SwapDataEvent.OutputObject
   >;
   getEvent(
-    key: "UpdateConfig"
+    key: "UpdateConfig",
   ): TypedContractEvent<
     UpdateConfigEvent.InputTuple,
     UpdateConfigEvent.OutputTuple,
     UpdateConfigEvent.OutputObject
   >;
   getEvent(
-    key: "UpdateCreditPosition"
+    key: "UpdateCreditPosition",
   ): TypedContractEvent<
     UpdateCreditPositionEvent.InputTuple,
     UpdateCreditPositionEvent.OutputTuple,
     UpdateCreditPositionEvent.OutputObject
   >;
   getEvent(
-    key: "UpdateDebtPosition"
+    key: "UpdateDebtPosition",
   ): TypedContractEvent<
     UpdateDebtPositionEvent.InputTuple,
     UpdateDebtPositionEvent.OutputTuple,
     UpdateDebtPositionEvent.OutputObject
   >;
   getEvent(
-    key: "VariablePoolBorrowRateUpdated"
+    key: "VariablePoolBorrowRateUpdated",
   ): TypedContractEvent<
     VariablePoolBorrowRateUpdatedEvent.InputTuple,
     VariablePoolBorrowRateUpdatedEvent.OutputTuple,
     VariablePoolBorrowRateUpdatedEvent.OutputObject
   >;
   getEvent(
-    key: "Withdraw"
+    key: "Withdraw",
   ): TypedContractEvent<
     WithdrawEvent.InputTuple,
     WithdrawEvent.OutputTuple,

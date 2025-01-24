@@ -34,8 +34,8 @@ export const config = createConfig({
   },
 });
 
-export const publicClients = Object.keys(RPC_URLS).map((chainId) =>
-  ({
+export const publicClients = Object.keys(RPC_URLS)
+  .map((chainId) => ({
     [chainId]: createPublicClient({
       chain: chains.find((chain) => chain.id === Number(chainId)),
       transport: http(
@@ -44,8 +44,8 @@ export const publicClients = Object.keys(RPC_URLS).map((chainId) =>
         }`,
       ),
     }),
-  }),
-).reduce((acc, curr) => ({ ...acc, ...curr }), {});
+  }))
+  .reduce((acc, curr) => ({ ...acc, ...curr }), {});
 
 declare module "wagmi" {
   interface Register {
