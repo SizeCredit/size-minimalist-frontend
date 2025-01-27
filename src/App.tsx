@@ -20,7 +20,6 @@ import Limit from "./pages/Limit";
 import Funding from "./pages/Funding";
 import Charts from "./pages/Charts";
 import Positions from "./pages/Positions";
-import Tx from "./pages/Tx";
 import Sidebar from "./components/Sidebar";
 
 export const pages = [
@@ -35,7 +34,6 @@ export const pages = [
   { path: "/funding", label: "Funding", component: <Funding /> },
   { path: "/charts", label: "Charts", component: <Charts /> },
   { path: "/positions", label: "Positions", component: <Positions /> },
-  { path: "/tx", label: "Transactions", component: <Tx /> },
   { path: "/factory", label: "Factory", component: <Factory /> },
 ];
 
