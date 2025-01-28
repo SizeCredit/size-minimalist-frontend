@@ -28,21 +28,46 @@ interface Props {
 const OrderbookDepth = ({ buyOrders, sellOrders }: Props) => {
   if (!buyOrders.length || !sellOrders.length) return null;
 
-  console.log(buyOrders, sellOrders);
+  const sellOrdersCumulative = [];
+  for (let i = 0; i < sellOrders.length; i++) {
+    const prevY: number = i > 0 ? sellOrdersCumulative[i - 1].y : 0;
+    sellOrdersCumulative.push({
+      x: sellOrders[i].apr,
+      y: prevY + sellOrders[i].depth,
+    });
+  }
+
+  const buyOrdersCumulative = [];
+  for (let i = 0; i < buyOrders.length; i++) {
+    const prevY: number = i > 0 ? buyOrdersCumulative[i - 1].y : 0;
+    buyOrdersCumulative.push({
+      x: buyOrders[i].apr,
+      y: prevY + buyOrders[i].depth,
+    });
+  }
+
   const buyData = [];
   const sellData = [];
 
-  for (let i = 0; i < buyOrders.length; i++) {
+  for (let i = 0; i < buyOrdersCumulative.length; i++) {
     const nextX =
-      i < buyOrders.length - 1 ? buyOrders[i + 1].apr : buyOrders[i].apr + 1;
-    buyData.push({ x: buyOrders[i].apr, y: buyOrders[i].depth });
-    buyData.push({ x: nextX, y: buyOrders[i].depth });
+      i < buyOrdersCumulative.length - 1
+        ? buyOrdersCumulative[i + 1].x
+        : buyOrdersCumulative[i].x + 1;
+    buyData.push({ x: buyOrdersCumulative[i].x, y: buyOrdersCumulative[i].y });
+    buyData.push({ x: nextX, y: buyOrdersCumulative[i].y });
   }
 
-  for (let i = 0; i < sellOrders.length; i++) {
-    const nextX = i < sellOrders.length - 1 ? sellOrders[i + 1].apr : 0;
-    sellData.push({ x: sellOrders[i].apr, y: sellOrders[i].depth });
-    sellData.push({ x: nextX, y: sellOrders[i].depth });
+  for (let i = 0; i < sellOrdersCumulative.length; i++) {
+    const nextX =
+      i < sellOrdersCumulative.length - 1
+        ? sellOrdersCumulative[i + 1].x
+        : sellOrdersCumulative[i].x + 1;
+    sellData.push({
+      x: sellOrdersCumulative[i].x,
+      y: sellOrdersCumulative[i].y,
+    });
+    sellData.push({ x: nextX, y: sellOrdersCumulative[i].y });
   }
 
   const data = {

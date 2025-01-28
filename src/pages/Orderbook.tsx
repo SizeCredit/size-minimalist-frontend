@@ -102,8 +102,6 @@ const Orderbook = () => {
       .catch(console.error);
   }, [market]);
 
-  console.log(buyCurves, sellCurves);
-
   const buyOrdersWithAprs = buyCurves
     .filter((curve) => getAprPercent(curve, days) !== undefined)
     .map((curve) => ({
@@ -146,7 +144,7 @@ const Orderbook = () => {
           <div className="days">
             <label>Days</label> &nbsp;
             <input
-              type="text"
+              type="number"
               value={days}
               onChange={(e) => setDays(Number(e.target.value))}
             />
