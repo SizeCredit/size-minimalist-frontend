@@ -21,6 +21,7 @@ import Funding from "./pages/Funding";
 import Charts from "./pages/Charts";
 import Positions from "./pages/Positions";
 import Sidebar from "./components/Sidebar";
+import Orderbook from "./pages/Orderbook";
 
 export const pages = [
   {
@@ -34,6 +35,7 @@ export const pages = [
   { path: "/funding", label: "Funding", component: <Funding /> },
   { path: "/charts", label: "Charts", component: <Charts /> },
   { path: "/positions", label: "Positions", component: <Positions /> },
+  { path: "/orderbook", label: "Orderbook", component: <Orderbook /> },
   { path: "/factory", label: "Factory", component: <Factory /> },
 ];
 
