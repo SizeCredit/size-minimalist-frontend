@@ -26,8 +26,6 @@ interface Props {
 }
 
 const OrderbookDepth = ({ buyOrders, sellOrders }: Props) => {
-  if (!buyOrders.length || !sellOrders.length) return null;
-
   const sellOrdersCumulative = [];
   for (let i = 0; i < sellOrders.length; i++) {
     const prevY: number = i > 0 ? sellOrdersCumulative[i - 1].y : 0;
