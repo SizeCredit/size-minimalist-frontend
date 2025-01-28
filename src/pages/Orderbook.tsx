@@ -61,8 +61,12 @@ function getAprPercent(curve: APICurve, days: number): number | undefined {
 const Orderbook = () => {
   const [markets, setMarkets] = useState<APIMarket[]>([]);
   const [market, setMarket] = useState<APIMarket | undefined>(undefined);
-  const [buyCurves, setBuyCurves] = useState<APICurve[]>([]);
-  const [sellCurves, setSellCurves] = useState<APICurve[]>([]);
+  const [buyCurves, setBuyCurves] = useState<Record<string, APICurve[]>>(
+    {} as Record<string, APICurve[]>,
+  );
+  const [sellCurves, setSellCurves] = useState<Record<string, APICurve[]>>(
+    {} as Record<string, APICurve[]>,
+  );
   const [days, setDays] = useState<number>(30);
 
   useEffect(() => {
@@ -74,54 +78,92 @@ const Orderbook = () => {
           ms.push(...markets);
         });
         setMarkets(ms);
-        setMarket(ms[0]);
       })
       .catch(console.error);
   }, []);
 
   useEffect(() => {
-    if (!market) return;
+    if (!markets.length) return;
 
-    fetch(
-      `${API_URL}/markets/${market.id}/buy-curves?include_zero_depth_curves=false`,
-    )
-      .then((res) => res.json())
-      .then((res) =>
-        res.filter((c: APICurve) => c.curve_relative_time_tenors.length > 0),
-      )
-      .then(setBuyCurves)
-      .catch(console.error);
+    Promise.all(
+      markets.map((market) => {
+        fetch(
+          `${API_URL}/markets/${market.id}/buy-curves?include_zero_depth_curves=false`,
+        )
+          .then((res) => res.json())
+          .then((res) =>
+            res.filter(
+              (c: APICurve) => c.curve_relative_time_tenors.length > 0,
+            ),
+          )
+          .then((curves) => {
+            setBuyCurves((prev) => ({ ...prev, [market.name]: curves }));
+          })
+          .catch(console.error);
+      }),
+    );
 
-    fetch(
-      `${API_URL}/markets/${market.id}/sell-curves?include_zero_depth_curves=false`,
-    )
-      .then((res) => res.json())
-      .then((res) =>
-        res.filter((c: APICurve) => c.curve_relative_time_tenors.length > 0),
-      )
-      .then(setSellCurves)
-      .catch(console.error);
-  }, [market]);
+    Promise.all(
+      markets.map((market) => {
+        fetch(
+          `${API_URL}/markets/${market.id}/sell-curves?include_zero_depth_curves=false`,
+        )
+          .then((res) => res.json())
+          .then((res) =>
+            res.filter(
+              (c: APICurve) => c.curve_relative_time_tenors.length > 0,
+            ),
+          )
+          .then((curves) => {
+            setSellCurves((prev) => ({ ...prev, [market.name]: curves }));
+          })
+          .catch(console.error);
+      }),
+    );
+  }, [markets]);
 
-  const buyOrdersWithAprs = buyCurves
-    .filter((curve) => getAprPercent(curve, days) !== undefined)
-    .map((curve) => ({
-      depth: Number(
-        (curve.depth / 10 ** market!.debt_token.decimals).toFixed(0),
-      ),
-      apr: getAprPercent(curve, days) as number,
-    }))
-    .sort((a, b) => a.apr - b.apr);
+  const buyOrdersWithAprs = Object.entries(buyCurves).reduce(
+    (acc, [marketName, curves]) => ({
+      ...acc,
+      [marketName]: curves
+        .filter((curve) => getAprPercent(curve, days) !== undefined)
+        .filter((_) => market === undefined || marketName === market?.name)
+        .map((curve) => ({
+          depth: Number(
+            (
+              curve.depth /
+              10 **
+                markets.find((m) => m.name === marketName)!.debt_token.decimals
+            ).toFixed(0),
+          ),
+          apr: getAprPercent(curve, days) as number,
+        }))
+        .sort((a, b) => a.apr - b.apr),
+    }),
+    {} as Record<string, { depth: number; apr: number }[]>,
+  );
 
-  const sellOrdersWithAprs = sellCurves
-    .filter((curve) => getAprPercent(curve, days) !== undefined)
-    .map((curve) => ({
-      depth: Number(
-        (curve.depth / 10 ** market!.collateral_token.decimals).toFixed(0),
-      ),
-      apr: getAprPercent(curve, days) as number,
-    }))
-    .sort((a, b) => a.apr - b.apr);
+  const sellOrdersWithAprs = Object.entries(sellCurves).reduce(
+    (acc, [marketName, curves]) => ({
+      ...acc,
+      [marketName]: curves
+        .filter((curve) => getAprPercent(curve, days) !== undefined)
+        .filter((_) => market === undefined || marketName === market?.name)
+        .map((curve) => ({
+          depth: Number(
+            (
+              curve.depth /
+              10 **
+                markets.find((m) => m.name === marketName)!.collateral_token
+                  .decimals
+            ).toFixed(0),
+          ),
+          apr: getAprPercent(curve, days) as number,
+        }))
+        .sort((a, b) => a.apr - b.apr),
+    }),
+    {} as Record<string, { depth: number; apr: number }[]>,
+  );
 
   return (
     <>
@@ -131,10 +173,14 @@ const Orderbook = () => {
           <select
             value={market?.name}
             onChange={(e) =>
-              setMarket(markets.find((m) => m.name === e.target.value))
+              setMarket(
+                e.target.value === "all"
+                  ? undefined
+                  : markets.find((m) => m.name === e.target.value),
+              )
             }
           >
-            {markets.map((m) => (
+            {[{ name: "All Markets", id: "all" }, ...markets].map((m) => (
               <option key={m.id} value={m.name}>
                 {m.name}
               </option>
