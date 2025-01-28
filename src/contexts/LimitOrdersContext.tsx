@@ -72,14 +72,14 @@ export function LimitOrdersProvider({ children }: Props) {
         publicClient.getLogs({
           address: market.address,
           event: parseAbiItem(
-            `event ${sellCreditLimitAbi.name}(${sellCreditLimitAbi.inputs.map((i) => `${i.name} ${i.type}`).join(", ")})`,
+            `event ${sellCreditLimitAbi.name}(${sellCreditLimitAbi.inputs.map((i) => `${i.type} ${i.name}`).join(",")})`,
           ) as AbiEvent,
           fromBlock: blockNumber - pastBlocks,
         }),
         publicClient.getLogs({
           address: market.address,
           event: parseAbiItem(
-            `event ${buyCreditLimitAbi.name}(${buyCreditLimitAbi.inputs.map((i) => `${i.name} ${i.type}`).join(", ")})`,
+            `event ${buyCreditLimitAbi.name}(${buyCreditLimitAbi.inputs.map((i) => `${i.type} ${i.name}`).join(",")})`,
           ) as AbiEvent,
           fromBlock: blockNumber - pastBlocks,
         }),
