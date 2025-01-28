@@ -112,30 +112,38 @@ export function LimitOrdersProvider({ children }: Props) {
       );
 
       const sellCreditLimitOffers = sellCreditLimit
-        .map((log, i) => ({
+        .map((log: any, i) => ({
           user: users[i],
           maxDueDate: new Date(Number(log.args.maxDueDate!) * 1000),
           curveRelativeTime: {
-            tenors: log.args.curveRelativeTimeTenors!.map((e) => Number(e)),
-            aprs: log.args.curveRelativeTimeAprs!.map((e) => Number(e) / 1e18),
+            tenors: log.args.curveRelativeTimeTenors!.map((e: any) =>
+              Number(e),
+            ),
+            aprs: log.args.curveRelativeTimeAprs!.map(
+              (e: any) => Number(e) / 1e18,
+            ),
             marketRateMultipliers:
               log.args.curveRelativeTimeMarketRateMultipliers!.map(
-                (e) => Number(e) / 1e18,
+                (e: any) => Number(e) / 1e18,
               ),
           },
         }))
         .reverse();
       const borrowOffers = deduplicate(sellCreditLimitOffers, "user.account");
       const buyCreditLimitOffers = buyCreditLimit
-        .map((log, i) => ({
+        .map((log: any, i) => ({
           user: users[sellCreditLimit.length + i],
           maxDueDate: new Date(Number(log.args.maxDueDate!) * 1000),
           curveRelativeTime: {
-            tenors: log.args.curveRelativeTimeTenors!.map((e) => Number(e)),
-            aprs: log.args.curveRelativeTimeAprs!.map((e) => Number(e) / 1e18),
+            tenors: log.args.curveRelativeTimeTenors!.map((e: any) =>
+              Number(e),
+            ),
+            aprs: log.args.curveRelativeTimeAprs!.map(
+              (e: any) => Number(e) / 1e18,
+            ),
             marketRateMultipliers:
               log.args.curveRelativeTimeMarketRateMultipliers!.map(
-                (e) => Number(e) / 1e18,
+                (e: any) => Number(e) / 1e18,
               ),
           },
         }))
