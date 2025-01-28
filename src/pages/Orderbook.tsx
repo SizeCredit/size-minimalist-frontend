@@ -60,7 +60,7 @@ function getAprPercent(curve: APICurve, days: number): number | undefined {
 
 const Orderbook = () => {
   const [markets, setMarkets] = useState<APIMarket[]>([]);
-  const [market, setMarket] = useState<APIMarket | undefined>(undefined);
+  const [selectedMarkets, setSelectedMarkets] = useState<APIMarket[]>([]);
   const [buyCurves, setBuyCurves] = useState<Record<string, APICurve[]>>(
     {} as Record<string, APICurve[]>,
   );
@@ -127,7 +127,11 @@ const Orderbook = () => {
       ...acc,
       [marketName]: curves
         .filter((curve) => getAprPercent(curve, days) !== undefined)
-        .filter((_) => market === undefined || marketName === market?.name)
+        .filter(
+          (_) =>
+            selectedMarkets.length === 0 ||
+            selectedMarkets.some((m) => m.name === marketName),
+        )
         .map((curve) => ({
           depth: Number(
             (
@@ -148,7 +152,11 @@ const Orderbook = () => {
       ...acc,
       [marketName]: curves
         .filter((curve) => getAprPercent(curve, days) !== undefined)
-        .filter((_) => market === undefined || marketName === market?.name)
+        .filter(
+          (_) =>
+            selectedMarkets.length === 0 ||
+            selectedMarkets.some((m) => m.name === marketName),
+        )
         .map((curve) => ({
           depth: Number(
             (
@@ -171,16 +179,18 @@ const Orderbook = () => {
         <div className="market-selector">
           <label>Market</label> &nbsp;
           <select
-            value={market?.name}
-            onChange={(e) =>
-              setMarket(
-                e.target.value === "all"
-                  ? undefined
-                  : markets.find((m) => m.name === e.target.value),
-              )
-            }
+            multiple
+            size={markets.length}
+            value={selectedMarkets.map((m) => m.name)}
+            onChange={(e) => {
+              const selectedOptions = Array.from(e.target.selectedOptions);
+              const selectedMarketObjects = selectedOptions
+                .map((option) => markets.find((m) => m.name === option.value))
+                .filter((m): m is APIMarket => m !== undefined);
+              setSelectedMarkets(selectedMarketObjects);
+            }}
           >
-            {[{ name: "All Markets", id: "all" }, ...markets].map((m) => (
+            {markets.map((m) => (
               <option key={m.id} value={m.name}>
                 {m.name}
               </option>
