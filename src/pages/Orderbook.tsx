@@ -11,6 +11,7 @@ interface GetAPIMarketsResponse {
 
 interface APIMarket {
   id: string;
+  name: string;
   collateral_token: {
     address: string;
     decimals: number;
@@ -128,14 +129,14 @@ const Orderbook = () => {
         <div className="market-selector">
           <label>Market</label> &nbsp;
           <select
-            value={market?.id}
+            value={market?.name}
             onChange={(e) =>
-              setMarket(markets.find((m) => m.id === e.target.value))
+              setMarket(markets.find((m) => m.name === e.target.value))
             }
           >
             {markets.map((m) => (
-              <option key={m.id} value={m.id}>
-                {m.id}
+              <option key={m.id} value={m.name}>
+                {m.name}
               </option>
             ))}
           </select>
