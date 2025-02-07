@@ -5,7 +5,10 @@ import {
   useEffect,
   useState,
 } from "react";
-import { CreditPositionStruct, DebtPositionStruct } from "../typechain/Size";
+import {
+  CreditPositionStruct,
+  DebtPositionStruct,
+} from "../types/ethers-contracts/Size";
 import Size from "../abi/Size.json";
 import { config } from "../wagmi";
 import { ethers } from "ethers";

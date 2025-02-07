@@ -8,6 +8,8 @@ const Limit = () => {
   const { user } = useContext(UserContext);
   const { buyCreditLimit, sellCreditLimit } = useContext(SizeContext);
 
+  if (!user) return null;
+
   const defaultOffer = {
     maxDueDate: 0,
     curveRelativeTime: {

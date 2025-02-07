@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext } from "react";
 import { useAccount, useReadContract } from "wagmi";
-import { UserViewStruct } from "../typechain/Size";
+import { UserViewStruct } from "../types/ethers-contracts/Size";
 import { config } from "../wagmi";
 import {
   CreditPosition,

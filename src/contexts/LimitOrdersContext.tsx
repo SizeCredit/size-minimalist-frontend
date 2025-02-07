@@ -10,7 +10,7 @@ import { usePublicClient } from "wagmi";
 import { AbiEvent, parseAbiItem } from "viem";
 import { delayed } from "../services/delayed";
 import { deduplicate } from "../services/deduplicate";
-import { UserViewStruct } from "../typechain/Size";
+import { UserViewStruct } from "../types/ethers-contracts/Size";
 import { readContract } from "wagmi/actions";
 import { config } from "../wagmi";
 import { RegistryContext } from "./RegistryContext";

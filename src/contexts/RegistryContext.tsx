@@ -18,7 +18,7 @@ import {
   InitializeFeeConfigParamsStruct,
   InitializeOracleParamsStruct,
   InitializeRiskConfigParamsStruct,
-} from "../typechain/Size";
+} from "../types/ethers-contracts/Size";
 import { readContract } from "wagmi/actions";
 import { ConfigContext } from "./ConfigContext";
 import { Abi, Address, erc20Abi } from "viem";

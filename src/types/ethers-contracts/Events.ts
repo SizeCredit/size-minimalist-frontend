@@ -27,6 +27,7 @@ export interface EventsInterface extends Interface {
       | "BuyCreditMarket"
       | "Claim"
       | "Compensate"
+      | "CopyLimitOrders"
       | "CreateCreditPosition"
       | "CreateDebtPosition"
       | "Deposit"
@@ -146,6 +147,55 @@ export namespace CompensateEvent {
     creditPositionWithDebtToRepayId: bigint;
     creditPositionToCompensateId: bigint;
     amount: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace CopyLimitOrdersEvent {
+  export type InputTuple = [
+    sender: AddressLike,
+    copyAddress: AddressLike,
+    minTenorLoanOffer: BigNumberish,
+    maxTenorLoanOffer: BigNumberish,
+    minAPRLoanOffer: BigNumberish,
+    maxAPRLoanOffer: BigNumberish,
+    offsetAPRLoanOffer: BigNumberish,
+    minTenorBorrowOffer: BigNumberish,
+    maxTenorBorrowOffer: BigNumberish,
+    minAPRBorrowOffer: BigNumberish,
+    maxAPRBorrowOffer: BigNumberish,
+    offsetAPRBorrowOffer: BigNumberish,
+  ];
+  export type OutputTuple = [
+    sender: string,
+    copyAddress: string,
+    minTenorLoanOffer: bigint,
+    maxTenorLoanOffer: bigint,
+    minAPRLoanOffer: bigint,
+    maxAPRLoanOffer: bigint,
+    offsetAPRLoanOffer: bigint,
+    minTenorBorrowOffer: bigint,
+    maxTenorBorrowOffer: bigint,
+    minAPRBorrowOffer: bigint,
+    maxAPRBorrowOffer: bigint,
+    offsetAPRBorrowOffer: bigint,
+  ];
+  export interface OutputObject {
+    sender: string;
+    copyAddress: string;
+    minTenorLoanOffer: bigint;
+    maxTenorLoanOffer: bigint;
+    minAPRLoanOffer: bigint;
+    maxAPRLoanOffer: bigint;
+    offsetAPRLoanOffer: bigint;
+    minTenorBorrowOffer: bigint;
+    maxTenorBorrowOffer: bigint;
+    minAPRBorrowOffer: bigint;
+    maxAPRBorrowOffer: bigint;
+    offsetAPRBorrowOffer: bigint;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -673,6 +723,13 @@ export interface Events extends BaseContract {
     CompensateEvent.OutputObject
   >;
   getEvent(
+    key: "CopyLimitOrders",
+  ): TypedContractEvent<
+    CopyLimitOrdersEvent.InputTuple,
+    CopyLimitOrdersEvent.OutputTuple,
+    CopyLimitOrdersEvent.OutputObject
+  >;
+  getEvent(
     key: "CreateCreditPosition",
   ): TypedContractEvent<
     CreateCreditPositionEvent.InputTuple,
@@ -835,6 +892,17 @@ export interface Events extends BaseContract {
       CompensateEvent.InputTuple,
       CompensateEvent.OutputTuple,
       CompensateEvent.OutputObject
+    >;
+
+    "CopyLimitOrders(address,address,uint256,uint256,uint256,uint256,int256,uint256,uint256,uint256,uint256,int256)": TypedContractEvent<
+      CopyLimitOrdersEvent.InputTuple,
+      CopyLimitOrdersEvent.OutputTuple,
+      CopyLimitOrdersEvent.OutputObject
+    >;
+    CopyLimitOrders: TypedContractEvent<
+      CopyLimitOrdersEvent.InputTuple,
+      CopyLimitOrdersEvent.OutputTuple,
+      CopyLimitOrdersEvent.OutputObject
     >;
 
     "CreateCreditPosition(uint256,address,uint256,uint256,uint256,bool)": TypedContractEvent<

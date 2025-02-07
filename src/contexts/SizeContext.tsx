@@ -35,6 +35,7 @@ interface SizeContext {
   ) => Promise<void>;
   claim: (creditPositionId: string) => Promise<void>;
   liquidate: (debtPositionId: string) => Promise<void>;
+  copyLimitOrders: (copyAddress: string) => Promise<void>;
 }
 
 export const SizeContext = createContext<SizeContext>({} as SizeContext);
@@ -438,6 +439,48 @@ export function SizeProvider({ children }: Props) {
     }
   };
 
+  const copyLimitOrders = async (copyAddress: string) => {
+    if (!chain) return;
+
+    const arg = {
+      copyAddress,
+      copyLoanOffer: {
+        minTenor: 0,
+        maxTenor: ethers.MaxUint256,
+        minAPR: 0,
+        maxAPR: ethers.MaxUint256,
+        offsetAPR: 0,
+      },
+      copyBorrowOffer: {
+        minTenor: 0,
+        maxTenor: ethers.MaxUint256,
+        minAPR: 0,
+        maxAPR: ethers.MaxUint256,
+        offsetAPR: 0,
+      },
+    };
+    console.log(arg);
+    const data = encodeFunctionData({
+      abi: [Size.abi.find((e) => e.name === "copyLimitOrders")],
+      functionName: "copyLimitOrders",
+      args: [arg],
+    });
+    console.log(data);
+    try {
+      const tx = await sendTransaction(config, {
+        to: market!.address,
+        data,
+      });
+      toast.success(
+        <a target="_blank" href={`${chain.explorer}/tx/${tx}`}>
+          {tx}
+        </a>,
+      );
+    } catch (e: any) {
+      toast.error(e.shortMessage);
+    }
+  };
+
   return (
     <SizeContext.Provider
       value={{
@@ -451,6 +494,7 @@ export function SizeProvider({ children }: Props) {
         compensate,
         claim,
         liquidate,
+        copyLimitOrders,
       }}
     >
       {children}

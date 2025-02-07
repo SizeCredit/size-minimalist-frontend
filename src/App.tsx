@@ -17,6 +17,7 @@ import Registry from "./pages/Registry";
 import Factory from "./pages/Factory";
 import Swap from "./pages/Swap";
 import Limit from "./pages/Limit";
+import CopyLimitOrders from "./pages/CopyLimitOrders";
 import Funding from "./pages/Funding";
 import Charts from "./pages/Charts";
 import Positions from "./pages/Positions";
@@ -32,6 +33,7 @@ export const pages = [
   },
   { path: "/swap", label: "Swap", component: <Swap /> },
   { path: "/limit", label: "Limit", component: <Limit /> },
+  { path: "/copy", label: "CopyLimitOrders", component: <CopyLimitOrders /> },
   { path: "/funding", label: "Funding", component: <Funding /> },
   { path: "/charts", label: "Charts", component: <Charts /> },
   { path: "/positions", label: "Positions", component: <Positions /> },

@@ -6,7 +6,7 @@ import {
   InitializeOracleParamsStruct,
   InitializeRiskConfigParamsStruct,
   PriceFeedParamsStruct,
-} from "../typechain/SizeFactory";
+} from "../types/ethers-contracts/SizeFactory";
 import { Address, isAddress, parseUnits } from "viem";
 
 interface CreateBorrowATokenV1_5Params {

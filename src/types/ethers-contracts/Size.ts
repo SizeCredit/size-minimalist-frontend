@@ -95,6 +95,44 @@ export type CompensateParamsStructOutput = [
   amount: bigint;
 };
 
+export type CopyLimitOrderStruct = {
+  minTenor: BigNumberish;
+  maxTenor: BigNumberish;
+  minAPR: BigNumberish;
+  maxAPR: BigNumberish;
+  offsetAPR: BigNumberish;
+};
+
+export type CopyLimitOrderStructOutput = [
+  minTenor: bigint,
+  maxTenor: bigint,
+  minAPR: bigint,
+  maxAPR: bigint,
+  offsetAPR: bigint,
+] & {
+  minTenor: bigint;
+  maxTenor: bigint;
+  minAPR: bigint;
+  maxAPR: bigint;
+  offsetAPR: bigint;
+};
+
+export type CopyLimitOrdersParamsStruct = {
+  copyAddress: AddressLike;
+  copyLoanOffer: CopyLimitOrderStruct;
+  copyBorrowOffer: CopyLimitOrderStruct;
+};
+
+export type CopyLimitOrdersParamsStructOutput = [
+  copyAddress: string,
+  copyLoanOffer: CopyLimitOrderStructOutput,
+  copyBorrowOffer: CopyLimitOrderStructOutput,
+] & {
+  copyAddress: string;
+  copyLoanOffer: CopyLimitOrderStructOutput;
+  copyBorrowOffer: CopyLimitOrderStructOutput;
+};
+
 export type DataViewStruct = {
   nextDebtPositionId: BigNumberish;
   nextCreditPositionId: BigNumberish;
@@ -227,6 +265,22 @@ export type SellCreditMarketParamsStructOutput = [
   deadline: bigint;
   maxAPR: bigint;
   exactAmountIn: boolean;
+};
+
+export type UserCopyLimitOrdersStruct = {
+  copyAddress: AddressLike;
+  copyLoanOffer: CopyLimitOrderStruct;
+  copyBorrowOffer: CopyLimitOrderStruct;
+};
+
+export type UserCopyLimitOrdersStructOutput = [
+  copyAddress: string,
+  copyLoanOffer: CopyLimitOrderStructOutput,
+  copyBorrowOffer: CopyLimitOrderStructOutput,
+] & {
+  copyAddress: string;
+  copyLoanOffer: CopyLimitOrderStructOutput;
+  copyBorrowOffer: CopyLimitOrderStructOutput;
 };
 
 export type LimitOrderStruct = {
@@ -506,6 +560,7 @@ export interface SizeInterface extends Interface {
       | "claim"
       | "collateralRatio"
       | "compensate"
+      | "copyLimitOrders"
       | "data"
       | "debtTokenAmountToCollateralTokenAmount"
       | "deposit"
@@ -521,6 +576,7 @@ export interface SizeInterface extends Interface {
       | "getRoleAdmin"
       | "getSellCreditMarketSwapData"
       | "getSwapFee"
+      | "getUserCopyLimitOrders"
       | "getUserView"
       | "grantRole"
       | "hasRole"
@@ -593,6 +649,10 @@ export interface SizeInterface extends Interface {
     functionFragment: "compensate",
     values: [CompensateParamsStruct],
   ): string;
+  encodeFunctionData(
+    functionFragment: "copyLimitOrders",
+    values: [CopyLimitOrdersParamsStruct],
+  ): string;
   encodeFunctionData(functionFragment: "data", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "debtTokenAmountToCollateralTokenAmount",
@@ -646,6 +706,10 @@ export interface SizeInterface extends Interface {
   encodeFunctionData(
     functionFragment: "getSwapFee",
     values: [BigNumberish, BigNumberish],
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getUserCopyLimitOrders",
+    values: [AddressLike],
   ): string;
   encodeFunctionData(
     functionFragment: "getUserView",
@@ -781,6 +845,10 @@ export interface SizeInterface extends Interface {
     data: BytesLike,
   ): Result;
   decodeFunctionResult(functionFragment: "compensate", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "copyLimitOrders",
+    data: BytesLike,
+  ): Result;
   decodeFunctionResult(functionFragment: "data", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "debtTokenAmountToCollateralTokenAmount",
@@ -829,6 +897,10 @@ export interface SizeInterface extends Interface {
     data: BytesLike,
   ): Result;
   decodeFunctionResult(functionFragment: "getSwapFee", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getUserCopyLimitOrders",
+    data: BytesLike,
+  ): Result;
   decodeFunctionResult(
     functionFragment: "getUserView",
     data: BytesLike,
@@ -1106,6 +1178,12 @@ export interface Size extends BaseContract {
     "payable"
   >;
 
+  copyLimitOrders: TypedContractMethod<
+    [params: CopyLimitOrdersParamsStruct],
+    [void],
+    "payable"
+  >;
+
   data: TypedContractMethod<[], [DataViewStructOutput], "view">;
 
   debtTokenAmountToCollateralTokenAmount: TypedContractMethod<
@@ -1181,6 +1259,12 @@ export interface Size extends BaseContract {
   getSwapFee: TypedContractMethod<
     [cash: BigNumberish, tenor: BigNumberish],
     [bigint],
+    "view"
+  >;
+
+  getUserCopyLimitOrders: TypedContractMethod<
+    [user: AddressLike],
+    [UserCopyLimitOrdersStructOutput],
     "view"
   >;
 
@@ -1373,6 +1457,13 @@ export interface Size extends BaseContract {
     nameOrSignature: "compensate",
   ): TypedContractMethod<[params: CompensateParamsStruct], [void], "payable">;
   getFunction(
+    nameOrSignature: "copyLimitOrders",
+  ): TypedContractMethod<
+    [params: CopyLimitOrdersParamsStruct],
+    [void],
+    "payable"
+  >;
+  getFunction(
     nameOrSignature: "data",
   ): TypedContractMethod<[], [DataViewStructOutput], "view">;
   getFunction(
@@ -1443,6 +1534,13 @@ export interface Size extends BaseContract {
   ): TypedContractMethod<
     [cash: BigNumberish, tenor: BigNumberish],
     [bigint],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "getUserCopyLimitOrders",
+  ): TypedContractMethod<
+    [user: AddressLike],
+    [UserCopyLimitOrdersStructOutput],
     "view"
   >;
   getFunction(
