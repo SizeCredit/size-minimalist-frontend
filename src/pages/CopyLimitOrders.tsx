@@ -1,9 +1,28 @@
 import { useContext, useState } from "react";
 import { SizeContext } from "../contexts/SizeContext";
+import { UserContext } from "../contexts/UserContext";
+import { formatUnits, parseUnits } from "viem";
+
+const PERCENT_DECIMALS = 16;
 
 const CopyLimitOrders = () => {
   const { copyLimitOrders } = useContext(SizeContext);
-  const [copyAddress, setCopyAddress] = useState("");
+  const { user } = useContext(UserContext);
+  const [copyAddress, setCopyAddress] = useState(
+    (user?.userCopyLimitOrders.copyAddress as string) || "",
+  );
+  const [loanOffsetAPR, setLoanOffsetAPR] = useState(
+    formatUnits(
+      BigInt(user?.userCopyLimitOrders.copyLoanOffer.offsetAPR || 0),
+      PERCENT_DECIMALS,
+    ),
+  );
+  const [borrowOffsetAPR, setBorrowOffsetAPR] = useState(
+    formatUnits(
+      BigInt(user?.userCopyLimitOrders.copyBorrowOffer.offsetAPR || 0),
+      PERCENT_DECIMALS,
+    ),
+  );
 
   return (
     <>
@@ -19,10 +38,38 @@ const CopyLimitOrders = () => {
           </div>
         </div>
 
+        <div className="input-container">
+          <div className="loan-offset-apr">
+            <label>Loan Offset APR (%)</label>
+            <input
+              type="text"
+              value={loanOffsetAPR}
+              onChange={(e) => setLoanOffsetAPR(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="input-container">
+          <div className="borrow-offset-apr">
+            <label>Borrow Offset APR (%)</label>
+            <input
+              type="text"
+              value={borrowOffsetAPR}
+              onChange={(e) => setBorrowOffsetAPR(e.target.value)}
+            />
+          </div>
+        </div>
+
         <div>
           <button
             className="action-button"
-            onClick={() => copyLimitOrders(copyAddress)}
+            onClick={() =>
+              copyLimitOrders(
+                copyAddress,
+                parseUnits(loanOffsetAPR, PERCENT_DECIMALS),
+                parseUnits(borrowOffsetAPR, PERCENT_DECIMALS),
+              )
+            }
           >
             Copy Limit Orders
           </button>

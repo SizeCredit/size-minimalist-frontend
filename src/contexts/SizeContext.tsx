@@ -35,7 +35,11 @@ interface SizeContext {
   ) => Promise<void>;
   claim: (creditPositionId: string) => Promise<void>;
   liquidate: (debtPositionId: string) => Promise<void>;
-  copyLimitOrders: (copyAddress: string) => Promise<void>;
+  copyLimitOrders: (
+    copyAddress: string,
+    loanOffsetAPR: bigint,
+    borrowOffsetAPR: bigint,
+  ) => Promise<void>;
 }
 
 export const SizeContext = createContext<SizeContext>({} as SizeContext);
@@ -439,7 +443,11 @@ export function SizeProvider({ children }: Props) {
     }
   };
 
-  const copyLimitOrders = async (copyAddress: string) => {
+  const copyLimitOrders = async (
+    copyAddress: string,
+    loanOffsetAPR: bigint,
+    borrowOffsetAPR: bigint,
+  ) => {
     if (!chain) return;
 
     const arg = {
@@ -449,14 +457,14 @@ export function SizeProvider({ children }: Props) {
         maxTenor: ethers.MaxUint256,
         minAPR: 0,
         maxAPR: ethers.MaxUint256,
-        offsetAPR: 0,
+        offsetAPR: loanOffsetAPR,
       },
       copyBorrowOffer: {
         minTenor: 0,
         maxTenor: ethers.MaxUint256,
         minAPR: 0,
         maxAPR: ethers.MaxUint256,
-        offsetAPR: 0,
+        offsetAPR: borrowOffsetAPR,
       },
     };
     console.log(arg);

@@ -1,6 +1,9 @@
 import { createContext, ReactNode, useContext } from "react";
 import { useAccount, useReadContract } from "wagmi";
-import { UserViewStruct } from "../types/ethers-contracts/Size";
+import {
+  CopyLimitOrdersParamsStruct,
+  UserViewStruct,
+} from "../types/ethers-contracts/Size";
 import { config } from "../wagmi";
 import {
   CreditPosition,
@@ -15,6 +18,7 @@ import { Address, erc20Abi } from "viem";
 interface User extends UserViewStruct {
   underlyingBorrowTokenBalance: BigNumberish;
   underlyingCollateralTokenBalance: BigNumberish;
+  userCopyLimitOrders: CopyLimitOrdersParamsStruct;
 }
 
 interface UserContext {
@@ -42,6 +46,17 @@ export function UserProvider({ children }: Props) {
   });
   const userView = (getUserView?.data || {}) as UserViewStruct;
 
+  const getUserCopyLimitOrders = useReadContract({
+    abi: Size.abi,
+    address: market?.address,
+    functionName: "getUserCopyLimitOrders",
+    args: [account.address],
+    config,
+  });
+
+  const userCopyLimitOrders = (getUserCopyLimitOrders?.data ||
+    {}) as CopyLimitOrdersParamsStruct;
+
   const underlyingBorrowTokenBalance = useReadContract({
     abi: erc20Abi,
     address: market?.data.underlyingBorrowToken as Address,
@@ -64,6 +79,7 @@ export function UserProvider({ children }: Props) {
       underlyingBorrowTokenBalance?.data as BigNumberish,
     underlyingCollateralTokenBalance:
       underlyingCollateralTokenBalance?.data as BigNumberish,
+    userCopyLimitOrders: userCopyLimitOrders,
   };
 
   return (
