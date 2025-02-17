@@ -8,6 +8,11 @@ const PERCENT_DECIMALS = 16;
 const CopyLimitOrders = () => {
   const { copyLimitOrders } = useContext(SizeContext);
   const { user } = useContext(UserContext);
+
+  if (!user) {
+    return <div>Loading...</div>;
+  }
+
   const [copyAddress, setCopyAddress] = useState(
     (user?.userCopyLimitOrders.copyAddress as string) || "",
   );
