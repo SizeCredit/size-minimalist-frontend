@@ -3,12 +3,11 @@ import { format, smallId } from "../services/format";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
 import Blockies from "react-blockies";
 import { formatDistance } from "date-fns/formatDistance";
 import { SidebarContext } from "../contexts/SidebarContext";
-import { isMobile } from "../services/isMobile";
 import { SizeContext } from "../contexts/SizeContext";
 import { compensateCandidates } from "../services/compensateCandidates";
 import { PositionsContext } from "../contexts/PositionsContext";
@@ -17,6 +16,8 @@ import { SwapContext } from "../contexts/SwapContext";
 import { RegistryContext } from "../contexts/RegistryContext";
 import { ConfigContext } from "../contexts/ConfigContext";
 import { pages } from "../App";
+
+const CONNECTION_TIMEOUT = 5000;
 
 const Sidebar = () => {
   const account = useAccount();
@@ -31,12 +32,53 @@ const Sidebar = () => {
   const { repay, compensate, sellCreditMarket } = useContext(SizeContext);
   const { collapsed, setCollapsed } = useContext(SidebarContext);
   const { sellCreditQuote } = useContext(SwapContext);
+  const [timeouts, setTimeouts] = useState<NodeJS.Timeout[]>([]);
 
-  const connector = isMobile() ? connectors[1] : connectors[0];
+  const tryConnect = async () => {
+    for (const connector of connectors) {
+      try {
+        // Attempt to connect with current connector
+        connect({ connector });
+
+        // Wait for either successful connection or timeout
+        const success = await Promise.race([
+          // Wait for connection
+          new Promise((resolve) => {
+            const checkConnection = setInterval(() => {
+              if (account.status === "connected") {
+                clearInterval(checkConnection);
+                resolve(true);
+              }
+            }, 500);
+          }),
+          // Timeout after CONNECTION_TIMEOUT
+          new Promise((resolve) => {
+            const timeout = setTimeout(
+              () => resolve(false),
+              CONNECTION_TIMEOUT,
+            );
+            setTimeouts((prev) => [...prev, timeout]);
+          }),
+        ]);
+
+        // If connected successfully, stop trying other connectors
+        if (success) break;
+      } catch (error) {
+        console.error(`Failed to connect with connector:`, error);
+        // Continue to next connector on error
+      }
+    }
+  };
 
   useEffect(() => {
     toast.error(error?.message);
   }, [error]);
+
+  useEffect(() => {
+    return () => {
+      timeouts.forEach((timeout) => clearTimeout(timeout));
+    };
+  }, [timeouts]);
 
   return (
     <div className={`sidebar ${collapsed ? "collapsed" : ""}`}>
@@ -51,7 +93,7 @@ const Sidebar = () => {
             onClick={
               account.status === "connected"
                 ? () => disconnect()
-                : () => connect({ connector })
+                : () => tryConnect()
             }
             className="connect-button"
           >
