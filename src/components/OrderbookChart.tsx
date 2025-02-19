@@ -22,7 +22,7 @@ ChartJS.register(
   Filler,
 );
 
-interface Order {
+export interface Order {
   depth: number;
   apr: number;
   user_address: string;
