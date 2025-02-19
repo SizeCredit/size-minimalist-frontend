@@ -20,105 +20,100 @@ ChartJS.register(
   Legend,
 );
 
+interface Order {
+  depth: number;
+  apr: number;
+  user_address: string;
+}
+
+interface Point {
+  x: number;
+  y: number;
+  user_address: string;
+}
+
 interface Props {
-  buyOrders: Record<string, { depth: number; apr: number }[]>;
-  sellOrders: Record<string, { depth: number; apr: number }[]>;
+  buyOrders: Record<string, Order[]>;
+  sellOrders: Record<string, Order[]>;
 }
 
 const OrderbookDepth = ({ buyOrders, sellOrders }: Props) => {
-  const sellOrdersCumulative: Record<string, { x: number; y: number }[]> = {};
-  Object.entries(sellOrders).forEach(([marketName, orders]) => {
-    if (!sellOrdersCumulative[marketName]) {
-      sellOrdersCumulative[marketName] = [] as {
-        x: number;
-        y: number;
-      }[];
-    }
-    for (let i = 0; i < orders.length; i++) {
-      const prevY: number =
-        i > 0 ? sellOrdersCumulative[marketName][i - 1].y : 0;
-      sellOrdersCumulative[marketName].push({
-        x: orders[i].apr,
-        y: prevY + orders[i].depth,
-      });
-    }
-  });
+  const getCumulativeOrders = (orders: Record<string, Order[]>) => {
+    const cumulativeOrders: Record<string, Point[]> = {};
+    Object.entries(orders).forEach(([marketName, orders]) => {
+      if (!cumulativeOrders[marketName]) {
+        cumulativeOrders[marketName] = [] as Point[];
+      }
+      for (let i = 0; i < orders.length; i++) {
+        const prevY: number = i > 0 ? cumulativeOrders[marketName][i - 1].y : 0;
+        cumulativeOrders[marketName].push({
+          x: orders[i].apr,
+          y: prevY + orders[i].depth,
+          user_address: orders[i].user_address,
+        });
+      }
+    });
+    return cumulativeOrders;
+  };
 
-  const buyOrdersCumulative: Record<string, { x: number; y: number }[]> = {};
-  Object.entries(buyOrders).forEach(([marketName, orders]) => {
-    if (!buyOrdersCumulative[marketName]) {
-      buyOrdersCumulative[marketName] = [] as {
-        x: number;
-        y: number;
-      }[];
-    }
-    for (let i = 0; i < orders.length; i++) {
-      const prevY: number =
-        i > 0 ? buyOrdersCumulative[marketName][i - 1].y : 0;
-      buyOrdersCumulative[marketName].push({
-        x: orders[i].apr,
-        y: prevY + orders[i].depth,
-      });
-    }
-  });
+  const sellOrdersCumulative = getCumulativeOrders(sellOrders);
+  const buyOrdersCumulative = getCumulativeOrders(buyOrders);
 
-  const buyData: Record<string, { x: number; y: number }[]> = {};
-  const sellData: Record<string, { x: number; y: number }[]> = {};
+  const getData = (cumulativeOrders: Record<string, Point[]>) => {
+    const data: Record<string, Point[]> = {};
+    Object.entries(cumulativeOrders).forEach(([marketName, orders]) => {
+      if (!data[marketName]) {
+        data[marketName] = [] as Point[];
+      }
+      for (let i = 0; i < orders.length; i++) {
+        const nextX =
+          i < orders.length - 1
+            ? cumulativeOrders[marketName][i + 1].x
+            : cumulativeOrders[marketName][i].x + 1;
+        data[marketName].push({
+          x: cumulativeOrders[marketName][i].x,
+          y: cumulativeOrders[marketName][i].y,
+          user_address: cumulativeOrders[marketName][i].user_address,
+        });
+        data[marketName].push({
+          x: nextX,
+          y: cumulativeOrders[marketName][i].y,
+          user_address: cumulativeOrders[marketName][i].user_address,
+        });
+      }
+    });
+    return data;
+  };
 
-  Object.entries(buyOrdersCumulative).forEach(([marketName, orders]) => {
-    if (!buyData[marketName]) {
-      buyData[marketName] = [] as { x: number; y: number }[];
-    }
-    for (let i = 0; i < orders.length; i++) {
-      const nextX =
-        i < orders.length - 1
-          ? buyOrdersCumulative[marketName][i + 1].x
-          : buyOrdersCumulative[marketName][i].x + 1;
-      buyData[marketName].push({
-        x: buyOrdersCumulative[marketName][i].x,
-        y: buyOrdersCumulative[marketName][i].y,
-      });
-      buyData[marketName].push({
-        x: nextX,
-        y: buyOrdersCumulative[marketName][i].y,
-      });
-    }
-  });
+  const buyData = getData(buyOrdersCumulative);
+  const sellData = getData(sellOrdersCumulative);
 
-  Object.entries(sellOrdersCumulative).forEach(([marketName, orders]) => {
-    if (!sellData[marketName]) {
-      sellData[marketName] = [] as { x: number; y: number }[];
-    }
-    for (let i = 0; i < orders.length; i++) {
-      const nextX = i < orders.length - 1 ? orders[i + 1].x : orders[i].x + 1;
-      sellData[marketName].push({
-        x: orders[i].x,
-        y: orders[i].y,
-      });
-      sellData[marketName].push({ x: nextX, y: orders[i].y });
-    }
-  });
-
-  const buyDatasets = Object.entries(buyData).map(
-    ([marketName, data], index) => ({
-      label: `Buy Credit ${marketName}`,
+  const getDatasets = (
+    label: string,
+    borderColorPrefix: string,
+    backgroundColorPrefix: string,
+    data: Record<string, Point[]>,
+  ) => {
+    return Object.entries(data).map(([marketName, data], index) => ({
+      label: `${label} Credit ${marketName}`,
       data,
-      borderColor: `hsl(120, 70%, ${40 + index * 10}%)`,
-      backgroundColor: `hsla(120, 70%, ${40 + index * 10}%, 0.5)`,
+      borderColor: `${borderColorPrefix} ${40 + index * 10}%)`,
+      backgroundColor: `${backgroundColorPrefix} ${40 + index * 10}%, 0.5)`,
       fill: true,
       pointRadius: 5,
-    }),
+    }));
+  };
+  const buyDatasets = getDatasets(
+    "Buy",
+    "hsl(120, 70%,",
+    "hsla(120, 70%,",
+    buyData,
   );
-
-  const sellDatasets = Object.entries(sellData).map(
-    ([marketName, data], index) => ({
-      label: `Sell Credit ${marketName}`,
-      data,
-      borderColor: `hsl(0, 70%, ${40 + index * 10}%)`,
-      backgroundColor: `hsla(0, 70%, ${40 + index * 10}%, 0.5)`,
-      fill: true,
-      pointRadius: 5,
-    }),
+  const sellDatasets = getDatasets(
+    "Sell",
+    "hsl(0, 70%,",
+    "hsla(0, 70%,",
+    sellData,
   );
 
   const data = {

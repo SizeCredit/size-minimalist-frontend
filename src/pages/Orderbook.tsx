@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import OrderbookChart from "../components/OrderbookChart";
+import OrderbookChart, { Order } from "../components/OrderbookChart";
 
 const API_URL = "https://api.size.credit";
 
@@ -122,56 +122,40 @@ const Orderbook = () => {
     );
   }, [markets]);
 
-  const buyOrdersWithAprs = Object.entries(buyCurves).reduce(
-    (acc, [marketName, curves]) => ({
-      ...acc,
-      [marketName]: curves
-        .filter((curve) => getAprPercent(curve, days) !== undefined)
-        .filter(
-          (_) =>
-            selectedMarkets.length === 0 ||
-            selectedMarkets.some((m) => m.name === marketName),
-        )
-        .map((curve) => ({
-          depth: Number(
-            (
-              curve.depth /
-              10 **
-                markets.find((m) => m.name === marketName)!.debt_token.decimals
-            ).toFixed(0),
-          ),
-          apr: getAprPercent(curve, days) as number,
-        }))
-        .sort((a, b) => a.apr - b.apr),
-    }),
-    {} as Record<string, { depth: number; apr: number }[]>,
-  );
+  const getOrdersWithAprs = (
+    curves: Record<string, APICurve[]>,
+    token: string,
+  ) => {
+    return Object.entries(curves).reduce(
+      (acc, [marketName, curves]) => ({
+        ...acc,
+        [marketName]: curves
+          .filter((curve) => getAprPercent(curve, days) !== undefined)
+          .filter(
+            (_) =>
+              selectedMarkets.length === 0 ||
+              selectedMarkets.some((m) => m.name === marketName),
+          )
+          .map((curve) => ({
+            depth: Number(
+              (
+                curve.depth /
+                10 **
+                  (markets.find((m) => m.name === marketName) as any)[token]
+                    .decimals
+              ).toFixed(0),
+            ),
+            apr: getAprPercent(curve, days) as number,
+            user_address: curve.user_address,
+          }))
+          .sort((a, b) => a.apr - b.apr),
+      }),
+      {} as Record<string, Order[]>,
+    );
+  };
 
-  const sellOrdersWithAprs = Object.entries(sellCurves).reduce(
-    (acc, [marketName, curves]) => ({
-      ...acc,
-      [marketName]: curves
-        .filter((curve) => getAprPercent(curve, days) !== undefined)
-        .filter(
-          (_) =>
-            selectedMarkets.length === 0 ||
-            selectedMarkets.some((m) => m.name === marketName),
-        )
-        .map((curve) => ({
-          depth: Number(
-            (
-              curve.depth /
-              10 **
-                markets.find((m) => m.name === marketName)!.collateral_token
-                  .decimals
-            ).toFixed(0),
-          ),
-          apr: getAprPercent(curve, days) as number,
-        }))
-        .sort((a, b) => a.apr - b.apr),
-    }),
-    {} as Record<string, { depth: number; apr: number }[]>,
-  );
+  const buyOrdersWithAprs = getOrdersWithAprs(buyCurves, "debt_token");
+  const sellOrdersWithAprs = getOrdersWithAprs(sellCurves, "collateral_token");
 
   return (
     <>
