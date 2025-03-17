@@ -209,38 +209,6 @@ const Registry = () => {
                   {market.tokens.underlyingCollateralToken.symbol} {"/"}{" "}
                   {market.tokens.underlyingBorrowToken.symbol}
                 </div>
-                <div>
-                  &nbsp;&nbsp; Chainlink Base Aggregator:{" "}
-                  <a
-                    href={`${chain.explorer}/address/${market.priceFeed.base}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {market.priceFeed.baseDescription}
-                    {" ("}
-                    {market.priceFeed.baseStalePriceInterval} seconds
-                    {" stale interval)"}
-                  </a>
-                </div>
-                <div>
-                  &nbsp;&nbsp; Chainlink Quote Aggregator:{" "}
-                  <a
-                    href={`${chain.explorer}/address/${market.priceFeed.quote}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {market.priceFeed.quoteDescription} {" ("}
-                    {market.priceFeed.quoteStalePriceInterval} seconds
-                    {" stale interval)"}
-                  </a>
-                </div>
-                <div>
-                  &nbsp;&nbsp; Prices:{" "}
-                  {format(market.priceFeed.chainlinkPriceFeedPrice, 18, 2, ",")}
-                  {" (Chainlink) "}
-                  {format(market.priceFeed.uniswapV3PriceFeedPrice, 18, 2, ",")}
-                  {` (Uniswap v3 ${market.priceFeed.uniswapV3PriceFeedTWAPWindow ? market.priceFeed.uniswapV3PriceFeedTWAPWindow / 60 : "?"}min TWAP)`}
-                </div>
               </div>
               <div>
                 <b>Variable Pool Borrow Rate Stale Interval:</b>{" "}
