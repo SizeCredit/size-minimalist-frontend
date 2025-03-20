@@ -1,16 +1,15 @@
-import { createPublicClient } from "viem";
+import { createPublicClient, HttpTransport } from "viem";
 import { http, createConfig } from "wagmi";
-import { base, baseSepolia, sepolia, mainnet } from "wagmi/chains";
+import { base, baseSepolia, mainnet } from "wagmi/chains";
 import { injected, walletConnect } from "wagmi/connectors";
 
 export const RPC_URLS = {
   [base.id]: "https://base-mainnet.g.alchemy.com/v2/",
   [baseSepolia.id]: "https://base-sepolia.g.alchemy.com/v2/",
-  [sepolia.id]: "https://eth-sepolia.g.alchemy.com/v2/",
   [mainnet.id]: "https://eth-mainnet.g.alchemy.com/v2/",
 };
 
-export const chains = [base, baseSepolia, sepolia, mainnet] as const;
+export const chains = [base, baseSepolia, mainnet] as const;
 
 export const config = createConfig({
   chains: chains,
@@ -18,20 +17,13 @@ export const config = createConfig({
     injected(),
     walletConnect({ projectId: import.meta.env.VITE_WC_PROJECT_ID }),
   ],
-  transports: {
-    [base.id]: http(
-      `${RPC_URLS[base.id]}${import.meta.env.VITE_ALCHEMY_API_KEY}`,
-    ),
-    [baseSepolia.id]: http(
-      `${RPC_URLS[baseSepolia.id]}${import.meta.env.VITE_ALCHEMY_API_KEY}`,
-    ),
-    [sepolia.id]: http(
-      `${RPC_URLS[sepolia.id]}${import.meta.env.VITE_ALCHEMY_API_KEY}`,
-    ),
-    [mainnet.id]: http(
-      `${RPC_URLS[mainnet.id]}${import.meta.env.VITE_ALCHEMY_API_KEY}`,
-    ),
-  },
+  transports: Object.entries(RPC_URLS).reduce(
+    (acc, [chainId, url]) => ({
+      ...acc,
+      [Number(chainId)]: http(`${url}${import.meta.env.VITE_ALCHEMY_API_KEY}`),
+    }),
+    {} as Record<number, HttpTransport>,
+  ),
 });
 
 export const publicClients = Object.keys(RPC_URLS)

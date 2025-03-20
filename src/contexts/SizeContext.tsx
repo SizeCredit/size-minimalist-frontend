@@ -76,7 +76,10 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`${chain.explorer}/tx/${tx}`}>
+        <a
+          target="_blank"
+          href={`${chain.chain.blockExplorers?.default?.url}/tx/${tx}`}
+        >
           {tx}
         </a>,
       );
@@ -121,7 +124,10 @@ export function SizeProvider({ children }: Props) {
             address: token as Address,
           });
           toast.success(
-            <a target="_blank" href={`${chain.explorer}/tx/${approve}`}>
+            <a
+              target="_blank"
+              href={`${chain.chain.blockExplorers?.default?.url}/tx/${approve}`}
+            >
               {approve}
             </a>,
           );
@@ -134,7 +140,10 @@ export function SizeProvider({ children }: Props) {
         value: token === chain.addresses.WETH ? amount : BigInt(0),
       });
       toast.success(
-        <a target="_blank" href={`${chain.explorer}/tx/${tx}`}>
+        <a
+          target="_blank"
+          href={`${chain.chain.blockExplorers?.default?.url}/tx/${tx}`}
+        >
           {tx}
         </a>,
       );
@@ -165,7 +174,10 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`${chain.explorer}/tx/${tx}`}>
+        <a
+          target="_blank"
+          href={`${chain.chain.blockExplorers?.default?.url}/tx/${tx}`}
+        >
           {tx}
         </a>,
       );
@@ -203,7 +215,10 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`${chain.explorer}/tx/${tx}`}>
+        <a
+          target="_blank"
+          href={`${chain.chain.blockExplorers?.default?.url}/tx/${tx}`}
+        >
           {tx}
         </a>,
       );
@@ -241,7 +256,10 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`${chain.explorer}/tx/${tx}`}>
+        <a
+          target="_blank"
+          href={`${chain.chain.blockExplorers?.default?.url}/tx/${tx}`}
+        >
           {tx}
         </a>,
       );
@@ -285,7 +303,10 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`${chain.explorer}/tx/${tx}`}>
+        <a
+          target="_blank"
+          href={`${chain.chain.blockExplorers?.default?.url}/tx/${tx}`}
+        >
           {tx}
         </a>,
       );
@@ -329,7 +350,10 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`${chain.explorer}/tx/${tx}`}>
+        <a
+          target="_blank"
+          href={`${chain.chain.blockExplorers?.default?.url}/tx/${tx}`}
+        >
           {tx}
         </a>,
       );
@@ -363,7 +387,10 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`${chain.explorer}/tx/${tx}`}>
+        <a
+          target="_blank"
+          href={`${chain.chain.blockExplorers?.default?.url}/tx/${tx}`}
+        >
           {tx}
         </a>,
       );
@@ -392,7 +419,10 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`${chain.explorer}/tx/${tx}`}>
+        <a
+          target="_blank"
+          href={`${chain.chain.blockExplorers?.default?.url}/tx/${tx}`}
+        >
           {tx}
         </a>,
       );
@@ -433,7 +463,10 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`${chain.explorer}/tx/${tx}`}>
+        <a
+          target="_blank"
+          href={`${chain.chain.blockExplorers?.default?.url}/tx/${tx}`}
+        >
           {tx}
         </a>,
       );
@@ -480,7 +513,10 @@ export function SizeProvider({ children }: Props) {
         data,
       });
       toast.success(
-        <a target="_blank" href={`${chain.explorer}/tx/${tx}`}>
+        <a
+          target="_blank"
+          href={`${chain.chain.blockExplorers?.default?.url}/tx/${tx}`}
+        >
           {tx}
         </a>,
       );

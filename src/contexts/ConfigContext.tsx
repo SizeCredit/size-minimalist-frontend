@@ -12,7 +12,6 @@ const chains = [baseMainnet, mainnet, baseSepolia];
 interface ConfigContext {
   chain?: {
     chain: Chain;
-    explorer: string;
     addresses: Record<string, Address>;
   };
   blockNumber?: bigint;

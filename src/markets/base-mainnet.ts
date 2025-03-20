@@ -3,7 +3,6 @@ import { base } from "wagmi/chains";
 
 export default {
   chain: base,
-  explorer: "https://basescan.org",
   addresses: {
     SizeFactory: "0x330Dc31dB45672c1F565cf3EC91F9a01f8f3DF0b" as Address,
     AaveV3Pool: "0xA238Dd80C259a72e81d7e4664a9801593F98d1c5" as Address,
