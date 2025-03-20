@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 import { ToastContainer } from "react-toastify";
 import LoadingBar from "react-top-loading-bar";
@@ -45,44 +40,40 @@ const App: React.FC = () => {
   const { progress: limitOrdersProgress } = useContext(LimitOrdersContext);
   const { progress: positionsProgress } = useContext(PositionsContext);
   const { collapsed, setCollapsed } = useContext(SidebarContext);
+  const location = useLocation();
+  const params = location.search;
 
   return (
-    <Router>
-      <div className="flex">
-        <LoadingBar progress={(limitOrdersProgress + positionsProgress) / 2} />
-        <Sidebar />
-        <ToastContainer />
-        <main className="ml-64 w-full min-h-screen bg-gray-50 p-6">
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <Navigate
-                  to={pages.find((page) => page.default)!.path}
-                  replace
-                />
-              }
-            />
-            {pages.map((page) => (
-              <Route
-                key={page.path}
-                path={page.path}
-                element={page.component}
+    <div className="flex">
+      <LoadingBar progress={(limitOrdersProgress + positionsProgress) / 2} />
+      <Sidebar />
+      <ToastContainer />
+      <main className="ml-64 w-full min-h-screen bg-gray-50 p-6">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Navigate
+                to={pages.find((page) => page.default)!.path + params}
+                replace
               />
-            ))}
-          </Routes>
-        </main>
+            }
+          />
+          {pages.map((page) => (
+            <Route key={page.path} path={page.path} element={page.component} />
+          ))}
+        </Routes>
+      </main>
 
-        <div className={collapsed ? "" : "collapsed"}>
-          <button
-            className="button-collapse right"
-            onClick={() => setCollapsed(false)}
-          >
-            « Expand
-          </button>
-        </div>
+      <div className={collapsed ? "" : "collapsed"}>
+        <button
+          className="button-collapse right"
+          onClick={() => setCollapsed(false)}
+        >
+          « Expand
+        </button>
       </div>
-    </Router>
+    </div>
   );
 };
 

@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useEffect } from "react";
+import { createContext, ReactNode } from "react";
 
 import { Chain, createPublicClient, HttpTransport, PublicClient } from "viem";
 import { http, createConfig, Config, WagmiProvider } from "wagmi";
@@ -56,6 +56,7 @@ export function CustomWagmiProvider({ children }: Props) {
     },
     blockExplorers: {
       default: {
+        ...chain.blockExplorers?.default,
         url: blockExplorers[chain.id],
       },
     },
@@ -76,10 +77,15 @@ export function CustomWagmiProvider({ children }: Props) {
     ),
   });
 
-  useEffect(() => {
-    console.log(config._internal.chains);
-    config._internal.chains.setState(chains);
-  }, [chains]);
+  console.log(
+    Object.entries(rpcUrls).reduce(
+      (acc, [chainId, url]) => ({
+        ...acc,
+        [Number(chainId)]: url,
+      }),
+      {},
+    ),
+  );
 
   const publicClients = Object.keys(rpcUrls)
     .map((chainId) => ({

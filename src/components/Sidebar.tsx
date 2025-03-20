@@ -1,7 +1,7 @@
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { format, smallId } from "../services/format";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
@@ -33,6 +33,8 @@ const Sidebar = () => {
   const { collapsed, setCollapsed } = useContext(SidebarContext);
   const { sellCreditQuote } = useContext(SwapContext);
   const [timeouts, setTimeouts] = useState<NodeJS.Timeout[]>([]);
+  const location = useLocation();
+  const params = location.search;
 
   const tryConnect = async () => {
     for (const connector of connectors) {
@@ -211,7 +213,7 @@ const Sidebar = () => {
           <div key={page.path} className="page-item">
             <button
               className="page-button button"
-              onClick={() => navigate(page.path)}
+              onClick={() => navigate(page.path + params)}
             >
               {page.label}
             </button>

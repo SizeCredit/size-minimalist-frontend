@@ -56,9 +56,9 @@ const Funding = () => {
                 )
               }
             >
-              {depositTokens.map((token) => (
+              {depositTokens.map((token, index) => (
                 <option
-                  key={market?.tokens[token].symbol}
+                  key={market?.tokens[token].symbol || index}
                   value={market?.tokens[token].symbol}
                 >
                   {market?.tokens[token].symbol}

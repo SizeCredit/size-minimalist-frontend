@@ -1,5 +1,6 @@
 import { Buffer } from "buffer";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter } from "react-router-dom";
 import React from "react";
 import ReactDOM from "react-dom/client";
 
@@ -24,30 +25,32 @@ const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <CustomWagmiProvider>
-      <QueryClientProvider client={queryClient}>
-        <ConfigProvider>
-          <RegistryProvider>
-            <FactoryProvider>
-              <PriceProvider>
-                <PositionsProvider>
-                  <LimitOrdersProvider>
-                    <UserProvider>
-                      <SwapProvider>
-                        <SidebarProvider>
-                          <SizeProvider>
-                            <App />
-                          </SizeProvider>
-                        </SidebarProvider>
-                      </SwapProvider>
-                    </UserProvider>
-                  </LimitOrdersProvider>
-                </PositionsProvider>
-              </PriceProvider>
-            </FactoryProvider>
-          </RegistryProvider>
-        </ConfigProvider>
-      </QueryClientProvider>
-    </CustomWagmiProvider>
+    <BrowserRouter>
+      <CustomWagmiProvider>
+        <QueryClientProvider client={queryClient}>
+          <ConfigProvider>
+            <RegistryProvider>
+              <FactoryProvider>
+                <PriceProvider>
+                  <PositionsProvider>
+                    <LimitOrdersProvider>
+                      <UserProvider>
+                        <SwapProvider>
+                          <SidebarProvider>
+                            <SizeProvider>
+                              <App />
+                            </SizeProvider>
+                          </SidebarProvider>
+                        </SwapProvider>
+                      </UserProvider>
+                    </LimitOrdersProvider>
+                  </PositionsProvider>
+                </PriceProvider>
+              </FactoryProvider>
+            </RegistryProvider>
+          </ConfigProvider>
+        </QueryClientProvider>
+      </CustomWagmiProvider>
+    </BrowserRouter>
   </React.StrictMode>,
 );

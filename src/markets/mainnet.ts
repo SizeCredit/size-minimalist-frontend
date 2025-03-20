@@ -2,7 +2,7 @@ import { Address, zeroAddress } from "viem";
 import { mainnet } from "wagmi/chains";
 
 export default {
-  chain: mainnet,
+  chainId: mainnet.id,
   addresses: {
     SizeFactory: "0x3A9C05c3Da48E6E26f39928653258D7D4Eb594C1" as Address,
     AaveV3Pool: "0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2" as Address,
