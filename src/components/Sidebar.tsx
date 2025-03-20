@@ -232,6 +232,7 @@ const Sidebar = () => {
           <input
             type="text"
             defaultValue={chain?.chain.rpcUrls?.default?.http[0]}
+            disabled
           />
         </div>
         <div className="vnet-block-explorer">
@@ -239,6 +240,7 @@ const Sidebar = () => {
           <input
             type="text"
             defaultValue={chain?.chain.blockExplorers?.default?.url}
+            disabled
           />
         </div>
       </div>

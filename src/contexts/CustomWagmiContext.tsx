@@ -1,11 +1,4 @@
-import {
-  createContext,
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, ReactNode, useEffect } from "react";
 
 import { Chain, createPublicClient, HttpTransport, PublicClient } from "viem";
 import { http, createConfig, Config, WagmiProvider } from "wagmi";
@@ -13,8 +6,6 @@ import { base, baseSepolia, mainnet } from "wagmi/chains";
 import { injected, walletConnect } from "wagmi/connectors";
 
 interface CustomWagmiContext {
-  rpcUrls: Record<number, string>;
-  blockExplorers: Record<number, string>;
   chains: readonly [Chain, ...Chain[]];
   config: Config;
   publicClients: Record<number, PublicClient>;
@@ -35,12 +26,14 @@ export function CustomWagmiProvider({ children }: Props) {
     "blockExplorerUrl",
   );
 
-  const rpcUrls = {
+  const rpcUrls: Record<number, string> = {
     [base.id]: `https://base-mainnet.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_API_KEY}`,
     [baseSepolia.id]: `https://base-sepolia.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_API_KEY}`,
     [mainnet.id]: `https://eth-mainnet.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_API_KEY}`,
-    [Number(chainId)]: rpcUrl,
   };
+  if (chainId && rpcUrl) {
+    rpcUrls[Number(chainId)] = rpcUrl;
+  }
   const defaultChains = [base, baseSepolia, mainnet] as const;
 
   const blockExplorers = defaultChains
@@ -100,8 +93,6 @@ export function CustomWagmiProvider({ children }: Props) {
   return (
     <CustomWagmiContext.Provider
       value={{
-        rpcUrls,
-        blockExplorers,
         chains,
         config,
         publicClients,
