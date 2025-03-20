@@ -481,3 +481,13 @@ select {
   white-space: normal; /* Allows text to wrap */
   font-family: monospace;
 }
+
+.vnet-list {
+  div {
+    display: flex;
+    flex-direction: column;
+  }
+  input {
+    font-size: 12px;
+  }
+}

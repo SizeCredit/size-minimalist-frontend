@@ -219,6 +219,30 @@ const Sidebar = () => {
         ))}
       </div>
       <div className="tabs">
+        <div>Virtual TestNets</div>
+      </div>
+
+      <div className="vnet-list">
+        <div className="vnet-chain-id">
+          <label>Chain ID</label>
+          <input type="number" defaultValue={chain?.chain.id} disabled />
+        </div>
+        <div className="vnet-rpc-url">
+          <label>RPC URL</label>
+          <input
+            type="text"
+            defaultValue={chain?.chain.rpcUrls?.default?.http[0]}
+          />
+        </div>
+        <div className="vnet-block-explorer">
+          <label>Block Explorer URL</label>
+          <input
+            type="text"
+            defaultValue={chain?.chain.blockExplorers?.default?.url}
+          />
+        </div>
+      </div>
+      <div className="tabs">
         <div>Positions</div>
       </div>
       <div className="position-list">

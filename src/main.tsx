@@ -2,12 +2,11 @@ import { Buffer } from "buffer";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { WagmiProvider } from "wagmi";
 
 import App from "./App.tsx";
-import { config } from "./wagmi.ts";
 
 import "./index.css";
+import { CustomWagmiProvider } from "./contexts/CustomWagmiContext.tsx";
 import { ConfigProvider } from "./contexts/ConfigContext.tsx";
 import { UserProvider } from "./contexts/UserContext.tsx";
 import { PositionsProvider } from "./contexts/PositionsContext.tsx";
@@ -25,7 +24,7 @@ const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <WagmiProvider config={config}>
+    <CustomWagmiProvider>
       <QueryClientProvider client={queryClient}>
         <ConfigProvider>
           <RegistryProvider>
@@ -49,6 +48,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           </RegistryProvider>
         </ConfigProvider>
       </QueryClientProvider>
-    </WagmiProvider>
+    </CustomWagmiProvider>
   </React.StrictMode>,
 );

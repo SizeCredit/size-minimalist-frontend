@@ -1,11 +1,11 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 import { Address } from "viem";
 import { type Chain } from "wagmi/chains";
 import baseSepolia from "../markets/base-sepolia";
 import baseMainnet from "../markets/base-mainnet";
 import mainnet from "../markets/mainnet";
 import { useAccount, useBlockNumber } from "wagmi";
-import { config } from "../wagmi";
+import { CustomWagmiContext } from "./CustomWagmiContext";
 
 const chains = [baseMainnet, mainnet, baseSepolia];
 
@@ -26,6 +26,7 @@ type Props = {
 };
 
 export function ConfigProvider({ children }: Props) {
+  const { config } = useContext(CustomWagmiContext);
   const account = useAccount({
     config,
   });

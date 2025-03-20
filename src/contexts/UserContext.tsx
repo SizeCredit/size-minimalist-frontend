@@ -4,7 +4,6 @@ import {
   CopyLimitOrdersParamsStruct,
   UserViewStruct,
 } from "../types/ethers-contracts/Size";
-import { config } from "../wagmi";
 import {
   CreditPosition,
   DebtPosition,
@@ -14,6 +13,7 @@ import { BigNumberish } from "ethers";
 import { RegistryContext } from "./RegistryContext";
 import Size from "../abi/Size.json";
 import { Address, erc20Abi } from "viem";
+import { CustomWagmiContext } from "./CustomWagmiContext";
 
 interface User extends UserViewStruct {
   underlyingBorrowTokenBalance: BigNumberish;
@@ -34,6 +34,7 @@ type Props = {
 };
 
 export function UserProvider({ children }: Props) {
+  const { config } = useContext(CustomWagmiContext);
   const account = useAccount();
   const { creditPositions, debtPositions } = useContext(PositionsContext);
   const { market } = useContext(RegistryContext);

@@ -1,7 +1,6 @@
 import { createContext, ReactNode, useContext } from "react";
 import { useAccount } from "wagmi";
 import { ConfigContext } from "./ConfigContext";
-import { config } from "../wagmi";
 import { PositionsContext } from "./PositionsContext";
 import { Address, encodeFunctionData, erc20Abi } from "viem";
 import Size from "../abi/Size.json";
@@ -11,6 +10,7 @@ import { Quote } from "./SwapContext";
 import { ethers } from "ethers";
 import { PriceContext } from "./PriceContext";
 import { RegistryContext } from "./RegistryContext";
+import { CustomWagmiContext } from "./CustomWagmiContext";
 
 interface SizeContext {
   repay: (debtPositionId: string) => Promise<void>;
@@ -49,6 +49,7 @@ type Props = {
 };
 
 export function SizeProvider({ children }: Props) {
+  const { config } = useContext(CustomWagmiContext);
   const account = useAccount();
   const { updatePositions, debtPositions } = useContext(PositionsContext);
   const { chain } = useContext(ConfigContext);

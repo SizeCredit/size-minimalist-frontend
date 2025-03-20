@@ -6,7 +6,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import { config } from "../wagmi";
 import Size from "../abi/Size.json";
 import SizeFactory from "../abi/SizeFactory.json";
 import PriceFeed from "../abi/PriceFeed.json";
@@ -23,6 +22,7 @@ import { readContract } from "wagmi/actions";
 import { ConfigContext } from "./ConfigContext";
 import { Abi, Address, erc20Abi } from "viem";
 import { Config } from "wagmi";
+import { CustomWagmiContext } from "./CustomWagmiContext";
 
 export type Token =
   | "underlyingCollateralToken"
@@ -102,6 +102,7 @@ async function readContractWithDefault<T>(
 }
 
 export function RegistryProvider({ children }: Props) {
+  const { config } = useContext(CustomWagmiContext);
   const { chain } = useContext(ConfigContext);
   const [progress, setProgress] = useState(0);
   const [markets, setMarkets] = useState<Market[]>([]);

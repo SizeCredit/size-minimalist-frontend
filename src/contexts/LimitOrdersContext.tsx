@@ -12,10 +12,10 @@ import { delayed } from "../services/delayed";
 import { deduplicate } from "../services/deduplicate";
 import { UserViewStruct } from "../types/ethers-contracts/Size";
 import { readContract } from "wagmi/actions";
-import { config } from "../wagmi";
 import { RegistryContext } from "./RegistryContext";
 import Size from "../abi/Size.json";
 import Events from "../abi/Events.json";
+import { CustomWagmiContext } from "./CustomWagmiContext";
 
 const RPC_REQUESTS_PER_SECOND = 10;
 
@@ -46,6 +46,7 @@ type Props = {
 };
 
 export function LimitOrdersProvider({ children }: Props) {
+  const { config } = useContext(CustomWagmiContext);
   const [context, setContext] = useState<Omit<LimitOrdersContext, "progress">>({
     borrowOffers: [],
     loanOffers: [],
@@ -69,14 +70,14 @@ export function LimitOrdersProvider({ children }: Props) {
         (e) => e.name === "BuyCreditLimit",
       )!;
       const [sellCreditLimit, buyCreditLimit] = await Promise.all([
-        publicClient.getLogs({
+        publicClient!.getLogs({
           address: market.address,
           event: parseAbiItem(
             `event ${sellCreditLimitAbi.name}(${sellCreditLimitAbi.inputs.map((i) => `${i.type} ${i.name}`).join(",")})`,
           ) as AbiEvent,
           fromBlock: blockNumber - pastBlocks,
         }),
-        publicClient.getLogs({
+        publicClient!.getLogs({
           address: market.address,
           event: parseAbiItem(
             `event ${buyCreditLimitAbi.name}(${buyCreditLimitAbi.inputs.map((i) => `${i.type} ${i.name}`).join(",")})`,
@@ -89,7 +90,7 @@ export function LimitOrdersProvider({ children }: Props) {
         ...Array.from(buyCreditLimit),
       ].map((log) => log.transactionHash);
       const transactionPromises = transactionHashes.map(
-        (hash) => () => publicClient.getTransaction({ hash }),
+        (hash) => () => publicClient!.getTransaction({ hash }),
       );
       const txs = await delayed(
         transactionPromises,

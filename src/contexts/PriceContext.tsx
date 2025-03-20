@@ -5,11 +5,11 @@ import {
   useEffect,
   useState,
 } from "react";
-import { config } from "../wagmi";
 import PriceFeed from "../abi/PriceFeed.json";
 import { readContract } from "wagmi/actions";
 import { RegistryContext } from "./RegistryContext";
 import { Address } from "viem";
+import { CustomWagmiContext } from "./CustomWagmiContext";
 
 interface PriceContext {
   price?: number;
@@ -22,6 +22,7 @@ type Props = {
 };
 
 export function PriceProvider({ children }: Props) {
+  const { config } = useContext(CustomWagmiContext);
   const { market } = useContext(RegistryContext);
   const [price, setPrice] = useState<number>();
 

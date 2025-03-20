@@ -10,11 +10,11 @@ import {
   DebtPositionStruct,
 } from "../types/ethers-contracts/Size";
 import Size from "../abi/Size.json";
-import { config } from "../wagmi";
 import { ethers } from "ethers";
 import { readContract } from "wagmi/actions";
 import { delayed } from "../services/delayed";
 import { RegistryContext } from "./RegistryContext";
+import { CustomWagmiContext } from "./CustomWagmiContext";
 
 const RPC_REQUESTS_PER_SECOND = 10;
 
@@ -53,6 +53,7 @@ type Props = {
 };
 
 export function PositionsProvider({ children }: Props) {
+  const { config } = useContext(CustomWagmiContext);
   const { market } = useContext(RegistryContext);
   const [context, setContext] = useState<DebtPositionsCreditPositionsContext>({
     debtPositions: [],
