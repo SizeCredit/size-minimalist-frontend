@@ -218,6 +218,16 @@ const Registry = () => {
                 {market.oracle.variablePoolBorrowRateStaleRateInterval.toString()}{" "}
                 seconds
               </div>
+              <div>
+                <b>Admin:</b>{" "}
+                <a
+                  href={`${chain.chain.blockExplorers?.default?.url}/address/${market.admin.toString()}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <code>{market.admin.toString()}</code>
+                </a>
+              </div>
             </div>
           ))}
         </div>

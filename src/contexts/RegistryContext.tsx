@@ -16,7 +16,7 @@ import {
 } from "../types/ethers-contracts/Size";
 import { readContract } from "wagmi/actions";
 import { ConfigContext } from "./ConfigContext";
-import { Abi, Address, erc20Abi } from "viem";
+import { Abi, Address, erc20Abi, zeroAddress, zeroHash } from "viem";
 import { Config } from "wagmi";
 import { CustomWagmiContext } from "./CustomWagmiContext";
 import IPriceFeed from "../abi/IPriceFeed.json";
@@ -47,6 +47,7 @@ export interface Market {
   riskConfig: InitializeRiskConfigParamsStruct;
   oracle: InitializeOracleParamsStruct;
   priceFeed: PriceFeedInformation;
+  admin: Address;
   tokens: Record<Token, TokenInformation>;
 }
 
@@ -72,17 +73,20 @@ async function readContractWithDefault<T>(
     abi,
     address,
     functionName,
+    args,
     defaultValue,
   }: {
     abi: Abi;
     address: Address;
     functionName: string;
+    args?: any[];
     defaultValue: T;
   },
 ): Promise<T> {
   return readContract(config, {
     abi,
     address,
+    args,
     functionName,
   })
     .then((value) => value as T)
@@ -222,6 +226,34 @@ export function RegistryProvider({ children }: Props) {
       }),
     );
 
+    const adminAddresses = await Promise.all(
+      addresses.map(async (address) => {
+        const admin = chain.addresses.admin;
+        const owner = (await readContractWithDefault(config, {
+          abi: [
+            {
+              inputs: [],
+              name: "owner",
+              outputs: [{ internalType: "address", name: "", type: "address" }],
+              stateMutability: "view",
+              type: "function",
+            },
+          ] as Abi,
+          address,
+          functionName: "owner",
+          defaultValue: zeroAddress,
+        })) as Address;
+        const hasRole = (await readContractWithDefault(config, {
+          abi: Size.abi as Abi,
+          address,
+          functionName: "hasRole",
+          args: [zeroHash, admin],
+          defaultValue: false,
+        })) as boolean;
+        return hasRole ? admin : owner;
+      }),
+    );
+
     setMarkets(
       addresses.map((address, i) => ({
         address,
@@ -232,6 +264,7 @@ export function RegistryProvider({ children }: Props) {
         oracle: oracles[i],
         tokens: tokens[i],
         priceFeed: priceFeedInformation[i],
+        admin: adminAddresses[i],
       })),
     );
 
