@@ -89,6 +89,7 @@ export type InitializeDataParamsStruct = {
   underlyingBorrowToken: AddressLike;
   variablePool: AddressLike;
   borrowATokenV1_5: AddressLike;
+  sizeFactory: AddressLike;
 };
 
 export type InitializeDataParamsStructOutput = [
@@ -97,12 +98,14 @@ export type InitializeDataParamsStructOutput = [
   underlyingBorrowToken: string,
   variablePool: string,
   borrowATokenV1_5: string,
+  sizeFactory: string,
 ] & {
   weth: string;
   underlyingCollateralToken: string;
   underlyingBorrowToken: string;
   variablePool: string;
   borrowATokenV1_5: string;
+  sizeFactory: string;
 };
 
 export type PriceFeedParamsStruct = {
@@ -145,41 +148,40 @@ export type PriceFeedParamsStructOutput = [
 export interface SizeFactoryInterface extends Interface {
   getFunction(
     nameOrSignature:
+      | "DEFAULT_ADMIN_ROLE"
       | "UPGRADE_INTERFACE_VERSION"
       | "acceptOwnership"
-      | "addBorrowATokenV1_5"
-      | "addMarket"
-      | "addPriceFeed"
+      | "authorizationNonces"
+      | "authorizations"
       | "createBorrowATokenV1_5"
       | "createMarket"
       | "createPriceFeed"
-      | "getBorrowATokenV1_5"
-      | "getBorrowATokenV1_5Descriptions"
-      | "getBorrowATokensV1_5"
-      | "getBorrowATokensV1_5Count"
       | "getMarket"
       | "getMarketDescriptions"
       | "getMarkets"
       | "getMarketsCount"
-      | "getPriceFeed"
-      | "getPriceFeedDescriptions"
-      | "getPriceFeeds"
-      | "getPriceFeedsCount"
+      | "getRoleAdmin"
+      | "grantRole"
+      | "hasRole"
       | "initialize"
-      | "isBorrowATokenV1_5"
+      | "isAuthorized"
+      | "isAuthorizedAll"
       | "isMarket"
-      | "isPriceFeed"
+      | "multicall"
       | "nonTransferrableScaledTokenV1_5Implementation"
       | "owner"
       | "pendingOwner"
       | "proxiableUUID"
-      | "removeBorrowATokenV1_5"
-      | "removeMarket"
-      | "removePriceFeed"
+      | "reinitialize"
       | "renounceOwnership"
+      | "renounceRole"
+      | "revokeAllAuthorizations"
+      | "revokeRole"
+      | "setAuthorization"
       | "setNonTransferrableScaledTokenV1_5Implementation"
       | "setSizeImplementation"
       | "sizeImplementation"
+      | "supportsInterface"
       | "transferOwnership"
       | "upgradeToAndCall"
       | "version",
@@ -187,20 +189,26 @@ export interface SizeFactoryInterface extends Interface {
 
   getEvent(
     nameOrSignatureOrTopic:
-      | "BorrowATokenV1_5Added"
-      | "BorrowATokenV1_5Removed"
+      | "CreateBorrowATokenV1_5"
+      | "CreateMarket"
+      | "CreatePriceFeed"
       | "Initialized"
-      | "MarketAdded"
-      | "MarketRemoved"
       | "NonTransferrableScaledTokenV1_5ImplementationSet"
       | "OwnershipTransferStarted"
       | "OwnershipTransferred"
-      | "PriceFeedAdded"
-      | "PriceFeedRemoved"
+      | "RevokeAllAuthorizations"
+      | "RoleAdminChanged"
+      | "RoleGranted"
+      | "RoleRevoked"
+      | "SetAuthorization"
       | "SizeImplementationSet"
       | "Upgraded",
   ): EventFragment;
 
+  encodeFunctionData(
+    functionFragment: "DEFAULT_ADMIN_ROLE",
+    values?: undefined,
+  ): string;
   encodeFunctionData(
     functionFragment: "UPGRADE_INTERFACE_VERSION",
     values?: undefined,
@@ -210,16 +218,12 @@ export interface SizeFactoryInterface extends Interface {
     values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "addBorrowATokenV1_5",
+    functionFragment: "authorizationNonces",
     values: [AddressLike],
   ): string;
   encodeFunctionData(
-    functionFragment: "addMarket",
-    values: [AddressLike],
-  ): string;
-  encodeFunctionData(
-    functionFragment: "addPriceFeed",
-    values: [AddressLike],
+    functionFragment: "authorizations",
+    values: [BigNumberish, AddressLike, AddressLike],
   ): string;
   encodeFunctionData(
     functionFragment: "createBorrowATokenV1_5",
@@ -239,22 +243,6 @@ export interface SizeFactoryInterface extends Interface {
     values: [PriceFeedParamsStruct],
   ): string;
   encodeFunctionData(
-    functionFragment: "getBorrowATokenV1_5",
-    values: [BigNumberish],
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getBorrowATokenV1_5Descriptions",
-    values?: undefined,
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getBorrowATokensV1_5",
-    values?: undefined,
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getBorrowATokensV1_5Count",
-    values?: undefined,
-  ): string;
-  encodeFunctionData(
     functionFragment: "getMarket",
     values: [BigNumberish],
   ): string;
@@ -271,36 +259,36 @@ export interface SizeFactoryInterface extends Interface {
     values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "getPriceFeed",
-    values: [BigNumberish],
+    functionFragment: "getRoleAdmin",
+    values: [BytesLike],
   ): string;
   encodeFunctionData(
-    functionFragment: "getPriceFeedDescriptions",
-    values?: undefined,
+    functionFragment: "grantRole",
+    values: [BytesLike, AddressLike],
   ): string;
   encodeFunctionData(
-    functionFragment: "getPriceFeeds",
-    values?: undefined,
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getPriceFeedsCount",
-    values?: undefined,
+    functionFragment: "hasRole",
+    values: [BytesLike, AddressLike],
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
     values: [AddressLike],
   ): string;
   encodeFunctionData(
-    functionFragment: "isBorrowATokenV1_5",
-    values: [AddressLike],
+    functionFragment: "isAuthorized",
+    values: [AddressLike, AddressLike, BigNumberish],
+  ): string;
+  encodeFunctionData(
+    functionFragment: "isAuthorizedAll",
+    values: [AddressLike, AddressLike, BigNumberish],
   ): string;
   encodeFunctionData(
     functionFragment: "isMarket",
     values: [AddressLike],
   ): string;
   encodeFunctionData(
-    functionFragment: "isPriceFeed",
-    values: [AddressLike],
+    functionFragment: "multicall",
+    values: [BytesLike[]],
   ): string;
   encodeFunctionData(
     functionFragment: "nonTransferrableScaledTokenV1_5Implementation",
@@ -316,20 +304,28 @@ export interface SizeFactoryInterface extends Interface {
     values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "removeBorrowATokenV1_5",
-    values: [AddressLike],
-  ): string;
-  encodeFunctionData(
-    functionFragment: "removeMarket",
-    values: [AddressLike],
-  ): string;
-  encodeFunctionData(
-    functionFragment: "removePriceFeed",
-    values: [AddressLike],
+    functionFragment: "reinitialize",
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined,
+  ): string;
+  encodeFunctionData(
+    functionFragment: "renounceRole",
+    values: [BytesLike, AddressLike],
+  ): string;
+  encodeFunctionData(
+    functionFragment: "revokeAllAuthorizations",
+    values?: undefined,
+  ): string;
+  encodeFunctionData(
+    functionFragment: "revokeRole",
+    values: [BytesLike, AddressLike],
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setAuthorization",
+    values: [AddressLike, BigNumberish],
   ): string;
   encodeFunctionData(
     functionFragment: "setNonTransferrableScaledTokenV1_5Implementation",
@@ -344,6 +340,10 @@ export interface SizeFactoryInterface extends Interface {
     values?: undefined,
   ): string;
   encodeFunctionData(
+    functionFragment: "supportsInterface",
+    values: [BytesLike],
+  ): string;
+  encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [AddressLike],
   ): string;
@@ -354,6 +354,10 @@ export interface SizeFactoryInterface extends Interface {
   encodeFunctionData(functionFragment: "version", values?: undefined): string;
 
   decodeFunctionResult(
+    functionFragment: "DEFAULT_ADMIN_ROLE",
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "UPGRADE_INTERFACE_VERSION",
     data: BytesLike,
   ): Result;
@@ -362,12 +366,11 @@ export interface SizeFactoryInterface extends Interface {
     data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "addBorrowATokenV1_5",
+    functionFragment: "authorizationNonces",
     data: BytesLike,
   ): Result;
-  decodeFunctionResult(functionFragment: "addMarket", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "addPriceFeed",
+    functionFragment: "authorizations",
     data: BytesLike,
   ): Result;
   decodeFunctionResult(
@@ -382,22 +385,6 @@ export interface SizeFactoryInterface extends Interface {
     functionFragment: "createPriceFeed",
     data: BytesLike,
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "getBorrowATokenV1_5",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getBorrowATokenV1_5Descriptions",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getBorrowATokensV1_5",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getBorrowATokensV1_5Count",
-    data: BytesLike,
-  ): Result;
   decodeFunctionResult(functionFragment: "getMarket", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getMarketDescriptions",
@@ -409,31 +396,22 @@ export interface SizeFactoryInterface extends Interface {
     data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getPriceFeed",
+    functionFragment: "getRoleAdmin",
     data: BytesLike,
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "getPriceFeedDescriptions",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getPriceFeeds",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getPriceFeedsCount",
-    data: BytesLike,
-  ): Result;
+  decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "isBorrowATokenV1_5",
+    functionFragment: "isAuthorized",
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "isAuthorizedAll",
     data: BytesLike,
   ): Result;
   decodeFunctionResult(functionFragment: "isMarket", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "isPriceFeed",
-    data: BytesLike,
-  ): Result;
+  decodeFunctionResult(functionFragment: "multicall", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "nonTransferrableScaledTokenV1_5Implementation",
     data: BytesLike,
@@ -448,19 +426,24 @@ export interface SizeFactoryInterface extends Interface {
     data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "removeBorrowATokenV1_5",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "removeMarket",
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "removePriceFeed",
+    functionFragment: "reinitialize",
     data: BytesLike,
   ): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceRole",
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "revokeAllAuthorizations",
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setAuthorization",
     data: BytesLike,
   ): Result;
   decodeFunctionResult(
@@ -476,6 +459,10 @@ export interface SizeFactoryInterface extends Interface {
     data: BytesLike,
   ): Result;
   decodeFunctionResult(
+    functionFragment: "supportsInterface",
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "transferOwnership",
     data: BytesLike,
   ): Result;
@@ -486,12 +473,11 @@ export interface SizeFactoryInterface extends Interface {
   decodeFunctionResult(functionFragment: "version", data: BytesLike): Result;
 }
 
-export namespace BorrowATokenV1_5AddedEvent {
-  export type InputTuple = [borrowATokenV1_5: AddressLike, existed: boolean];
-  export type OutputTuple = [borrowATokenV1_5: string, existed: boolean];
+export namespace CreateBorrowATokenV1_5Event {
+  export type InputTuple = [borrowATokenV1_5: AddressLike];
+  export type OutputTuple = [borrowATokenV1_5: string];
   export interface OutputObject {
     borrowATokenV1_5: string;
-    existed: boolean;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -499,12 +485,23 @@ export namespace BorrowATokenV1_5AddedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export namespace BorrowATokenV1_5RemovedEvent {
-  export type InputTuple = [borrowATokenV1_5: AddressLike, existed: boolean];
-  export type OutputTuple = [borrowATokenV1_5: string, existed: boolean];
+export namespace CreateMarketEvent {
+  export type InputTuple = [market: AddressLike];
+  export type OutputTuple = [market: string];
   export interface OutputObject {
-    borrowATokenV1_5: string;
-    existed: boolean;
+    market: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace CreatePriceFeedEvent {
+  export type InputTuple = [priceFeed: AddressLike];
+  export type OutputTuple = [priceFeed: string];
+  export interface OutputObject {
+    priceFeed: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -517,32 +514,6 @@ export namespace InitializedEvent {
   export type OutputTuple = [version: bigint];
   export interface OutputObject {
     version: bigint;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export namespace MarketAddedEvent {
-  export type InputTuple = [market: AddressLike, existed: boolean];
-  export type OutputTuple = [market: string, existed: boolean];
-  export interface OutputObject {
-    market: string;
-    existed: boolean;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export namespace MarketRemovedEvent {
-  export type InputTuple = [market: AddressLike, existed: boolean];
-  export type OutputTuple = [market: string, existed: boolean];
-  export interface OutputObject {
-    market: string;
-    existed: boolean;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -595,12 +566,11 @@ export namespace OwnershipTransferredEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export namespace PriceFeedAddedEvent {
-  export type InputTuple = [priceFeed: AddressLike, existed: boolean];
-  export type OutputTuple = [priceFeed: string, existed: boolean];
+export namespace RevokeAllAuthorizationsEvent {
+  export type InputTuple = [sender: AddressLike];
+  export type OutputTuple = [sender: string];
   export interface OutputObject {
-    priceFeed: string;
-    existed: boolean;
+    sender: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -608,12 +578,82 @@ export namespace PriceFeedAddedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export namespace PriceFeedRemovedEvent {
-  export type InputTuple = [priceFeed: AddressLike, existed: boolean];
-  export type OutputTuple = [priceFeed: string, existed: boolean];
+export namespace RoleAdminChangedEvent {
+  export type InputTuple = [
+    role: BytesLike,
+    previousAdminRole: BytesLike,
+    newAdminRole: BytesLike,
+  ];
+  export type OutputTuple = [
+    role: string,
+    previousAdminRole: string,
+    newAdminRole: string,
+  ];
   export interface OutputObject {
-    priceFeed: string;
-    existed: boolean;
+    role: string;
+    previousAdminRole: string;
+    newAdminRole: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace RoleGrantedEvent {
+  export type InputTuple = [
+    role: BytesLike,
+    account: AddressLike,
+    sender: AddressLike,
+  ];
+  export type OutputTuple = [role: string, account: string, sender: string];
+  export interface OutputObject {
+    role: string;
+    account: string;
+    sender: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace RoleRevokedEvent {
+  export type InputTuple = [
+    role: BytesLike,
+    account: AddressLike,
+    sender: AddressLike,
+  ];
+  export type OutputTuple = [role: string, account: string, sender: string];
+  export interface OutputObject {
+    role: string;
+    account: string;
+    sender: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace SetAuthorizationEvent {
+  export type InputTuple = [
+    sender: AddressLike,
+    operator: AddressLike,
+    actionsBitmap: BigNumberish,
+    nonce: BigNumberish,
+  ];
+  export type OutputTuple = [
+    sender: string,
+    operator: string,
+    actionsBitmap: bigint,
+    nonce: bigint,
+  ];
+  export interface OutputObject {
+    sender: string;
+    operator: string;
+    actionsBitmap: bigint;
+    nonce: bigint;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -695,26 +735,22 @@ export interface SizeFactory extends BaseContract {
     event?: TCEvent,
   ): Promise<this>;
 
+  DEFAULT_ADMIN_ROLE: TypedContractMethod<[], [string], "view">;
+
   UPGRADE_INTERFACE_VERSION: TypedContractMethod<[], [string], "view">;
 
   acceptOwnership: TypedContractMethod<[], [void], "nonpayable">;
 
-  addBorrowATokenV1_5: TypedContractMethod<
-    [borrowATokenV1_5: AddressLike],
-    [boolean],
-    "nonpayable"
+  authorizationNonces: TypedContractMethod<
+    [onBehalfOf: AddressLike],
+    [bigint],
+    "view"
   >;
 
-  addMarket: TypedContractMethod<
-    [market: AddressLike],
-    [boolean],
-    "nonpayable"
-  >;
-
-  addPriceFeed: TypedContractMethod<
-    [priceFeed: AddressLike],
-    [boolean],
-    "nonpayable"
+  authorizations: TypedContractMethod<
+    [nonce: BigNumberish, operator: AddressLike, onBehalfOf: AddressLike],
+    [bigint],
+    "view"
   >;
 
   createBorrowATokenV1_5: TypedContractMethod<
@@ -740,18 +776,6 @@ export interface SizeFactory extends BaseContract {
     "nonpayable"
   >;
 
-  getBorrowATokenV1_5: TypedContractMethod<
-    [index: BigNumberish],
-    [string],
-    "view"
-  >;
-
-  getBorrowATokenV1_5Descriptions: TypedContractMethod<[], [string[]], "view">;
-
-  getBorrowATokensV1_5: TypedContractMethod<[], [string[]], "view">;
-
-  getBorrowATokensV1_5Count: TypedContractMethod<[], [bigint], "view">;
-
   getMarket: TypedContractMethod<[index: BigNumberish], [string], "view">;
 
   getMarketDescriptions: TypedContractMethod<[], [string[]], "view">;
@@ -760,25 +784,41 @@ export interface SizeFactory extends BaseContract {
 
   getMarketsCount: TypedContractMethod<[], [bigint], "view">;
 
-  getPriceFeed: TypedContractMethod<[index: BigNumberish], [string], "view">;
+  getRoleAdmin: TypedContractMethod<[role: BytesLike], [string], "view">;
 
-  getPriceFeedDescriptions: TypedContractMethod<[], [string[]], "view">;
+  grantRole: TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [void],
+    "nonpayable"
+  >;
 
-  getPriceFeeds: TypedContractMethod<[], [string[]], "view">;
-
-  getPriceFeedsCount: TypedContractMethod<[], [bigint], "view">;
+  hasRole: TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [boolean],
+    "view"
+  >;
 
   initialize: TypedContractMethod<[_owner: AddressLike], [void], "nonpayable">;
 
-  isBorrowATokenV1_5: TypedContractMethod<
-    [candidate: AddressLike],
+  isAuthorized: TypedContractMethod<
+    [operator: AddressLike, onBehalfOf: AddressLike, action: BigNumberish],
+    [boolean],
+    "view"
+  >;
+
+  isAuthorizedAll: TypedContractMethod<
+    [
+      operator: AddressLike,
+      onBehalfOf: AddressLike,
+      actionsBitmap: BigNumberish,
+    ],
     [boolean],
     "view"
   >;
 
   isMarket: TypedContractMethod<[candidate: AddressLike], [boolean], "view">;
 
-  isPriceFeed: TypedContractMethod<[candidate: AddressLike], [boolean], "view">;
+  multicall: TypedContractMethod<[data: BytesLike[]], [string[]], "nonpayable">;
 
   nonTransferrableScaledTokenV1_5Implementation: TypedContractMethod<
     [],
@@ -792,25 +832,29 @@ export interface SizeFactory extends BaseContract {
 
   proxiableUUID: TypedContractMethod<[], [string], "view">;
 
-  removeBorrowATokenV1_5: TypedContractMethod<
-    [borrowATokenV1_5: AddressLike],
-    [boolean],
-    "nonpayable"
-  >;
-
-  removeMarket: TypedContractMethod<
-    [market: AddressLike],
-    [boolean],
-    "nonpayable"
-  >;
-
-  removePriceFeed: TypedContractMethod<
-    [priceFeed: AddressLike],
-    [boolean],
-    "nonpayable"
-  >;
+  reinitialize: TypedContractMethod<[], [void], "nonpayable">;
 
   renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
+
+  renounceRole: TypedContractMethod<
+    [role: BytesLike, callerConfirmation: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
+  revokeAllAuthorizations: TypedContractMethod<[], [void], "nonpayable">;
+
+  revokeRole: TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
+  setAuthorization: TypedContractMethod<
+    [operator: AddressLike, actionsBitmap: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
 
   setNonTransferrableScaledTokenV1_5Implementation: TypedContractMethod<
     [_nonTransferrableScaledTokenV1_5Implementation: AddressLike],
@@ -825,6 +869,12 @@ export interface SizeFactory extends BaseContract {
   >;
 
   sizeImplementation: TypedContractMethod<[], [string], "view">;
+
+  supportsInterface: TypedContractMethod<
+    [interfaceId: BytesLike],
+    [boolean],
+    "view"
+  >;
 
   transferOwnership: TypedContractMethod<
     [newOwner: AddressLike],
@@ -845,24 +895,24 @@ export interface SizeFactory extends BaseContract {
   ): T;
 
   getFunction(
+    nameOrSignature: "DEFAULT_ADMIN_ROLE",
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
     nameOrSignature: "UPGRADE_INTERFACE_VERSION",
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "acceptOwnership",
   ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: "addBorrowATokenV1_5",
+    nameOrSignature: "authorizationNonces",
+  ): TypedContractMethod<[onBehalfOf: AddressLike], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "authorizations",
   ): TypedContractMethod<
-    [borrowATokenV1_5: AddressLike],
-    [boolean],
-    "nonpayable"
+    [nonce: BigNumberish, operator: AddressLike, onBehalfOf: AddressLike],
+    [bigint],
+    "view"
   >;
-  getFunction(
-    nameOrSignature: "addMarket",
-  ): TypedContractMethod<[market: AddressLike], [boolean], "nonpayable">;
-  getFunction(
-    nameOrSignature: "addPriceFeed",
-  ): TypedContractMethod<[priceFeed: AddressLike], [boolean], "nonpayable">;
   getFunction(
     nameOrSignature: "createBorrowATokenV1_5",
   ): TypedContractMethod<
@@ -890,18 +940,6 @@ export interface SizeFactory extends BaseContract {
     "nonpayable"
   >;
   getFunction(
-    nameOrSignature: "getBorrowATokenV1_5",
-  ): TypedContractMethod<[index: BigNumberish], [string], "view">;
-  getFunction(
-    nameOrSignature: "getBorrowATokenV1_5Descriptions",
-  ): TypedContractMethod<[], [string[]], "view">;
-  getFunction(
-    nameOrSignature: "getBorrowATokensV1_5",
-  ): TypedContractMethod<[], [string[]], "view">;
-  getFunction(
-    nameOrSignature: "getBorrowATokensV1_5Count",
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
     nameOrSignature: "getMarket",
   ): TypedContractMethod<[index: BigNumberish], [string], "view">;
   getFunction(
@@ -914,29 +952,49 @@ export interface SizeFactory extends BaseContract {
     nameOrSignature: "getMarketsCount",
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
-    nameOrSignature: "getPriceFeed",
-  ): TypedContractMethod<[index: BigNumberish], [string], "view">;
+    nameOrSignature: "getRoleAdmin",
+  ): TypedContractMethod<[role: BytesLike], [string], "view">;
   getFunction(
-    nameOrSignature: "getPriceFeedDescriptions",
-  ): TypedContractMethod<[], [string[]], "view">;
+    nameOrSignature: "grantRole",
+  ): TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [void],
+    "nonpayable"
+  >;
   getFunction(
-    nameOrSignature: "getPriceFeeds",
-  ): TypedContractMethod<[], [string[]], "view">;
-  getFunction(
-    nameOrSignature: "getPriceFeedsCount",
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: "hasRole",
+  ): TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [boolean],
+    "view"
+  >;
   getFunction(
     nameOrSignature: "initialize",
   ): TypedContractMethod<[_owner: AddressLike], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: "isBorrowATokenV1_5",
-  ): TypedContractMethod<[candidate: AddressLike], [boolean], "view">;
+    nameOrSignature: "isAuthorized",
+  ): TypedContractMethod<
+    [operator: AddressLike, onBehalfOf: AddressLike, action: BigNumberish],
+    [boolean],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "isAuthorizedAll",
+  ): TypedContractMethod<
+    [
+      operator: AddressLike,
+      onBehalfOf: AddressLike,
+      actionsBitmap: BigNumberish,
+    ],
+    [boolean],
+    "view"
+  >;
   getFunction(
     nameOrSignature: "isMarket",
   ): TypedContractMethod<[candidate: AddressLike], [boolean], "view">;
   getFunction(
-    nameOrSignature: "isPriceFeed",
-  ): TypedContractMethod<[candidate: AddressLike], [boolean], "view">;
+    nameOrSignature: "multicall",
+  ): TypedContractMethod<[data: BytesLike[]], [string[]], "nonpayable">;
   getFunction(
     nameOrSignature: "nonTransferrableScaledTokenV1_5Implementation",
   ): TypedContractMethod<[], [string], "view">;
@@ -950,21 +1008,35 @@ export interface SizeFactory extends BaseContract {
     nameOrSignature: "proxiableUUID",
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "removeBorrowATokenV1_5",
-  ): TypedContractMethod<
-    [borrowATokenV1_5: AddressLike],
-    [boolean],
-    "nonpayable"
-  >;
-  getFunction(
-    nameOrSignature: "removeMarket",
-  ): TypedContractMethod<[market: AddressLike], [boolean], "nonpayable">;
-  getFunction(
-    nameOrSignature: "removePriceFeed",
-  ): TypedContractMethod<[priceFeed: AddressLike], [boolean], "nonpayable">;
+    nameOrSignature: "reinitialize",
+  ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "renounceOwnership",
   ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "renounceRole",
+  ): TypedContractMethod<
+    [role: BytesLike, callerConfirmation: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "revokeAllAuthorizations",
+  ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "revokeRole",
+  ): TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "setAuthorization",
+  ): TypedContractMethod<
+    [operator: AddressLike, actionsBitmap: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
   getFunction(
     nameOrSignature: "setNonTransferrableScaledTokenV1_5Implementation",
   ): TypedContractMethod<
@@ -983,6 +1055,9 @@ export interface SizeFactory extends BaseContract {
     nameOrSignature: "sizeImplementation",
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
+    nameOrSignature: "supportsInterface",
+  ): TypedContractMethod<[interfaceId: BytesLike], [boolean], "view">;
+  getFunction(
     nameOrSignature: "transferOwnership",
   ): TypedContractMethod<[newOwner: AddressLike], [void], "nonpayable">;
   getFunction(
@@ -997,18 +1072,25 @@ export interface SizeFactory extends BaseContract {
   ): TypedContractMethod<[], [string], "view">;
 
   getEvent(
-    key: "BorrowATokenV1_5Added",
+    key: "CreateBorrowATokenV1_5",
   ): TypedContractEvent<
-    BorrowATokenV1_5AddedEvent.InputTuple,
-    BorrowATokenV1_5AddedEvent.OutputTuple,
-    BorrowATokenV1_5AddedEvent.OutputObject
+    CreateBorrowATokenV1_5Event.InputTuple,
+    CreateBorrowATokenV1_5Event.OutputTuple,
+    CreateBorrowATokenV1_5Event.OutputObject
   >;
   getEvent(
-    key: "BorrowATokenV1_5Removed",
+    key: "CreateMarket",
   ): TypedContractEvent<
-    BorrowATokenV1_5RemovedEvent.InputTuple,
-    BorrowATokenV1_5RemovedEvent.OutputTuple,
-    BorrowATokenV1_5RemovedEvent.OutputObject
+    CreateMarketEvent.InputTuple,
+    CreateMarketEvent.OutputTuple,
+    CreateMarketEvent.OutputObject
+  >;
+  getEvent(
+    key: "CreatePriceFeed",
+  ): TypedContractEvent<
+    CreatePriceFeedEvent.InputTuple,
+    CreatePriceFeedEvent.OutputTuple,
+    CreatePriceFeedEvent.OutputObject
   >;
   getEvent(
     key: "Initialized",
@@ -1016,20 +1098,6 @@ export interface SizeFactory extends BaseContract {
     InitializedEvent.InputTuple,
     InitializedEvent.OutputTuple,
     InitializedEvent.OutputObject
-  >;
-  getEvent(
-    key: "MarketAdded",
-  ): TypedContractEvent<
-    MarketAddedEvent.InputTuple,
-    MarketAddedEvent.OutputTuple,
-    MarketAddedEvent.OutputObject
-  >;
-  getEvent(
-    key: "MarketRemoved",
-  ): TypedContractEvent<
-    MarketRemovedEvent.InputTuple,
-    MarketRemovedEvent.OutputTuple,
-    MarketRemovedEvent.OutputObject
   >;
   getEvent(
     key: "NonTransferrableScaledTokenV1_5ImplementationSet",
@@ -1053,18 +1121,39 @@ export interface SizeFactory extends BaseContract {
     OwnershipTransferredEvent.OutputObject
   >;
   getEvent(
-    key: "PriceFeedAdded",
+    key: "RevokeAllAuthorizations",
   ): TypedContractEvent<
-    PriceFeedAddedEvent.InputTuple,
-    PriceFeedAddedEvent.OutputTuple,
-    PriceFeedAddedEvent.OutputObject
+    RevokeAllAuthorizationsEvent.InputTuple,
+    RevokeAllAuthorizationsEvent.OutputTuple,
+    RevokeAllAuthorizationsEvent.OutputObject
   >;
   getEvent(
-    key: "PriceFeedRemoved",
+    key: "RoleAdminChanged",
   ): TypedContractEvent<
-    PriceFeedRemovedEvent.InputTuple,
-    PriceFeedRemovedEvent.OutputTuple,
-    PriceFeedRemovedEvent.OutputObject
+    RoleAdminChangedEvent.InputTuple,
+    RoleAdminChangedEvent.OutputTuple,
+    RoleAdminChangedEvent.OutputObject
+  >;
+  getEvent(
+    key: "RoleGranted",
+  ): TypedContractEvent<
+    RoleGrantedEvent.InputTuple,
+    RoleGrantedEvent.OutputTuple,
+    RoleGrantedEvent.OutputObject
+  >;
+  getEvent(
+    key: "RoleRevoked",
+  ): TypedContractEvent<
+    RoleRevokedEvent.InputTuple,
+    RoleRevokedEvent.OutputTuple,
+    RoleRevokedEvent.OutputObject
+  >;
+  getEvent(
+    key: "SetAuthorization",
+  ): TypedContractEvent<
+    SetAuthorizationEvent.InputTuple,
+    SetAuthorizationEvent.OutputTuple,
+    SetAuthorizationEvent.OutputObject
   >;
   getEvent(
     key: "SizeImplementationSet",
@@ -1082,26 +1171,37 @@ export interface SizeFactory extends BaseContract {
   >;
 
   filters: {
-    "BorrowATokenV1_5Added(address,bool)": TypedContractEvent<
-      BorrowATokenV1_5AddedEvent.InputTuple,
-      BorrowATokenV1_5AddedEvent.OutputTuple,
-      BorrowATokenV1_5AddedEvent.OutputObject
+    "CreateBorrowATokenV1_5(address)": TypedContractEvent<
+      CreateBorrowATokenV1_5Event.InputTuple,
+      CreateBorrowATokenV1_5Event.OutputTuple,
+      CreateBorrowATokenV1_5Event.OutputObject
     >;
-    BorrowATokenV1_5Added: TypedContractEvent<
-      BorrowATokenV1_5AddedEvent.InputTuple,
-      BorrowATokenV1_5AddedEvent.OutputTuple,
-      BorrowATokenV1_5AddedEvent.OutputObject
+    CreateBorrowATokenV1_5: TypedContractEvent<
+      CreateBorrowATokenV1_5Event.InputTuple,
+      CreateBorrowATokenV1_5Event.OutputTuple,
+      CreateBorrowATokenV1_5Event.OutputObject
     >;
 
-    "BorrowATokenV1_5Removed(address,bool)": TypedContractEvent<
-      BorrowATokenV1_5RemovedEvent.InputTuple,
-      BorrowATokenV1_5RemovedEvent.OutputTuple,
-      BorrowATokenV1_5RemovedEvent.OutputObject
+    "CreateMarket(address)": TypedContractEvent<
+      CreateMarketEvent.InputTuple,
+      CreateMarketEvent.OutputTuple,
+      CreateMarketEvent.OutputObject
     >;
-    BorrowATokenV1_5Removed: TypedContractEvent<
-      BorrowATokenV1_5RemovedEvent.InputTuple,
-      BorrowATokenV1_5RemovedEvent.OutputTuple,
-      BorrowATokenV1_5RemovedEvent.OutputObject
+    CreateMarket: TypedContractEvent<
+      CreateMarketEvent.InputTuple,
+      CreateMarketEvent.OutputTuple,
+      CreateMarketEvent.OutputObject
+    >;
+
+    "CreatePriceFeed(address)": TypedContractEvent<
+      CreatePriceFeedEvent.InputTuple,
+      CreatePriceFeedEvent.OutputTuple,
+      CreatePriceFeedEvent.OutputObject
+    >;
+    CreatePriceFeed: TypedContractEvent<
+      CreatePriceFeedEvent.InputTuple,
+      CreatePriceFeedEvent.OutputTuple,
+      CreatePriceFeedEvent.OutputObject
     >;
 
     "Initialized(uint64)": TypedContractEvent<
@@ -1113,28 +1213,6 @@ export interface SizeFactory extends BaseContract {
       InitializedEvent.InputTuple,
       InitializedEvent.OutputTuple,
       InitializedEvent.OutputObject
-    >;
-
-    "MarketAdded(address,bool)": TypedContractEvent<
-      MarketAddedEvent.InputTuple,
-      MarketAddedEvent.OutputTuple,
-      MarketAddedEvent.OutputObject
-    >;
-    MarketAdded: TypedContractEvent<
-      MarketAddedEvent.InputTuple,
-      MarketAddedEvent.OutputTuple,
-      MarketAddedEvent.OutputObject
-    >;
-
-    "MarketRemoved(address,bool)": TypedContractEvent<
-      MarketRemovedEvent.InputTuple,
-      MarketRemovedEvent.OutputTuple,
-      MarketRemovedEvent.OutputObject
-    >;
-    MarketRemoved: TypedContractEvent<
-      MarketRemovedEvent.InputTuple,
-      MarketRemovedEvent.OutputTuple,
-      MarketRemovedEvent.OutputObject
     >;
 
     "NonTransferrableScaledTokenV1_5ImplementationSet(address,address)": TypedContractEvent<
@@ -1170,26 +1248,59 @@ export interface SizeFactory extends BaseContract {
       OwnershipTransferredEvent.OutputObject
     >;
 
-    "PriceFeedAdded(address,bool)": TypedContractEvent<
-      PriceFeedAddedEvent.InputTuple,
-      PriceFeedAddedEvent.OutputTuple,
-      PriceFeedAddedEvent.OutputObject
+    "RevokeAllAuthorizations(address)": TypedContractEvent<
+      RevokeAllAuthorizationsEvent.InputTuple,
+      RevokeAllAuthorizationsEvent.OutputTuple,
+      RevokeAllAuthorizationsEvent.OutputObject
     >;
-    PriceFeedAdded: TypedContractEvent<
-      PriceFeedAddedEvent.InputTuple,
-      PriceFeedAddedEvent.OutputTuple,
-      PriceFeedAddedEvent.OutputObject
+    RevokeAllAuthorizations: TypedContractEvent<
+      RevokeAllAuthorizationsEvent.InputTuple,
+      RevokeAllAuthorizationsEvent.OutputTuple,
+      RevokeAllAuthorizationsEvent.OutputObject
     >;
 
-    "PriceFeedRemoved(address,bool)": TypedContractEvent<
-      PriceFeedRemovedEvent.InputTuple,
-      PriceFeedRemovedEvent.OutputTuple,
-      PriceFeedRemovedEvent.OutputObject
+    "RoleAdminChanged(bytes32,bytes32,bytes32)": TypedContractEvent<
+      RoleAdminChangedEvent.InputTuple,
+      RoleAdminChangedEvent.OutputTuple,
+      RoleAdminChangedEvent.OutputObject
     >;
-    PriceFeedRemoved: TypedContractEvent<
-      PriceFeedRemovedEvent.InputTuple,
-      PriceFeedRemovedEvent.OutputTuple,
-      PriceFeedRemovedEvent.OutputObject
+    RoleAdminChanged: TypedContractEvent<
+      RoleAdminChangedEvent.InputTuple,
+      RoleAdminChangedEvent.OutputTuple,
+      RoleAdminChangedEvent.OutputObject
+    >;
+
+    "RoleGranted(bytes32,address,address)": TypedContractEvent<
+      RoleGrantedEvent.InputTuple,
+      RoleGrantedEvent.OutputTuple,
+      RoleGrantedEvent.OutputObject
+    >;
+    RoleGranted: TypedContractEvent<
+      RoleGrantedEvent.InputTuple,
+      RoleGrantedEvent.OutputTuple,
+      RoleGrantedEvent.OutputObject
+    >;
+
+    "RoleRevoked(bytes32,address,address)": TypedContractEvent<
+      RoleRevokedEvent.InputTuple,
+      RoleRevokedEvent.OutputTuple,
+      RoleRevokedEvent.OutputObject
+    >;
+    RoleRevoked: TypedContractEvent<
+      RoleRevokedEvent.InputTuple,
+      RoleRevokedEvent.OutputTuple,
+      RoleRevokedEvent.OutputObject
+    >;
+
+    "SetAuthorization(address,address,uint256,uint256)": TypedContractEvent<
+      SetAuthorizationEvent.InputTuple,
+      SetAuthorizationEvent.OutputTuple,
+      SetAuthorizationEvent.OutputObject
+    >;
+    SetAuthorization: TypedContractEvent<
+      SetAuthorizationEvent.InputTuple,
+      SetAuthorizationEvent.OutputTuple,
+      SetAuthorizationEvent.OutputObject
     >;
 
     "SizeImplementationSet(address,address)": TypedContractEvent<

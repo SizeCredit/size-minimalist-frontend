@@ -259,12 +259,61 @@ const _abi = [
   },
   {
     type: "error",
+    name: "INVALID_ACTION",
+    inputs: [
+      {
+        name: "action",
+        type: "uint8",
+        internalType: "uint8",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "INVALID_ACTIONS_BITMAP",
+    inputs: [
+      {
+        name: "actionsBitmap",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+  },
+  {
+    type: "error",
     name: "INVALID_ADDRESS",
     inputs: [
       {
         name: "account",
         type: "address",
         internalType: "address",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "INVALID_AMOUNT",
+    inputs: [
+      {
+        name: "amount",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "INVALID_APR_RANGE",
+    inputs: [
+      {
+        name: "minAPR",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "maxAPR",
+        type: "uint256",
+        internalType: "uint256",
       },
     ],
   },
@@ -401,6 +450,17 @@ const _abi = [
   },
   {
     type: "error",
+    name: "INVALID_MARKET",
+    inputs: [
+      {
+        name: "market",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+  },
+  {
+    type: "error",
     name: "INVALID_MAXIMUM_TENOR",
     inputs: [
       {
@@ -418,6 +478,17 @@ const _abi = [
         name: "value",
         type: "uint256",
         internalType: "uint256",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "INVALID_OFFER",
+    inputs: [
+      {
+        name: "account",
+        type: "address",
+        internalType: "address",
       },
     ],
   },
@@ -600,6 +671,53 @@ const _abi = [
         name: "loanStatus",
         type: "uint8",
         internalType: "uint8",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "MISMATCHED_CURVES",
+    inputs: [
+      {
+        name: "account",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "tenor",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "loanOfferAPR",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "borrowOfferAPR",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "MUST_IMPROVE_COLLATERAL_RATIO",
+    inputs: [
+      {
+        name: "account",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "crBefore",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "crAfter",
+        type: "uint256",
+        internalType: "uint256",
       },
     ],
   },
@@ -895,7 +1013,7 @@ const _abi = [
   },
   {
     type: "error",
-    name: "USER_IS_UNDERWATER",
+    name: "UNAUTHORIZED_ACTION",
     inputs: [
       {
         name: "account",
@@ -903,9 +1021,14 @@ const _abi = [
         internalType: "address",
       },
       {
-        name: "cr",
-        type: "uint256",
-        internalType: "uint256",
+        name: "onBehalfOf",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "action",
+        type: "uint8",
+        internalType: "uint8",
       },
     ],
   },
@@ -928,7 +1051,7 @@ const _abi = [
 ] as const;
 
 const _bytecode =
-  "0x6055604b600b8282823980515f1a607314603f577f4e487b71000000000000000000000000000000000000000000000000000000005f525f60045260245ffd5b305f52607381538281f3fe730000000000000000000000000000000000000000301460806040525f80fdfea264697066735822122008638325540612f55c212095b2e51b1f2fb33f01ea89f1fb7ac482f7a6840b8364736f6c63430008170033";
+  "0x60556032600b8282823980515f1a607314602657634e487b7160e01b5f525f60045260245ffd5b305f52607381538281f3fe730000000000000000000000000000000000000000301460806040525f80fdfea2646970667358221220edd63674578bff8d1a9acb6547d125db3a8b3d8ac1df1250eb42e62be3ff828464736f6c63430008170033";
 
 type ErrorsConstructorParams =
   | [signer?: Signer]

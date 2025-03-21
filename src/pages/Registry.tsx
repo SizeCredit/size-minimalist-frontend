@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { RegistryContext } from "../contexts/RegistryContext";
 import { format } from "../services/format";
 import { ConfigContext } from "../contexts/ConfigContext";
+import PauseButton from "../components/PauseButton";
 
 const Registry = () => {
   const { chain } = useContext(ConfigContext);
@@ -15,7 +16,9 @@ const Registry = () => {
         <div className="registry-grid">
           {markets.map((market) => (
             <div key={market.address} className="market-entry">
-              <h5>{market.description}</h5>
+              <h5>
+                {market.description} <PauseButton />
+              </h5>
               <div>
                 <b>Address:</b>{" "}
                 <a

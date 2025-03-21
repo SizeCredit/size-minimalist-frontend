@@ -45,6 +45,16 @@ export type BuyCreditLimitParamsStructOutput = [
   curveRelativeTime: YieldCurveStructOutput,
 ] & { maxDueDate: bigint; curveRelativeTime: YieldCurveStructOutput };
 
+export type BuyCreditLimitOnBehalfOfParamsStruct = {
+  params: BuyCreditLimitParamsStruct;
+  onBehalfOf: AddressLike;
+};
+
+export type BuyCreditLimitOnBehalfOfParamsStructOutput = [
+  params: BuyCreditLimitParamsStructOutput,
+  onBehalfOf: string,
+] & { params: BuyCreditLimitParamsStructOutput; onBehalfOf: string };
+
 export type BuyCreditMarketParamsStruct = {
   borrower: AddressLike;
   creditPositionId: BigNumberish;
@@ -73,6 +83,22 @@ export type BuyCreditMarketParamsStructOutput = [
   exactAmountIn: boolean;
 };
 
+export type BuyCreditMarketOnBehalfOfParamsStruct = {
+  params: BuyCreditMarketParamsStruct;
+  onBehalfOf: AddressLike;
+  recipient: AddressLike;
+};
+
+export type BuyCreditMarketOnBehalfOfParamsStructOutput = [
+  params: BuyCreditMarketParamsStructOutput,
+  onBehalfOf: string,
+  recipient: string,
+] & {
+  params: BuyCreditMarketParamsStructOutput;
+  onBehalfOf: string;
+  recipient: string;
+};
+
 export type ClaimParamsStruct = { creditPositionId: BigNumberish };
 
 export type ClaimParamsStructOutput = [creditPositionId: bigint] & {
@@ -94,6 +120,16 @@ export type CompensateParamsStructOutput = [
   creditPositionToCompensateId: bigint;
   amount: bigint;
 };
+
+export type CompensateOnBehalfOfParamsStruct = {
+  params: CompensateParamsStruct;
+  onBehalfOf: AddressLike;
+};
+
+export type CompensateOnBehalfOfParamsStructOutput = [
+  params: CompensateParamsStructOutput,
+  onBehalfOf: string,
+] & { params: CompensateParamsStructOutput; onBehalfOf: string };
 
 export type CopyLimitOrderStruct = {
   minTenor: BigNumberish;
@@ -132,6 +168,16 @@ export type CopyLimitOrdersParamsStructOutput = [
   copyLoanOffer: CopyLimitOrderStructOutput;
   copyBorrowOffer: CopyLimitOrderStructOutput;
 };
+
+export type CopyLimitOrdersOnBehalfOfParamsStruct = {
+  params: CopyLimitOrdersParamsStruct;
+  onBehalfOf: AddressLike;
+};
+
+export type CopyLimitOrdersOnBehalfOfParamsStructOutput = [
+  params: CopyLimitOrdersParamsStructOutput,
+  onBehalfOf: string,
+] & { params: CopyLimitOrdersParamsStructOutput; onBehalfOf: string };
 
 export type DataViewStruct = {
   nextDebtPositionId: BigNumberish;
@@ -175,6 +221,16 @@ export type DepositParamsStructOutput = [
   amount: bigint,
   to: string,
 ] & { token: string; amount: bigint; to: string };
+
+export type DepositOnBehalfOfParamsStruct = {
+  params: DepositParamsStruct;
+  onBehalfOf: AddressLike;
+};
+
+export type DepositOnBehalfOfParamsStructOutput = [
+  params: DepositParamsStructOutput,
+  onBehalfOf: string,
+] & { params: DepositParamsStructOutput; onBehalfOf: string };
 
 export type InitializeFeeConfigParamsStruct = {
   swapFeeAPR: BigNumberish;
@@ -375,6 +431,7 @@ export type InitializeDataParamsStruct = {
   underlyingBorrowToken: AddressLike;
   variablePool: AddressLike;
   borrowATokenV1_5: AddressLike;
+  sizeFactory: AddressLike;
 };
 
 export type InitializeDataParamsStructOutput = [
@@ -383,12 +440,14 @@ export type InitializeDataParamsStructOutput = [
   underlyingBorrowToken: string,
   variablePool: string,
   borrowATokenV1_5: string,
+  sizeFactory: string,
 ] & {
   weth: string;
   underlyingCollateralToken: string;
   underlyingBorrowToken: string;
   variablePool: string;
   borrowATokenV1_5: string;
+  sizeFactory: string;
 };
 
 export type LiquidateParamsStruct = {
@@ -429,6 +488,22 @@ export type LiquidateWithReplacementParamsStructOutput = [
   minAPR: bigint;
 };
 
+export type PartialRepayParamsStruct = {
+  creditPositionWithDebtToRepayId: BigNumberish;
+  amount: BigNumberish;
+  borrower: AddressLike;
+};
+
+export type PartialRepayParamsStructOutput = [
+  creditPositionWithDebtToRepayId: bigint,
+  amount: bigint,
+  borrower: string,
+] & {
+  creditPositionWithDebtToRepayId: bigint;
+  amount: bigint;
+  borrower: string;
+};
+
 export type RepayParamsStruct = {
   debtPositionId: BigNumberish;
   borrower: AddressLike;
@@ -445,6 +520,22 @@ export type SelfLiquidateParamsStructOutput = [creditPositionId: bigint] & {
   creditPositionId: bigint;
 };
 
+export type SelfLiquidateOnBehalfOfParamsStruct = {
+  params: SelfLiquidateParamsStruct;
+  onBehalfOf: AddressLike;
+  recipient: AddressLike;
+};
+
+export type SelfLiquidateOnBehalfOfParamsStructOutput = [
+  params: SelfLiquidateParamsStructOutput,
+  onBehalfOf: string,
+  recipient: string,
+] & {
+  params: SelfLiquidateParamsStructOutput;
+  onBehalfOf: string;
+  recipient: string;
+};
+
 export type SellCreditLimitParamsStruct = {
   maxDueDate: BigNumberish;
   curveRelativeTime: YieldCurveStruct;
@@ -454,6 +545,32 @@ export type SellCreditLimitParamsStructOutput = [
   maxDueDate: bigint,
   curveRelativeTime: YieldCurveStructOutput,
 ] & { maxDueDate: bigint; curveRelativeTime: YieldCurveStructOutput };
+
+export type SellCreditLimitOnBehalfOfParamsStruct = {
+  params: SellCreditLimitParamsStruct;
+  onBehalfOf: AddressLike;
+};
+
+export type SellCreditLimitOnBehalfOfParamsStructOutput = [
+  params: SellCreditLimitParamsStructOutput,
+  onBehalfOf: string,
+] & { params: SellCreditLimitParamsStructOutput; onBehalfOf: string };
+
+export type SellCreditMarketOnBehalfOfParamsStruct = {
+  params: SellCreditMarketParamsStruct;
+  onBehalfOf: AddressLike;
+  recipient: AddressLike;
+};
+
+export type SellCreditMarketOnBehalfOfParamsStructOutput = [
+  params: SellCreditMarketParamsStructOutput,
+  onBehalfOf: string,
+  recipient: string,
+] & {
+  params: SellCreditMarketParamsStructOutput;
+  onBehalfOf: string;
+  recipient: string;
+};
 
 export type SetUserConfigurationParamsStruct = {
   openingLimitBorrowCR: BigNumberish;
@@ -474,6 +591,16 @@ export type SetUserConfigurationParamsStructOutput = [
   creditPositionIds: bigint[];
 };
 
+export type SetUserConfigurationOnBehalfOfParamsStruct = {
+  params: SetUserConfigurationParamsStruct;
+  onBehalfOf: AddressLike;
+};
+
+export type SetUserConfigurationOnBehalfOfParamsStructOutput = [
+  params: SetUserConfigurationParamsStructOutput,
+  onBehalfOf: string,
+] & { params: SetUserConfigurationParamsStructOutput; onBehalfOf: string };
+
 export type UpdateConfigParamsStruct = { key: string; value: BigNumberish };
 
 export type UpdateConfigParamsStructOutput = [key: string, value: bigint] & {
@@ -492,6 +619,16 @@ export type WithdrawParamsStructOutput = [
   amount: bigint,
   to: string,
 ] & { token: string; amount: bigint; to: string };
+
+export type WithdrawOnBehalfOfParamsStruct = {
+  params: WithdrawParamsStruct;
+  onBehalfOf: AddressLike;
+};
+
+export type WithdrawOnBehalfOfParamsStructOutput = [
+  params: WithdrawParamsStructOutput,
+  onBehalfOf: string,
+] & { params: WithdrawParamsStructOutput; onBehalfOf: string };
 
 export declare namespace BuyCreditMarket {
   export type SwapDataBuyCreditMarketStruct = {
@@ -556,14 +693,19 @@ export interface SizeInterface extends Interface {
       | "DEFAULT_ADMIN_ROLE"
       | "UPGRADE_INTERFACE_VERSION"
       | "buyCreditLimit"
+      | "buyCreditLimitOnBehalfOf"
       | "buyCreditMarket"
+      | "buyCreditMarketOnBehalfOf"
       | "claim"
       | "collateralRatio"
       | "compensate"
+      | "compensateOnBehalfOf"
       | "copyLimitOrders"
+      | "copyLimitOrdersOnBehalfOf"
       | "data"
       | "debtTokenAmountToCollateralTokenAmount"
       | "deposit"
+      | "depositOnBehalfOf"
       | "feeConfig"
       | "getBorrowOfferAPR"
       | "getBuyCreditMarketSwapData"
@@ -584,29 +726,36 @@ export interface SizeInterface extends Interface {
       | "isCreditPositionId"
       | "isDebtPositionId"
       | "isDebtPositionLiquidatable"
-      | "isUserUnderwater"
       | "liquidate"
       | "liquidateWithReplacement"
       | "multicall"
       | "oracle"
+      | "partialRepay"
       | "pause"
       | "paused"
       | "proxiableUUID"
+      | "reinitialize"
       | "renounceRole"
       | "repay"
       | "revokeRole"
       | "riskConfig"
       | "selfLiquidate"
+      | "selfLiquidateOnBehalfOf"
       | "sellCreditLimit"
+      | "sellCreditLimitOnBehalfOf"
       | "sellCreditMarket"
+      | "sellCreditMarketOnBehalfOf"
       | "setUserConfiguration"
+      | "setUserConfigurationOnBehalfOf"
       | "setVariablePoolBorrowRate"
+      | "sizeFactory"
       | "supportsInterface"
       | "unpause"
       | "updateConfig"
       | "upgradeToAndCall"
       | "version"
-      | "withdraw",
+      | "withdraw"
+      | "withdrawOnBehalfOf",
   ): FunctionFragment;
 
   getEvent(
@@ -634,8 +783,16 @@ export interface SizeInterface extends Interface {
     values: [BuyCreditLimitParamsStruct],
   ): string;
   encodeFunctionData(
+    functionFragment: "buyCreditLimitOnBehalfOf",
+    values: [BuyCreditLimitOnBehalfOfParamsStruct],
+  ): string;
+  encodeFunctionData(
     functionFragment: "buyCreditMarket",
     values: [BuyCreditMarketParamsStruct],
+  ): string;
+  encodeFunctionData(
+    functionFragment: "buyCreditMarketOnBehalfOf",
+    values: [BuyCreditMarketOnBehalfOfParamsStruct],
   ): string;
   encodeFunctionData(
     functionFragment: "claim",
@@ -650,8 +807,16 @@ export interface SizeInterface extends Interface {
     values: [CompensateParamsStruct],
   ): string;
   encodeFunctionData(
+    functionFragment: "compensateOnBehalfOf",
+    values: [CompensateOnBehalfOfParamsStruct],
+  ): string;
+  encodeFunctionData(
     functionFragment: "copyLimitOrders",
     values: [CopyLimitOrdersParamsStruct],
+  ): string;
+  encodeFunctionData(
+    functionFragment: "copyLimitOrdersOnBehalfOf",
+    values: [CopyLimitOrdersOnBehalfOfParamsStruct],
   ): string;
   encodeFunctionData(functionFragment: "data", values?: undefined): string;
   encodeFunctionData(
@@ -661,6 +826,10 @@ export interface SizeInterface extends Interface {
   encodeFunctionData(
     functionFragment: "deposit",
     values: [DepositParamsStruct],
+  ): string;
+  encodeFunctionData(
+    functionFragment: "depositOnBehalfOf",
+    values: [DepositOnBehalfOfParamsStruct],
   ): string;
   encodeFunctionData(functionFragment: "feeConfig", values?: undefined): string;
   encodeFunctionData(
@@ -746,10 +915,6 @@ export interface SizeInterface extends Interface {
     values: [BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "isUserUnderwater",
-    values: [AddressLike],
-  ): string;
-  encodeFunctionData(
     functionFragment: "liquidate",
     values: [LiquidateParamsStruct],
   ): string;
@@ -762,11 +927,19 @@ export interface SizeInterface extends Interface {
     values: [BytesLike[]],
   ): string;
   encodeFunctionData(functionFragment: "oracle", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "partialRepay",
+    values: [PartialRepayParamsStruct],
+  ): string;
   encodeFunctionData(functionFragment: "pause", values?: undefined): string;
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "proxiableUUID",
     values?: undefined,
+  ): string;
+  encodeFunctionData(
+    functionFragment: "reinitialize",
+    values: [AddressLike],
   ): string;
   encodeFunctionData(
     functionFragment: "renounceRole",
@@ -789,20 +962,40 @@ export interface SizeInterface extends Interface {
     values: [SelfLiquidateParamsStruct],
   ): string;
   encodeFunctionData(
+    functionFragment: "selfLiquidateOnBehalfOf",
+    values: [SelfLiquidateOnBehalfOfParamsStruct],
+  ): string;
+  encodeFunctionData(
     functionFragment: "sellCreditLimit",
     values: [SellCreditLimitParamsStruct],
+  ): string;
+  encodeFunctionData(
+    functionFragment: "sellCreditLimitOnBehalfOf",
+    values: [SellCreditLimitOnBehalfOfParamsStruct],
   ): string;
   encodeFunctionData(
     functionFragment: "sellCreditMarket",
     values: [SellCreditMarketParamsStruct],
   ): string;
   encodeFunctionData(
+    functionFragment: "sellCreditMarketOnBehalfOf",
+    values: [SellCreditMarketOnBehalfOfParamsStruct],
+  ): string;
+  encodeFunctionData(
     functionFragment: "setUserConfiguration",
     values: [SetUserConfigurationParamsStruct],
   ): string;
   encodeFunctionData(
+    functionFragment: "setUserConfigurationOnBehalfOf",
+    values: [SetUserConfigurationOnBehalfOfParamsStruct],
+  ): string;
+  encodeFunctionData(
     functionFragment: "setVariablePoolBorrowRate",
     values: [BigNumberish],
+  ): string;
+  encodeFunctionData(
+    functionFragment: "sizeFactory",
+    values?: undefined,
   ): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
@@ -822,6 +1015,10 @@ export interface SizeInterface extends Interface {
     functionFragment: "withdraw",
     values: [WithdrawParamsStruct],
   ): string;
+  encodeFunctionData(
+    functionFragment: "withdrawOnBehalfOf",
+    values: [WithdrawOnBehalfOfParamsStruct],
+  ): string;
 
   decodeFunctionResult(
     functionFragment: "DEFAULT_ADMIN_ROLE",
@@ -836,7 +1033,15 @@ export interface SizeInterface extends Interface {
     data: BytesLike,
   ): Result;
   decodeFunctionResult(
+    functionFragment: "buyCreditLimitOnBehalfOf",
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "buyCreditMarket",
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "buyCreditMarketOnBehalfOf",
     data: BytesLike,
   ): Result;
   decodeFunctionResult(functionFragment: "claim", data: BytesLike): Result;
@@ -846,7 +1051,15 @@ export interface SizeInterface extends Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "compensate", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "compensateOnBehalfOf",
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "copyLimitOrders",
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "copyLimitOrdersOnBehalfOf",
     data: BytesLike,
   ): Result;
   decodeFunctionResult(functionFragment: "data", data: BytesLike): Result;
@@ -855,6 +1068,10 @@ export interface SizeInterface extends Interface {
     data: BytesLike,
   ): Result;
   decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "depositOnBehalfOf",
+    data: BytesLike,
+  ): Result;
   decodeFunctionResult(functionFragment: "feeConfig", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getBorrowOfferAPR",
@@ -920,10 +1137,6 @@ export interface SizeInterface extends Interface {
     functionFragment: "isDebtPositionLiquidatable",
     data: BytesLike,
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "isUserUnderwater",
-    data: BytesLike,
-  ): Result;
   decodeFunctionResult(functionFragment: "liquidate", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "liquidateWithReplacement",
@@ -931,10 +1144,18 @@ export interface SizeInterface extends Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "multicall", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "oracle", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "partialRepay",
+    data: BytesLike,
+  ): Result;
   decodeFunctionResult(functionFragment: "pause", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "proxiableUUID",
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "reinitialize",
     data: BytesLike,
   ): Result;
   decodeFunctionResult(
@@ -949,7 +1170,15 @@ export interface SizeInterface extends Interface {
     data: BytesLike,
   ): Result;
   decodeFunctionResult(
+    functionFragment: "selfLiquidateOnBehalfOf",
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "sellCreditLimit",
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "sellCreditLimitOnBehalfOf",
     data: BytesLike,
   ): Result;
   decodeFunctionResult(
@@ -957,11 +1186,23 @@ export interface SizeInterface extends Interface {
     data: BytesLike,
   ): Result;
   decodeFunctionResult(
+    functionFragment: "sellCreditMarketOnBehalfOf",
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "setUserConfiguration",
     data: BytesLike,
   ): Result;
   decodeFunctionResult(
+    functionFragment: "setUserConfigurationOnBehalfOf",
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "setVariablePoolBorrowRate",
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "sizeFactory",
     data: BytesLike,
   ): Result;
   decodeFunctionResult(
@@ -979,6 +1220,10 @@ export interface SizeInterface extends Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "version", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "withdrawOnBehalfOf",
+    data: BytesLike,
+  ): Result;
 }
 
 export namespace InitializedEvent {
@@ -1162,8 +1407,20 @@ export interface Size extends BaseContract {
     "payable"
   >;
 
+  buyCreditLimitOnBehalfOf: TypedContractMethod<
+    [externalParams: BuyCreditLimitOnBehalfOfParamsStruct],
+    [void],
+    "payable"
+  >;
+
   buyCreditMarket: TypedContractMethod<
     [params: BuyCreditMarketParamsStruct],
+    [void],
+    "payable"
+  >;
+
+  buyCreditMarketOnBehalfOf: TypedContractMethod<
+    [externalParams: BuyCreditMarketOnBehalfOfParamsStruct],
     [void],
     "payable"
   >;
@@ -1178,8 +1435,20 @@ export interface Size extends BaseContract {
     "payable"
   >;
 
+  compensateOnBehalfOf: TypedContractMethod<
+    [externalParams: CompensateOnBehalfOfParamsStruct],
+    [void],
+    "payable"
+  >;
+
   copyLimitOrders: TypedContractMethod<
     [params: CopyLimitOrdersParamsStruct],
+    [void],
+    "payable"
+  >;
+
+  copyLimitOrdersOnBehalfOf: TypedContractMethod<
+    [externalParams: CopyLimitOrdersOnBehalfOfParamsStruct],
     [void],
     "payable"
   >;
@@ -1194,6 +1463,12 @@ export interface Size extends BaseContract {
 
   deposit: TypedContractMethod<
     [params: DepositParamsStruct],
+    [void],
+    "payable"
+  >;
+
+  depositOnBehalfOf: TypedContractMethod<
+    [params: DepositOnBehalfOfParamsStruct],
     [void],
     "payable"
   >;
@@ -1316,8 +1591,6 @@ export interface Size extends BaseContract {
     "view"
   >;
 
-  isUserUnderwater: TypedContractMethod<[user: AddressLike], [boolean], "view">;
-
   liquidate: TypedContractMethod<
     [params: LiquidateParamsStruct],
     [bigint],
@@ -1339,11 +1612,23 @@ export interface Size extends BaseContract {
 
   oracle: TypedContractMethod<[], [InitializeOracleParamsStructOutput], "view">;
 
+  partialRepay: TypedContractMethod<
+    [params: PartialRepayParamsStruct],
+    [void],
+    "payable"
+  >;
+
   pause: TypedContractMethod<[], [void], "nonpayable">;
 
   paused: TypedContractMethod<[], [boolean], "view">;
 
   proxiableUUID: TypedContractMethod<[], [string], "view">;
+
+  reinitialize: TypedContractMethod<
+    [_sizeFactory: AddressLike],
+    [void],
+    "nonpayable"
+  >;
 
   renounceRole: TypedContractMethod<
     [role: BytesLike, callerConfirmation: AddressLike],
@@ -1371,8 +1656,20 @@ export interface Size extends BaseContract {
     "payable"
   >;
 
+  selfLiquidateOnBehalfOf: TypedContractMethod<
+    [externalParams: SelfLiquidateOnBehalfOfParamsStruct],
+    [void],
+    "payable"
+  >;
+
   sellCreditLimit: TypedContractMethod<
     [params: SellCreditLimitParamsStruct],
+    [void],
+    "payable"
+  >;
+
+  sellCreditLimitOnBehalfOf: TypedContractMethod<
+    [externalParams: SellCreditLimitOnBehalfOfParamsStruct],
     [void],
     "payable"
   >;
@@ -1383,8 +1680,20 @@ export interface Size extends BaseContract {
     "payable"
   >;
 
+  sellCreditMarketOnBehalfOf: TypedContractMethod<
+    [externalParams: SellCreditMarketOnBehalfOfParamsStruct],
+    [void],
+    "payable"
+  >;
+
   setUserConfiguration: TypedContractMethod<
     [params: SetUserConfigurationParamsStruct],
+    [void],
+    "payable"
+  >;
+
+  setUserConfigurationOnBehalfOf: TypedContractMethod<
+    [externalParams: SetUserConfigurationOnBehalfOfParamsStruct],
     [void],
     "payable"
   >;
@@ -1394,6 +1703,8 @@ export interface Size extends BaseContract {
     [void],
     "nonpayable"
   >;
+
+  sizeFactory: TypedContractMethod<[], [string], "view">;
 
   supportsInterface: TypedContractMethod<
     [interfaceId: BytesLike],
@@ -1423,6 +1734,12 @@ export interface Size extends BaseContract {
     "payable"
   >;
 
+  withdrawOnBehalfOf: TypedContractMethod<
+    [externalParams: WithdrawOnBehalfOfParamsStruct],
+    [void],
+    "payable"
+  >;
+
   getFunction<T extends ContractMethod = ContractMethod>(
     key: string | FunctionFragment,
   ): T;
@@ -1441,9 +1758,23 @@ export interface Size extends BaseContract {
     "payable"
   >;
   getFunction(
+    nameOrSignature: "buyCreditLimitOnBehalfOf",
+  ): TypedContractMethod<
+    [externalParams: BuyCreditLimitOnBehalfOfParamsStruct],
+    [void],
+    "payable"
+  >;
+  getFunction(
     nameOrSignature: "buyCreditMarket",
   ): TypedContractMethod<
     [params: BuyCreditMarketParamsStruct],
+    [void],
+    "payable"
+  >;
+  getFunction(
+    nameOrSignature: "buyCreditMarketOnBehalfOf",
+  ): TypedContractMethod<
+    [externalParams: BuyCreditMarketOnBehalfOfParamsStruct],
     [void],
     "payable"
   >;
@@ -1457,9 +1788,23 @@ export interface Size extends BaseContract {
     nameOrSignature: "compensate",
   ): TypedContractMethod<[params: CompensateParamsStruct], [void], "payable">;
   getFunction(
+    nameOrSignature: "compensateOnBehalfOf",
+  ): TypedContractMethod<
+    [externalParams: CompensateOnBehalfOfParamsStruct],
+    [void],
+    "payable"
+  >;
+  getFunction(
     nameOrSignature: "copyLimitOrders",
   ): TypedContractMethod<
     [params: CopyLimitOrdersParamsStruct],
+    [void],
+    "payable"
+  >;
+  getFunction(
+    nameOrSignature: "copyLimitOrdersOnBehalfOf",
+  ): TypedContractMethod<
+    [externalParams: CopyLimitOrdersOnBehalfOfParamsStruct],
     [void],
     "payable"
   >;
@@ -1472,6 +1817,13 @@ export interface Size extends BaseContract {
   getFunction(
     nameOrSignature: "deposit",
   ): TypedContractMethod<[params: DepositParamsStruct], [void], "payable">;
+  getFunction(
+    nameOrSignature: "depositOnBehalfOf",
+  ): TypedContractMethod<
+    [params: DepositOnBehalfOfParamsStruct],
+    [void],
+    "payable"
+  >;
   getFunction(
     nameOrSignature: "feeConfig",
   ): TypedContractMethod<[], [InitializeFeeConfigParamsStructOutput], "view">;
@@ -1583,9 +1935,6 @@ export interface Size extends BaseContract {
     nameOrSignature: "isDebtPositionLiquidatable",
   ): TypedContractMethod<[debtPositionId: BigNumberish], [boolean], "view">;
   getFunction(
-    nameOrSignature: "isUserUnderwater",
-  ): TypedContractMethod<[user: AddressLike], [boolean], "view">;
-  getFunction(
     nameOrSignature: "liquidate",
   ): TypedContractMethod<[params: LiquidateParamsStruct], [bigint], "payable">;
   getFunction(nameOrSignature: "liquidateWithReplacement"): TypedContractMethod<
@@ -1605,6 +1954,9 @@ export interface Size extends BaseContract {
     nameOrSignature: "oracle",
   ): TypedContractMethod<[], [InitializeOracleParamsStructOutput], "view">;
   getFunction(
+    nameOrSignature: "partialRepay",
+  ): TypedContractMethod<[params: PartialRepayParamsStruct], [void], "payable">;
+  getFunction(
     nameOrSignature: "pause",
   ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
@@ -1613,6 +1965,9 @@ export interface Size extends BaseContract {
   getFunction(
     nameOrSignature: "proxiableUUID",
   ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "reinitialize",
+  ): TypedContractMethod<[_sizeFactory: AddressLike], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "renounceRole",
   ): TypedContractMethod<
@@ -1641,9 +1996,23 @@ export interface Size extends BaseContract {
     "payable"
   >;
   getFunction(
+    nameOrSignature: "selfLiquidateOnBehalfOf",
+  ): TypedContractMethod<
+    [externalParams: SelfLiquidateOnBehalfOfParamsStruct],
+    [void],
+    "payable"
+  >;
+  getFunction(
     nameOrSignature: "sellCreditLimit",
   ): TypedContractMethod<
     [params: SellCreditLimitParamsStruct],
+    [void],
+    "payable"
+  >;
+  getFunction(
+    nameOrSignature: "sellCreditLimitOnBehalfOf",
+  ): TypedContractMethod<
+    [externalParams: SellCreditLimitOnBehalfOfParamsStruct],
     [void],
     "payable"
   >;
@@ -1655,6 +2024,13 @@ export interface Size extends BaseContract {
     "payable"
   >;
   getFunction(
+    nameOrSignature: "sellCreditMarketOnBehalfOf",
+  ): TypedContractMethod<
+    [externalParams: SellCreditMarketOnBehalfOfParamsStruct],
+    [void],
+    "payable"
+  >;
+  getFunction(
     nameOrSignature: "setUserConfiguration",
   ): TypedContractMethod<
     [params: SetUserConfigurationParamsStruct],
@@ -1662,8 +2038,18 @@ export interface Size extends BaseContract {
     "payable"
   >;
   getFunction(
+    nameOrSignature: "setUserConfigurationOnBehalfOf",
+  ): TypedContractMethod<
+    [externalParams: SetUserConfigurationOnBehalfOfParamsStruct],
+    [void],
+    "payable"
+  >;
+  getFunction(
     nameOrSignature: "setVariablePoolBorrowRate",
   ): TypedContractMethod<[borrowRate: BigNumberish], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "sizeFactory",
+  ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "supportsInterface",
   ): TypedContractMethod<[interfaceId: BytesLike], [boolean], "view">;
@@ -1690,6 +2076,13 @@ export interface Size extends BaseContract {
   getFunction(
     nameOrSignature: "withdraw",
   ): TypedContractMethod<[params: WithdrawParamsStruct], [void], "payable">;
+  getFunction(
+    nameOrSignature: "withdrawOnBehalfOf",
+  ): TypedContractMethod<
+    [externalParams: WithdrawOnBehalfOfParamsStruct],
+    [void],
+    "payable"
+  >;
 
   getEvent(
     key: "Initialized",

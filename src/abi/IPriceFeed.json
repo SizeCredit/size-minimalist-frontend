@@ -1,0 +1,108 @@
+{
+  "abi": [
+    {
+      "type": "function",
+      "name": "decimals",
+      "inputs": [],
+      "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getPrice",
+      "inputs": [],
+      "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+      "stateMutability": "view"
+    }
+  ],
+  "bytecode": { "object": "0x", "sourceMap": "", "linkReferences": {} },
+  "deployedBytecode": { "object": "0x", "sourceMap": "", "linkReferences": {} },
+  "methodIdentifiers": { "decimals()": "313ce567", "getPrice()": "98d5fdca" },
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.23+commit.f704f362\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPrice\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"author\":\"Size (https://size.credit/)\",\"custom:security-contact\":\"security@size.credit\",\"kind\":\"dev\",\"methods\":{},\"title\":\"IPriceFeed\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"decimals()\":{\"notice\":\"Returns the number of decimals of the price feed\"},\"getPrice()\":{\"notice\":\"Returns the price of the asset\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/oracle/IPriceFeed.sol\":\"IPriceFeed\"},\"evmVersion\":\"shanghai\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":@aave/=lib/aave-v3-core/contracts/\",\":@chainlink/=lib/chainlink/\",\":@chimera/=lib/chimera/src/\",\":@crytic/properties/=lib/properties/\",\":@deprecated/=deprecated/\",\":@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/\",\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@script/=script/\",\":@solady/=lib/solady/src/\",\":@src/=src/\",\":@test/=test/\",\":@uniswap/v3-core/=lib/v3-core/\",\":@uniswap/v3-periphery/=lib/v3-periphery/\",\":ERC4626/=lib/properties/lib/ERC4626/contracts/\",\":aave-v3-core/=lib/aave-v3-core/\",\":chainlink/=lib/chainlink/contracts/\",\":chimera/=lib/chimera/src/\",\":ds-test/=lib/solady/lib/ds-test/src/\",\":erc4626-tests/=lib/openzeppelin-contracts-upgradeable/lib/erc4626-tests/\",\":forge-std/=lib/forge-std/src/\",\":halmos-cheatcodes/=lib/halmos-cheatcodes/src/\",\":openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/\",\":openzeppelin-contracts/=lib/openzeppelin-contracts/\",\":properties/=lib/properties/contracts/\",\":solady/=lib/solady/\",\":solmate/=lib/properties/lib/solmate/src/\",\":v3-core/=lib/v3-core/contracts/\",\":v3-periphery/=lib/v3-periphery/contracts/\"]},\"sources\":{\"src/oracle/IPriceFeed.sol\":{\"keccak256\":\"0x7ec983afe56cc8eee5d4b3573a51665ad0cfc8835f8fb8fd864b2a5a119f9a90\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://02fc706986c7c132d4b0b95ec2f7b3aa49def6511ebe84643ee1359b2318da48\",\"dweb:/ipfs/QmQCwub8SCenVvQnVtL24Eny3jNZrugoxKsu86da55nBKJ\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": { "version": "0.8.23+commit.f704f362" },
+    "language": "Solidity",
+    "output": {
+      "abi": [
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "decimals",
+          "outputs": [
+            { "internalType": "uint256", "name": "", "type": "uint256" }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getPrice",
+          "outputs": [
+            { "internalType": "uint256", "name": "", "type": "uint256" }
+          ]
+        }
+      ],
+      "devdoc": { "kind": "dev", "methods": {}, "version": 1 },
+      "userdoc": {
+        "kind": "user",
+        "methods": {
+          "decimals()": {
+            "notice": "Returns the number of decimals of the price feed"
+          },
+          "getPrice()": { "notice": "Returns the price of the asset" }
+        },
+        "version": 1
+      }
+    },
+    "settings": {
+      "remappings": [
+        "@aave/=lib/aave-v3-core/contracts/",
+        "@chainlink/=lib/chainlink/",
+        "@chimera/=lib/chimera/src/",
+        "@crytic/properties/=lib/properties/",
+        "@deprecated/=deprecated/",
+        "@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/",
+        "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+        "@script/=script/",
+        "@solady/=lib/solady/src/",
+        "@src/=src/",
+        "@test/=test/",
+        "@uniswap/v3-core/=lib/v3-core/",
+        "@uniswap/v3-periphery/=lib/v3-periphery/",
+        "ERC4626/=lib/properties/lib/ERC4626/contracts/",
+        "aave-v3-core/=lib/aave-v3-core/",
+        "chainlink/=lib/chainlink/contracts/",
+        "chimera/=lib/chimera/src/",
+        "ds-test/=lib/solady/lib/ds-test/src/",
+        "erc4626-tests/=lib/openzeppelin-contracts-upgradeable/lib/erc4626-tests/",
+        "forge-std/=lib/forge-std/src/",
+        "halmos-cheatcodes/=lib/halmos-cheatcodes/src/",
+        "openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/",
+        "openzeppelin-contracts/=lib/openzeppelin-contracts/",
+        "properties/=lib/properties/contracts/",
+        "solady/=lib/solady/",
+        "solmate/=lib/properties/lib/solmate/src/",
+        "v3-core/=lib/v3-core/contracts/",
+        "v3-periphery/=lib/v3-periphery/contracts/"
+      ],
+      "optimizer": { "enabled": true, "runs": 200 },
+      "metadata": { "bytecodeHash": "ipfs" },
+      "compilationTarget": { "src/oracle/IPriceFeed.sol": "IPriceFeed" },
+      "evmVersion": "shanghai",
+      "libraries": {}
+    },
+    "sources": {
+      "src/oracle/IPriceFeed.sol": {
+        "keccak256": "0x7ec983afe56cc8eee5d4b3573a51665ad0cfc8835f8fb8fd864b2a5a119f9a90",
+        "urls": [
+          "bzz-raw://02fc706986c7c132d4b0b95ec2f7b3aa49def6511ebe84643ee1359b2318da48",
+          "dweb:/ipfs/QmQCwub8SCenVvQnVtL24Eny3jNZrugoxKsu86da55nBKJ"
+        ],
+        "license": "MIT"
+      }
+    },
+    "version": 1
+  },
+  "id": 163
+}

@@ -41,6 +41,7 @@ interface SizeContext {
     loanOffsetAPR: bigint,
     borrowOffsetAPR: bigint,
   ) => Promise<void>;
+  pause: () => Promise<void>;
 }
 
 export const SizeContext = createContext<SizeContext>({} as SizeContext);
@@ -491,6 +492,34 @@ export function SizeProvider({ children }: Props) {
     }
   };
 
+  const pause = async () => {
+    if (!chain) return;
+
+    const arg = {
+      pause: true,
+    };
+    console.log(arg);
+    const data = encodeFunctionData({
+      abi: [Size.abi.find((e) => e.name === "pause")],
+      functionName: "pause",
+      args: [arg],
+    });
+    console.log(data);
+    try {
+      const tx = await sendTransaction(config, {
+        to: market!.address,
+        data,
+      });
+      toast.success(
+        <a target="_blank" href={txUrl(chain.chain, tx)}>
+          {tx}
+        </a>,
+      );
+    } catch (e: any) {
+      toast.error(e.shortMessage);
+    }
+  };
+
   return (
     <SizeContext.Provider
       value={{
@@ -505,6 +534,7 @@ export function SizeProvider({ children }: Props) {
         claim,
         liquidate,
         copyLimitOrders,
+        pause,
       }}
     >
       {children}

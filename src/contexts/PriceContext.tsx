@@ -5,7 +5,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import PriceFeed from "../abi/PriceFeed.json";
+import IPriceFeed from "../abi/IPriceFeed.json";
 import { readContract } from "wagmi/actions";
 import { RegistryContext } from "./RegistryContext";
 import { Address } from "viem";
@@ -31,7 +31,7 @@ export function PriceProvider({ children }: Props) {
 
     (async () => {
       const p = await readContract(config, {
-        abi: PriceFeed.abi,
+        abi: IPriceFeed.abi,
         address: market.oracle.priceFeed as Address,
         functionName: "getPrice",
       });

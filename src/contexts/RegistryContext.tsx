@@ -8,10 +8,6 @@ import {
 } from "react";
 import Size from "../abi/Size.json";
 import SizeFactory from "../abi/SizeFactory.json";
-import PriceFeed from "../abi/PriceFeed.json";
-import UniswapV3PriceFeed from "../abi/UniswapV3PriceFeed.json";
-import ChainlinkPriceFeed from "../abi/ChainlinkPriceFeed.json";
-import AggregatorV3Interface from "../abi/AggregatorV3Interface.json";
 import {
   DataViewStruct,
   InitializeFeeConfigParamsStruct,
@@ -23,6 +19,7 @@ import { ConfigContext } from "./ConfigContext";
 import { Abi, Address, erc20Abi } from "viem";
 import { Config } from "wagmi";
 import { CustomWagmiContext } from "./CustomWagmiContext";
+import IPriceFeed from "../abi/IPriceFeed.json";
 
 export type Token =
   | "underlyingCollateralToken"
@@ -39,16 +36,7 @@ interface TokenInformation {
 }
 
 interface PriceFeedInformation {
-  base?: Address;
-  quote?: Address;
-  baseDescription?: string;
-  quoteDescription?: string;
-  baseStalePriceInterval?: number;
-  quoteStalePriceInterval?: number;
   price: bigint;
-  chainlinkPriceFeedPrice?: bigint;
-  uniswapV3PriceFeedPrice?: bigint;
-  uniswapV3PriceFeedTWAPWindow?: number;
 }
 
 export interface Market {
@@ -174,69 +162,12 @@ export function RegistryProvider({ children }: Props) {
 
     const priceFeedInformation = await Promise.all(
       addresses.map(async (_, i) => {
-        const [
-          base,
-          quote,
-          baseStalePriceInterval,
-          quoteStalePriceInterval,
-          getPrice,
-          chainlinkPriceFeed,
-          uniswapV3PriceFeed,
-        ] = await Promise.all(
-          [
-            "base",
-            "quote",
-            "baseStalePriceInterval",
-            "quoteStalePriceInterval",
-            "getPrice",
-            "chainlinkPriceFeed",
-            "uniswapV3PriceFeed",
-          ].map(
-            async (param) =>
-              readContractWithDefault(config, {
-                abi: PriceFeed.abi as Abi,
-                address: oracles[i].priceFeed as Address,
-                functionName: param,
-                defaultValue: undefined,
-              }) as Promise<unknown>,
-          ),
-        );
         return {
-          base: base as Address,
-          quote: quote as Address,
-          baseDescription: (await readContractWithDefault(config, {
-            abi: AggregatorV3Interface.abi as Abi,
-            address: base as Address,
-            functionName: "description",
-            defaultValue: undefined,
-          })) as string | undefined,
-          quoteDescription: (await readContractWithDefault(config, {
-            abi: AggregatorV3Interface.abi as Abi,
-            address: quote as Address,
-            functionName: "description",
-            defaultValue: undefined,
-          })) as string | undefined,
-          baseStalePriceInterval: Number(baseStalePriceInterval as bigint),
-          quoteStalePriceInterval: Number(quoteStalePriceInterval as bigint),
-          price: getPrice as bigint,
-          chainlinkPriceFeedPrice: (await readContractWithDefault(config, {
-            abi: ChainlinkPriceFeed.abi as Abi,
-            address: chainlinkPriceFeed as Address,
+          price: (await readContract(config, {
+            abi: IPriceFeed.abi as Abi,
+            address: oracles[i].priceFeed as Address,
             functionName: "getPrice",
-            defaultValue: undefined,
-          })) as bigint | undefined,
-          uniswapV3PriceFeedPrice: (await readContractWithDefault(config, {
-            abi: UniswapV3PriceFeed.abi as Abi,
-            address: uniswapV3PriceFeed as Address,
-            functionName: "getPrice",
-            defaultValue: undefined,
-          })) as bigint | undefined,
-          uniswapV3PriceFeedTWAPWindow: (await readContractWithDefault(config, {
-            abi: UniswapV3PriceFeed.abi as Abi,
-            address: uniswapV3PriceFeed as Address,
-            functionName: "twapWindow",
-            defaultValue: undefined,
-          })) as number | undefined,
+          })) as bigint,
         };
       }),
     );

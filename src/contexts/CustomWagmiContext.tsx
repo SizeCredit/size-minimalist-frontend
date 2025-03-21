@@ -77,16 +77,6 @@ export function CustomWagmiProvider({ children }: Props) {
     ),
   });
 
-  console.log(
-    Object.entries(rpcUrls).reduce(
-      (acc, [chainId, url]) => ({
-        ...acc,
-        [Number(chainId)]: url,
-      }),
-      {},
-    ),
-  );
-
   const publicClients = Object.keys(rpcUrls)
     .map((chainId) => ({
       [chainId]: createPublicClient({

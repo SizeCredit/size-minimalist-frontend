@@ -23,6 +23,12 @@ const _abi = [
         internalType: "address",
       },
       {
+        name: "onBehalfOf",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
         name: "maxDueDate",
         type: "uint256",
         indexed: false,
@@ -54,6 +60,12 @@ const _abi = [
     name: "BuyCreditMarket",
     inputs: [
       {
+        name: "sender",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
         name: "lender",
         type: "address",
         indexed: true,
@@ -66,9 +78,15 @@ const _abi = [
         internalType: "address",
       },
       {
+        name: "recipient",
+        type: "address",
+        indexed: false,
+        internalType: "address",
+      },
+      {
         name: "creditPositionId",
         type: "uint256",
-        indexed: true,
+        indexed: false,
         internalType: "uint256",
       },
       {
@@ -134,6 +152,12 @@ const _abi = [
         internalType: "address",
       },
       {
+        name: "onBehalfOf",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
         name: "creditPositionWithDebtToRepayId",
         type: "uint256",
         indexed: true,
@@ -142,7 +166,7 @@ const _abi = [
       {
         name: "creditPositionToCompensateId",
         type: "uint256",
-        indexed: true,
+        indexed: false,
         internalType: "uint256",
       },
       {
@@ -160,6 +184,12 @@ const _abi = [
     inputs: [
       {
         name: "sender",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "onBehalfOf",
         type: "address",
         indexed: true,
         internalType: "address",
@@ -324,6 +354,12 @@ const _abi = [
         internalType: "address",
       },
       {
+        name: "onBehalfOf",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
         name: "token",
         type: "address",
         indexed: true,
@@ -332,7 +368,7 @@ const _abi = [
       {
         name: "to",
         type: "address",
-        indexed: true,
+        indexed: false,
         internalType: "address",
       },
       {
@@ -445,6 +481,37 @@ const _abi = [
   },
   {
     type: "event",
+    name: "PartialRepay",
+    inputs: [
+      {
+        name: "sender",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "creditPositionWithDebtToRepayId",
+        type: "uint256",
+        indexed: true,
+        internalType: "uint256",
+      },
+      {
+        name: "amount",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "borrower",
+        type: "address",
+        indexed: false,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
     name: "Repay",
     inputs: [
       {
@@ -479,10 +546,22 @@ const _abi = [
         internalType: "address",
       },
       {
+        name: "lender",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
         name: "creditPositionId",
         type: "uint256",
         indexed: true,
         internalType: "uint256",
+      },
+      {
+        name: "recipient",
+        type: "address",
+        indexed: false,
+        internalType: "address",
       },
     ],
     anonymous: false,
@@ -493,6 +572,12 @@ const _abi = [
     inputs: [
       {
         name: "sender",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "onBehalfOf",
         type: "address",
         indexed: true,
         internalType: "address",
@@ -529,6 +614,12 @@ const _abi = [
     name: "SellCreditMarket",
     inputs: [
       {
+        name: "sender",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
         name: "borrower",
         type: "address",
         indexed: true,
@@ -541,9 +632,15 @@ const _abi = [
         internalType: "address",
       },
       {
+        name: "recipient",
+        type: "address",
+        indexed: false,
+        internalType: "address",
+      },
+      {
         name: "creditPositionId",
         type: "uint256",
-        indexed: true,
+        indexed: false,
         internalType: "uint256",
       },
       {
@@ -585,6 +682,12 @@ const _abi = [
     inputs: [
       {
         name: "sender",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "onBehalfOf",
         type: "address",
         indexed: true,
         internalType: "address",
@@ -800,6 +903,12 @@ const _abi = [
         internalType: "address",
       },
       {
+        name: "onBehalfOf",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
         name: "token",
         type: "address",
         indexed: true,
@@ -808,7 +917,7 @@ const _abi = [
       {
         name: "to",
         type: "address",
-        indexed: true,
+        indexed: false,
         internalType: "address",
       },
       {
@@ -823,7 +932,7 @@ const _abi = [
 ] as const;
 
 const _bytecode =
-  "0x6055604b600b8282823980515f1a607314603f577f4e487b71000000000000000000000000000000000000000000000000000000005f525f60045260245ffd5b305f52607381538281f3fe730000000000000000000000000000000000000000301460806040525f80fdfea264697066735822122078cdd70420a1846220d4e18b0a863ea7445dff571407b648fb7fe7c85ba31e6964736f6c63430008170033";
+  "0x60556032600b8282823980515f1a607314602657634e487b7160e01b5f525f60045260245ffd5b305f52607381538281f3fe730000000000000000000000000000000000000000301460806040525f80fdfea2646970667358221220b4943778b38b385f0436b89d4b9067386365e91b4b19de36dc45dc0d8269b82e64736f6c63430008170033";
 
 type EventsConstructorParams =
   | [signer?: Signer]

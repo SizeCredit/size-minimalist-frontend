@@ -12,13 +12,16 @@ import {
 import { BigNumberish } from "ethers";
 import { RegistryContext } from "./RegistryContext";
 import Size from "../abi/Size.json";
-import { Address, erc20Abi } from "viem";
+import SizeFactory from "../abi/SizeFactory.json";
+import { Address, erc20Abi, keccak256, toHex } from "viem";
 import { CustomWagmiContext } from "./CustomWagmiContext";
+import { ConfigContext } from "./ConfigContext";
 
 interface User extends UserViewStruct {
   underlyingBorrowTokenBalance: BigNumberish;
   underlyingCollateralTokenBalance: BigNumberish;
   userCopyLimitOrders: CopyLimitOrdersParamsStruct;
+  pauser: boolean;
 }
 
 interface UserContext {
@@ -35,6 +38,7 @@ type Props = {
 
 export function UserProvider({ children }: Props) {
   const { config } = useContext(CustomWagmiContext);
+  const { chain } = useContext(ConfigContext);
   const account = useAccount();
   const { creditPositions, debtPositions } = useContext(PositionsContext);
   const { market } = useContext(RegistryContext);
@@ -74,6 +78,16 @@ export function UserProvider({ children }: Props) {
     config,
   });
 
+  const pauser = useReadContract({
+    abi: SizeFactory.abi,
+    address: chain?.addresses.SizeFactory,
+    functionName: "hasRole",
+    args: [keccak256(toHex("PAUSER_ROLE")), account.address],
+    config,
+  });
+
+  console.log("hasRole", account.address, pauser?.data);
+
   const user: User = {
     ...userView,
     underlyingBorrowTokenBalance:
@@ -81,6 +95,7 @@ export function UserProvider({ children }: Props) {
     underlyingCollateralTokenBalance:
       underlyingCollateralTokenBalance?.data as BigNumberish,
     userCopyLimitOrders: userCopyLimitOrders,
+    pauser: pauser?.data as boolean,
   };
 
   return (
