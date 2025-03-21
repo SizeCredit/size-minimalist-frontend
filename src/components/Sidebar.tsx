@@ -16,7 +16,7 @@ import { SwapContext } from "../contexts/SwapContext";
 import { RegistryContext } from "../contexts/RegistryContext";
 import { ConfigContext } from "../contexts/ConfigContext";
 import { pages } from "../App";
-
+import { CustomWagmiContext } from "../contexts/CustomWagmiContext";
 const CONNECTION_TIMEOUT = 5000;
 
 const Sidebar = () => {
@@ -35,6 +35,7 @@ const Sidebar = () => {
   const [timeouts, setTimeouts] = useState<NodeJS.Timeout[]>([]);
   const location = useLocation();
   const params = location.search;
+  const { virtualTestnet } = useContext(CustomWagmiContext);
 
   const tryConnect = async () => {
     for (const connector of connectors) {
@@ -221,27 +222,23 @@ const Sidebar = () => {
         ))}
       </div>
       <div className="tabs">
-        <div>Virtual TestNets</div>
+        <div>Virtual TestNet</div>
       </div>
 
       <div className="vnet-list">
         <div className="vnet-chain-id">
           <label>Chain ID</label>
-          <input type="number" defaultValue={chain?.chain.id} disabled />
+          <input type="number" defaultValue={virtualTestnet.chainId} disabled />
         </div>
         <div className="vnet-rpc-url">
           <label>RPC URL</label>
-          <input
-            type="text"
-            defaultValue={chain?.chain.rpcUrls?.default?.http[0]}
-            disabled
-          />
+          <input type="text" defaultValue={virtualTestnet.rpcUrl} disabled />
         </div>
         <div className="vnet-block-explorer">
           <label>Block Explorer URL</label>
           <input
             type="text"
-            defaultValue={chain?.chain.blockExplorers?.default?.url}
+            defaultValue={virtualTestnet.blockExplorerUrl}
             disabled
           />
         </div>

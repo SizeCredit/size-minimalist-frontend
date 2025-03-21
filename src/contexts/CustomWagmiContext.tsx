@@ -9,6 +9,11 @@ interface CustomWagmiContext {
   chains: readonly [Chain, ...Chain[]];
   config: Config;
   publicClients: Record<number, PublicClient>;
+  virtualTestnet: {
+    chainId: number;
+    rpcUrl: string;
+    blockExplorerUrl: string;
+  };
 }
 
 export const CustomWagmiContext = createContext<CustomWagmiContext>(
@@ -26,13 +31,19 @@ export function CustomWagmiProvider({ children }: Props) {
     "blockExplorerUrl",
   );
 
+  const virtualTestnet = {
+    chainId: Number(chainId),
+    rpcUrl: rpcUrl || "",
+    blockExplorerUrl: blockExplorerUrl || "",
+  };
+
   const rpcUrls: Record<number, string> = {
     [base.id]: `https://base-mainnet.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_API_KEY}`,
     [baseSepolia.id]: `https://base-sepolia.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_API_KEY}`,
     [mainnet.id]: `https://eth-mainnet.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_API_KEY}`,
   };
-  if (chainId && rpcUrl) {
-    rpcUrls[Number(chainId)] = rpcUrl;
+  if (virtualTestnet.chainId && virtualTestnet.rpcUrl) {
+    rpcUrls[virtualTestnet.chainId] = virtualTestnet.rpcUrl;
   }
   const defaultChains = [base, baseSepolia, mainnet] as const;
 
@@ -40,7 +51,7 @@ export function CustomWagmiProvider({ children }: Props) {
     .map((chain) => ({
       [chain.id]:
         chain.id === Number(chainId)
-          ? blockExplorerUrl
+          ? virtualTestnet.blockExplorerUrl
           : chain.blockExplorers?.default?.url,
     }))
     .reduce((acc, curr) => ({ ...acc, ...curr }), {});
@@ -92,6 +103,7 @@ export function CustomWagmiProvider({ children }: Props) {
         chains,
         config,
         publicClients,
+        virtualTestnet,
       }}
     >
       <WagmiProvider config={config}>{children}</WagmiProvider>
