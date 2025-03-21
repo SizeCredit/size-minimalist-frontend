@@ -495,14 +495,10 @@ export function SizeProvider({ children }: Props) {
   const pause = async () => {
     if (!chain) return;
 
-    const arg = {
-      pause: true,
-    };
-    console.log(arg);
     const data = encodeFunctionData({
       abi: [Size.abi.find((e) => e.name === "pause")],
       functionName: "pause",
-      args: [arg],
+      args: [],
     });
     console.log(data);
     try {
