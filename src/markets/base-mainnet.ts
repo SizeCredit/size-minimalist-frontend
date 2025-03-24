@@ -5,6 +5,7 @@ export default {
   chainId: base.id,
   addresses: {
     admin: "0x462B545e8BBb6f9E5860928748Bfe9eCC712c3a7" as Address,
+    feeRecipient: "0x12328eA44AB6D7B18aa9Cc030714763734b625dB" as Address,
     SizeFactory: "0x330Dc31dB45672c1F565cf3EC91F9a01f8f3DF0b" as Address,
     AaveV3Pool: "0xA238Dd80C259a72e81d7e4664a9801593F98d1c5" as Address,
     WETH: "0x4200000000000000000000000000000000000006" as Address,

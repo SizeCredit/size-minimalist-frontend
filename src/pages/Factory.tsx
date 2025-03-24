@@ -52,19 +52,19 @@ const Factory = () => {
     });
   const [createMarketFeeConfigParams, setCreateMarketFeeConfigParams] =
     useState<InitializeFeeConfigParamsStruct>({
-      swapFeeAPR: 0,
+      swapFeeAPR: "0.005e18",
       fragmentationFee: 0,
-      liquidationRewardPercent: 0,
-      overdueCollateralProtocolPercent: 0,
-      collateralProtocolPercent: 0,
-      feeRecipient: "" as Address,
+      liquidationRewardPercent: "0.05e18",
+      overdueCollateralProtocolPercent: "0.01e18",
+      collateralProtocolPercent: "0.10e18",
+      feeRecipient: chain.addresses.feeRecipient as Address,
     } as InitializeFeeConfigParamsStruct);
   const [createMarketRiskConfigParams, setCreateMarketRiskConfigParams] =
     useState<InitializeRiskConfigParamsStruct>({
-      crOpening: 0,
-      crLiquidation: 0,
-      minimumCreditBorrowAToken: 0,
-      borrowATokenCap: 0,
+      crOpening: "1.3e18",
+      crLiquidation: "1.2e18",
+      minimumCreditBorrowAToken: "10e6",
+      borrowATokenCap: "1_000_000e6",
       minTenor: 1 * HOURS,
       maxTenor: 5 * YEARS,
     } as InitializeRiskConfigParamsStruct);
