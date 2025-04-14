@@ -35,9 +35,9 @@ export function ConfigProvider({ children }: Props) {
     const addresses =
       chain.id === baseMainnet.chainId
         ? baseMainnet.addresses
-          : chain.id === mainnet.chainId
-            ? mainnet.addresses
-            : {};
+        : chain.id === mainnet.chainId
+          ? mainnet.addresses
+          : {};
     return {
       chain,
       addresses,

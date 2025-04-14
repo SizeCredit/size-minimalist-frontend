@@ -42,6 +42,12 @@ const Registry = () => {
                   </td>
                 ))}
               </tr>
+              <tr>
+                <td>Chain</td>
+                {markets.map((market) => (
+                  <td key={market.address}>{market.chainInfo.chain.name}</td>
+                ))}
+              </tr>
 
               {/* Tokens */}
               <tr className="section-header">
