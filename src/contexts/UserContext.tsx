@@ -91,8 +91,6 @@ export function UserProvider({ children }: Props) {
     config,
   });
 
-  console.log("hasRole", account.address, pauser?.data);
-
   const user: User = {
     ...userView,
     underlyingBorrowTokenBalance:

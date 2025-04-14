@@ -297,11 +297,7 @@ export function RegistryProvider({ children }: Props) {
 
     setMarkets(marketsArray);
 
-    const productionMarkets = marketsArray.filter(
-      (m) => !m.chainInfo.chain.testnet,
-    );
-
-    setMarketName(productionMarkets[productionMarkets.length - 1].description);
+    setMarketName(marketsArray[marketsArray.length - 1].description);
     setProgress(100);
   };
 

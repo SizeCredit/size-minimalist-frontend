@@ -2,7 +2,7 @@ import { createContext, ReactNode } from "react";
 
 import { Chain, createPublicClient, HttpTransport, PublicClient } from "viem";
 import { http, createConfig, Config, WagmiProvider } from "wagmi";
-import { base, baseSepolia, mainnet } from "wagmi/chains";
+import { base, mainnet } from "wagmi/chains";
 import { injected, walletConnect } from "wagmi/connectors";
 
 interface CustomWagmiContext {
@@ -39,13 +39,12 @@ export function CustomWagmiProvider({ children }: Props) {
 
   const rpcUrls: Record<number, string> = {
     [base.id]: `https://base-mainnet.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_API_KEY}`,
-    [baseSepolia.id]: `https://base-sepolia.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_API_KEY}`,
     [mainnet.id]: `https://eth-mainnet.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_API_KEY}`,
   };
   if (virtualTestnet.chainId && virtualTestnet.rpcUrl) {
     rpcUrls[virtualTestnet.chainId] = virtualTestnet.rpcUrl;
   }
-  const defaultChains = [base, baseSepolia, mainnet] as const;
+  const defaultChains = [base, mainnet] as const;
 
   const blockExplorers = defaultChains
     .map((chain) => ({

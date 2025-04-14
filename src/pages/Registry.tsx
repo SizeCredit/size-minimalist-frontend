@@ -1,260 +1,395 @@
 import { useContext } from "react";
 import { RegistryContext } from "../contexts/RegistryContext";
 import { format } from "../services/format";
-import { ConfigContext } from "../contexts/ConfigContext";
 import PauseButton from "../components/PauseButton";
 import { addressUrl } from "../services/addressUrl";
 import { tokenUrl } from "../services/tokenUrl";
 
 const Registry = () => {
-  const { chainInfo } = useContext(ConfigContext);
   const { markets } = useContext(RegistryContext);
-
-  console.log(markets);
-
-  if (!chainInfo) return <div>Loading...</div>;
 
   return (
     <>
       <div className="registry-container">
-        <div className="registry-grid">
-          {markets.map((market) => (
-            <div key={market.address} className="market-entry">
-              <h5>
-                {market.description} <PauseButton />
-              </h5>
-              <div>
-                <b>Address:</b>{" "}
-                <a
-                  href={addressUrl(chainInfo.chain, market.address)}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <code>{market.address}</code>
-                </a>
-              </div>
-              <div>
-                <b>Collateral Token:</b>{" "}
-                <a
-                  href={tokenUrl(
-                    chainInfo.chain,
-                    market.data.collateralToken.toString(),
-                  )}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <code>{market.data.collateralToken.toString()}</code>
-                </a>
-              </div>
-              <div>
-                &nbsp;&nbsp; Total Supply:{" "}
-                {format(
-                  market.tokens.collateralToken.totalSupply,
-                  market.tokens.collateralToken.decimals,
-                  3,
-                  ",",
-                )}{" "}
-                {market.tokens.collateralToken.symbol}
-              </div>
-              <div>
-                <b>Borrow AToken:</b>{" "}
-                <a
-                  href={tokenUrl(
-                    chainInfo.chain,
-                    market.data.borrowAToken.toString(),
-                  )}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <code>{market.data.borrowAToken.toString()}</code>
-                </a>
-              </div>
-              <div>
-                &nbsp;&nbsp; Total Supply:{" "}
-                {format(
-                  market.tokens.borrowAToken.totalSupply,
-                  market.tokens.borrowAToken.decimals,
-                  3,
-                  ",",
-                )}{" "}
-                {market.tokens.borrowAToken.symbol}
-              </div>
-              <div>
-                <b>Debt Token:</b>{" "}
-                <a
-                  href={tokenUrl(
-                    chainInfo.chain,
-                    market.data.debtToken.toString(),
-                  )}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <code>{market.data.debtToken.toString()}</code>
-                </a>
-              </div>
-              <div>
-                &nbsp;&nbsp; Total Supply:{" "}
-                {format(
-                  market.tokens.debtToken.totalSupply,
-                  market.tokens.debtToken.decimals,
-                  3,
-                  ",",
-                )}{" "}
-                {market.tokens.debtToken.symbol}
-              </div>
-              <div>
-                <b>Underlying Collateral Token:</b>{" "}
-                <a
-                  href={tokenUrl(
-                    chainInfo.chain,
-                    market.data.underlyingCollateralToken.toString(),
-                  )}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <code>
-                    {market.data.underlyingCollateralToken.toString()}
-                  </code>
-                </a>
-              </div>
-              <div>
-                <b>Underlying Borrow Token:</b>{" "}
-                <a
-                  href={tokenUrl(
-                    chainInfo.chain,
-                    market.data.underlyingBorrowToken.toString(),
-                  )}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <code>{market.data.underlyingBorrowToken.toString()}</code>
-                </a>
-              </div>
-              <div>
-                <b>Swap Fee APR:</b>{" "}
-                {format(market.feeConfig.swapFeeAPR, 18 - 2)}%
-              </div>
-              <div>
-                <b>Fragmentation Fee:</b>{" "}
-                {format(market.feeConfig.fragmentationFee, 18)}{" "}
-                {market.tokens.underlyingBorrowToken.symbol}
-              </div>
-              <div>
-                <b>Liquidation Reward:</b>{" "}
-                {format(market.feeConfig.liquidationRewardPercent, 18 - 2)}%
-              </div>
-              <div>
-                <b>Overdue Collateral Protocol:</b>{" "}
-                {format(
-                  market.feeConfig.overdueCollateralProtocolPercent,
-                  18 - 2,
-                )}
-                %
-              </div>
-              <div>
-                <b>Liquidation Collateral Protocol:</b>{" "}
-                {format(market.feeConfig.collateralProtocolPercent, 18 - 2)}%
-              </div>
-              <div>
-                <b>Fee Recipient:</b>{" "}
-                <a
-                  href={addressUrl(
-                    chainInfo.chain,
-                    market.feeConfig.feeRecipient.toString(),
-                  )}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <code>{market.feeConfig.feeRecipient.toString()}</code>
-                </a>
-              </div>
-              <div>
-                &nbsp;&nbsp; Fees:{" "}
-                {format(
-                  market.tokens.borrowAToken.feeRecipientBalance,
-                  market.tokens.borrowAToken.decimals,
-                )}{" "}
-                {market.tokens.borrowAToken.symbol}{" "}
-                {format(
-                  market.tokens.collateralToken.feeRecipientBalance,
-                  market.tokens.collateralToken.decimals,
-                )}{" "}
-                {market.tokens.collateralToken.symbol}
-              </div>
-              <div>
-                <b>CR Opening:</b> {format(market.riskConfig.crOpening, 18 - 2)}
-                %
-              </div>
-              <div>
-                <b>CR Liquidation:</b>{" "}
-                {format(market.riskConfig.crLiquidation, 18 - 2)}%
-              </div>
-              <div>
-                <b>Min Borrow A Token:</b>{" "}
-                {format(
-                  market.riskConfig.minimumCreditBorrowAToken,
-                  market.tokens.borrowAToken.decimals,
-                  market.tokens.borrowAToken.decimals,
-                )}{" "}
-                {market.tokens.underlyingBorrowToken.symbol}
-              </div>
-              <div>
-                <b>Borrow A Token Cap:</b>{" "}
-                {format(
-                  market.riskConfig.borrowATokenCap,
-                  market.tokens.borrowAToken.decimals,
-                  0,
-                  ",",
-                )}{" "}
-                {market.tokens.underlyingBorrowToken.symbol}
-              </div>
-              <div>
-                <b>Min Tenor:</b> {market.riskConfig.minTenor.toString()}{" "}
-                seconds ({Number(market.riskConfig.minTenor) / 3600} hours)
-              </div>
-              <div>
-                <b>Max Tenor:</b> {market.riskConfig.maxTenor.toString()}{" "}
-                seconds ({Number(market.riskConfig.maxTenor) / 3600 / 24 / 365}{" "}
-                years)
-              </div>
-              <div>
-                <b>Price Feed:</b>{" "}
-                <a
-                  href={addressUrl(
-                    chainInfo.chain,
-                    market.oracle.priceFeed.toString(),
-                  )}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <code>{market.oracle.priceFeed.toString()}</code>
-                </a>
-              </div>
-              <div>
-                <div>
-                  &nbsp;&nbsp; Price:{" "}
-                  {format(market.priceFeed.price, 18, 2, ",")}{" "}
-                  {market.tokens.underlyingCollateralToken.symbol} {"/"}{" "}
-                  {market.tokens.underlyingBorrowToken.symbol}
-                </div>
-              </div>
-              <div>
-                <b>Variable Pool Borrow Rate Stale Interval:</b>{" "}
-                {market.oracle.variablePoolBorrowRateStaleRateInterval.toString()}{" "}
-                seconds
-              </div>
-              <div>
-                <b>Admin:</b>{" "}
-                <a
-                  href={addressUrl(chainInfo.chain, market.admin.toString())}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <code>{market.admin.toString()}</code>
-                </a>
-              </div>
-            </div>
-          ))}
+        <div className="table-responsive">
+          <table className="registry-table">
+            <thead>
+              <tr>
+                <th>Configuration</th>
+                {markets.map((market) => (
+                  <th key={market.address}>
+                    {market.description} <PauseButton />
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {/* Market Information */}
+              <tr className="section-header">
+                <td colSpan={markets.length + 1}>Market Information</td>
+              </tr>
+              <tr>
+                <td>Address</td>
+                {markets.map((market) => (
+                  <td key={market.address}>
+                    <a
+                      href={addressUrl(market.chainInfo.chain, market.address)}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <code>{market.address}</code>
+                    </a>
+                  </td>
+                ))}
+              </tr>
+
+              {/* Tokens */}
+              <tr className="section-header">
+                <td colSpan={markets.length + 1}>Token Information</td>
+              </tr>
+              <tr>
+                <td>Collateral Token</td>
+                {markets.map((market) => (
+                  <td key={market.address}>
+                    <a
+                      href={tokenUrl(
+                        market.chainInfo.chain,
+                        market.data.collateralToken.toString(),
+                      )}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <code>{market.data.collateralToken.toString()}</code>
+                    </a>
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td>Collateral Token Total Supply</td>
+                {markets.map((market) => (
+                  <td key={market.address}>
+                    {format(
+                      market.tokens.collateralToken.totalSupply,
+                      market.tokens.collateralToken.decimals,
+                      3,
+                      ",",
+                    )}{" "}
+                    {market.tokens.collateralToken.symbol}
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td>Borrow AToken</td>
+                {markets.map((market) => (
+                  <td key={market.address}>
+                    <a
+                      href={tokenUrl(
+                        market.chainInfo.chain,
+                        market.data.borrowAToken.toString(),
+                      )}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <code>{market.data.borrowAToken.toString()}</code>
+                    </a>
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td>Borrow AToken Total Supply</td>
+                {markets.map((market) => (
+                  <td key={market.address}>
+                    {format(
+                      market.tokens.borrowAToken.totalSupply,
+                      market.tokens.borrowAToken.decimals,
+                      3,
+                      ",",
+                    )}{" "}
+                    {market.tokens.borrowAToken.symbol}
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td>Debt Token</td>
+                {markets.map((market) => (
+                  <td key={market.address}>
+                    <a
+                      href={tokenUrl(
+                        market.chainInfo.chain,
+                        market.data.debtToken.toString(),
+                      )}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <code>{market.data.debtToken.toString()}</code>
+                    </a>
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td>Debt Token Total Supply</td>
+                {markets.map((market) => (
+                  <td key={market.address}>
+                    {format(
+                      market.tokens.debtToken.totalSupply,
+                      market.tokens.debtToken.decimals,
+                      3,
+                      ",",
+                    )}{" "}
+                    {market.tokens.debtToken.symbol}
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td>Underlying Collateral Token</td>
+                {markets.map((market) => (
+                  <td key={market.address}>
+                    <a
+                      href={tokenUrl(
+                        market.chainInfo.chain,
+                        market.data.underlyingCollateralToken.toString(),
+                      )}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <code>
+                        {market.data.underlyingCollateralToken.toString()}
+                      </code>
+                    </a>
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td>Underlying Borrow Token</td>
+                {markets.map((market) => (
+                  <td key={market.address}>
+                    <a
+                      href={tokenUrl(
+                        market.chainInfo.chain,
+                        market.data.underlyingBorrowToken.toString(),
+                      )}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <code>
+                        {market.data.underlyingBorrowToken.toString()}
+                      </code>
+                    </a>
+                  </td>
+                ))}
+              </tr>
+
+              {/* Fee Configuration */}
+              <tr className="section-header">
+                <td colSpan={markets.length + 1}>Fee Configuration</td>
+              </tr>
+              <tr>
+                <td>Swap Fee APR</td>
+                {markets.map((market) => (
+                  <td key={market.address}>
+                    {format(market.feeConfig.swapFeeAPR, 18 - 2)}%
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td>Fragmentation Fee</td>
+                {markets.map((market) => (
+                  <td key={market.address}>
+                    {format(market.feeConfig.fragmentationFee, 18)}{" "}
+                    {market.tokens.underlyingBorrowToken.symbol}
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td>Liquidation Reward</td>
+                {markets.map((market) => (
+                  <td key={market.address}>
+                    {format(market.feeConfig.liquidationRewardPercent, 18 - 2)}%
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td>Overdue Collateral Protocol</td>
+                {markets.map((market) => (
+                  <td key={market.address}>
+                    {format(
+                      market.feeConfig.overdueCollateralProtocolPercent,
+                      18 - 2,
+                    )}
+                    %
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td>Liquidation Collateral Protocol</td>
+                {markets.map((market) => (
+                  <td key={market.address}>
+                    {format(market.feeConfig.collateralProtocolPercent, 18 - 2)}
+                    %
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td>Fee Recipient</td>
+                {markets.map((market) => (
+                  <td key={market.address}>
+                    <a
+                      href={addressUrl(
+                        market.chainInfo.chain,
+                        market.feeConfig.feeRecipient.toString(),
+                      )}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <code>{market.feeConfig.feeRecipient.toString()}</code>
+                    </a>
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td>Fees</td>
+                {markets.map((market) => (
+                  <td key={market.address}>
+                    {format(
+                      market.tokens.borrowAToken.feeRecipientBalance,
+                      market.tokens.borrowAToken.decimals,
+                    )}{" "}
+                    {market.tokens.borrowAToken.symbol}{" "}
+                    {format(
+                      market.tokens.collateralToken.feeRecipientBalance,
+                      market.tokens.collateralToken.decimals,
+                    )}{" "}
+                    {market.tokens.collateralToken.symbol}
+                  </td>
+                ))}
+              </tr>
+
+              {/* Risk Configuration */}
+              <tr className="section-header">
+                <td colSpan={markets.length + 1}>Risk Configuration</td>
+              </tr>
+              <tr>
+                <td>CR Opening</td>
+                {markets.map((market) => (
+                  <td key={market.address}>
+                    {format(market.riskConfig.crOpening, 18 - 2)}%
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td>CR Liquidation</td>
+                {markets.map((market) => (
+                  <td key={market.address}>
+                    {format(market.riskConfig.crLiquidation, 18 - 2)}%
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td>Min Borrow A Token</td>
+                {markets.map((market) => (
+                  <td key={market.address}>
+                    {format(
+                      market.riskConfig.minimumCreditBorrowAToken,
+                      market.tokens.borrowAToken.decimals,
+                      market.tokens.borrowAToken.decimals,
+                    )}{" "}
+                    {market.tokens.underlyingBorrowToken.symbol}
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td>Borrow A Token Cap</td>
+                {markets.map((market) => (
+                  <td key={market.address}>
+                    {format(
+                      market.riskConfig.borrowATokenCap,
+                      market.tokens.borrowAToken.decimals,
+                      0,
+                      ",",
+                    )}{" "}
+                    {market.tokens.underlyingBorrowToken.symbol}
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td>Min Tenor</td>
+                {markets.map((market) => (
+                  <td key={market.address}>
+                    {market.riskConfig.minTenor.toString()} seconds (
+                    {Number(market.riskConfig.minTenor) / 3600} hours)
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td>Max Tenor</td>
+                {markets.map((market) => (
+                  <td key={market.address}>
+                    {market.riskConfig.maxTenor.toString()} seconds (
+                    {Number(market.riskConfig.maxTenor) / 3600 / 24 / 365}{" "}
+                    years)
+                  </td>
+                ))}
+              </tr>
+
+              {/* Oracle & Admin */}
+              <tr className="section-header">
+                <td colSpan={markets.length + 1}>Oracle & Admin</td>
+              </tr>
+              <tr>
+                <td>Price Feed</td>
+                {markets.map((market) => (
+                  <td key={market.address}>
+                    <a
+                      href={addressUrl(
+                        market.chainInfo.chain,
+                        market.oracle.priceFeed.toString(),
+                      )}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <code>{market.oracle.priceFeed.toString()}</code>
+                    </a>
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td>Price</td>
+                {markets.map((market) => (
+                  <td key={market.address}>
+                    {format(market.priceFeed.price, 18, 2, ",")}{" "}
+                    {market.tokens.underlyingCollateralToken.symbol} {"/"}{" "}
+                    {market.tokens.underlyingBorrowToken.symbol}
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td>Variable Pool Borrow Rate Stale Interval</td>
+                {markets.map((market) => (
+                  <td key={market.address}>
+                    {market.oracle.variablePoolBorrowRateStaleRateInterval.toString()}{" "}
+                    seconds
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td>Admin</td>
+                {markets.map((market) => (
+                  <td key={market.address}>
+                    <a
+                      href={addressUrl(
+                        market.chainInfo.chain,
+                        market.admin.toString(),
+                      )}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <code>{market.admin.toString()}</code>
+                    </a>
+                  </td>
+                ))}
+              </tr>
+            </tbody>
+          </table>
         </div>
         <div className="disclaimers">
           <small>*Unofficial Size application</small>

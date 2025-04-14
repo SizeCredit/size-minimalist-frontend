@@ -1,7 +1,6 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 import { Address } from "viem";
 import { type Chain } from "wagmi/chains";
-import baseSepolia from "../markets/base-sepolia";
 import baseMainnet from "../markets/base-mainnet";
 import mainnet from "../markets/mainnet";
 import { useAccount, useBlockNumber } from "wagmi";
@@ -34,10 +33,8 @@ export function ConfigProvider({ children }: Props) {
 
   const chainInfos = chains.map((chain) => {
     const addresses =
-      chain.id === baseSepolia.chainId
-        ? baseSepolia.addresses
-        : chain.id === baseMainnet.chainId
-          ? baseMainnet.addresses
+      chain.id === baseMainnet.chainId
+        ? baseMainnet.addresses
           : chain.id === mainnet.chainId
             ? mainnet.addresses
             : {};
