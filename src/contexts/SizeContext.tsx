@@ -54,12 +54,12 @@ export function SizeProvider({ children }: Props) {
   const { config } = useContext(CustomWagmiContext);
   const account = useAccount();
   const { updatePositions, debtPositions } = useContext(PositionsContext);
-  const { chain } = useContext(ConfigContext);
+  const { chainInfo } = useContext(ConfigContext);
   const { market } = useContext(RegistryContext);
   const { price } = useContext(PriceContext);
 
   const repay = async (debtPositionId: string) => {
-    if (!chain) return;
+    if (!chainInfo) return;
 
     const borrower = account.address;
     const arg = {
@@ -75,11 +75,12 @@ export function SizeProvider({ children }: Props) {
     console.log(data);
     try {
       const tx = await sendTransaction(config, {
+        chainId: chainInfo.chain.id,
         to: market!.address,
         data,
       });
       toast.success(
-        <a target="_blank" href={txUrl(chain.chain, tx)}>
+        <a target="_blank" href={txUrl(chainInfo.chain, tx)}>
           {tx}
         </a>,
       );
@@ -93,7 +94,7 @@ export function SizeProvider({ children }: Props) {
   };
 
   const deposit = async (token: string, amount: bigint) => {
-    if (!chain) return;
+    if (!chainInfo) return;
 
     const to = account.address;
     const arg = {
@@ -109,8 +110,9 @@ export function SizeProvider({ children }: Props) {
     });
     console.log(data);
     try {
-      if (token !== chain.addresses.WETH) {
+      if (token !== chainInfo.addresses.WETH) {
         const allowance = await readContract(config, {
+          chainId: chainInfo.chain.id,
           abi: erc20Abi,
           functionName: "allowance",
           args: [account.address!, market!.address],
@@ -118,13 +120,14 @@ export function SizeProvider({ children }: Props) {
         });
         if (allowance < amount) {
           const approve = await writeContract(config, {
+            chainId: chainInfo.chain.id,
             abi: erc20Abi,
             functionName: "approve",
             args: [market!.address, amount],
             address: token as Address,
           });
           toast.success(
-            <a target="_blank" href={txUrl(chain.chain, approve)}>
+            <a target="_blank" href={txUrl(chainInfo.chain, approve)}>
               {approve}
             </a>,
           );
@@ -132,12 +135,13 @@ export function SizeProvider({ children }: Props) {
         }
       }
       const tx = await sendTransaction(config, {
+        chainId: chainInfo.chain.id,
         to: market!.address,
         data,
-        value: token === chain.addresses.WETH ? amount : BigInt(0),
+        value: token === chainInfo.addresses.WETH ? amount : BigInt(0),
       });
       toast.success(
-        <a target="_blank" href={txUrl(chain.chain, tx)}>
+        <a target="_blank" href={txUrl(chainInfo.chain, tx)}>
           {tx}
         </a>,
       );
@@ -147,7 +151,7 @@ export function SizeProvider({ children }: Props) {
   };
 
   const withdraw = async (token: string, amount: bigint) => {
-    if (!chain) return;
+    if (!chainInfo) return;
 
     const to = account.address;
     const arg = {
@@ -164,11 +168,12 @@ export function SizeProvider({ children }: Props) {
     console.log(data);
     try {
       const tx = await sendTransaction(config, {
+        chainId: chainInfo.chain.id,
         to: market!.address,
         data,
       });
       toast.success(
-        <a target="_blank" href={txUrl(chain.chain, tx)}>
+        <a target="_blank" href={txUrl(chainInfo.chain, tx)}>
           {tx}
         </a>,
       );
@@ -178,7 +183,7 @@ export function SizeProvider({ children }: Props) {
   };
 
   const buyCreditLimit = async (tenors: bigint[], aprs: bigint[]) => {
-    if (!chain) return;
+    if (!chainInfo) return;
 
     const marketRateMultipliers = tenors.map(() => 0);
     const maxDueDate =
@@ -202,11 +207,12 @@ export function SizeProvider({ children }: Props) {
     console.log(data);
     try {
       const tx = await sendTransaction(config, {
+        chainId: chainInfo.chain.id,
         to: market!.address,
         data,
       });
       toast.success(
-        <a target="_blank" href={txUrl(chain.chain, tx)}>
+        <a target="_blank" href={txUrl(chainInfo.chain, tx)}>
           {tx}
         </a>,
       );
@@ -216,7 +222,7 @@ export function SizeProvider({ children }: Props) {
   };
 
   const sellCreditLimit = async (tenors: bigint[], aprs: bigint[]) => {
-    if (!chain) return;
+    if (!chainInfo) return;
 
     const marketRateMultipliers = tenors.map(() => 0);
     const maxDueDate =
@@ -240,11 +246,12 @@ export function SizeProvider({ children }: Props) {
     console.log(data);
     try {
       const tx = await sendTransaction(config, {
+        chainId: chainInfo.chain.id,
         to: market!.address,
         data,
       });
       toast.success(
-        <a target="_blank" href={txUrl(chain.chain, tx)}>
+        <a target="_blank" href={txUrl(chainInfo.chain, tx)}>
           {tx}
         </a>,
       );
@@ -259,7 +266,7 @@ export function SizeProvider({ children }: Props) {
     tenor: number,
     creditPositionId?: bigint,
   ): Promise<void> => {
-    if (!chain) return;
+    if (!chainInfo) return;
 
     const { user: lender, rate } = quote;
     const deadline = Math.floor(Date.now() / 1000) + 60 * 60;
@@ -284,11 +291,12 @@ export function SizeProvider({ children }: Props) {
     console.log(data);
     try {
       const tx = await sendTransaction(config, {
+        chainId: chainInfo.chain.id,
         to: market!.address,
         data,
       });
       toast.success(
-        <a target="_blank" href={txUrl(chain.chain, tx)}>
+        <a target="_blank" href={txUrl(chainInfo.chain, tx)}>
           {tx}
         </a>,
       );
@@ -303,7 +311,7 @@ export function SizeProvider({ children }: Props) {
     amount: bigint,
     tenor: number,
   ): Promise<void> => {
-    if (!chain) return;
+    if (!chainInfo) return;
 
     const { user: borrower, rate } = quote;
     const deadline = Math.floor(Date.now() / 1000) + 60 * 60;
@@ -328,11 +336,12 @@ export function SizeProvider({ children }: Props) {
     console.log(data);
     try {
       const tx = await sendTransaction(config, {
+        chainId: chainInfo.chain.id,
         to: market!.address,
         data,
       });
       toast.success(
-        <a target="_blank" href={txUrl(chain.chain, tx)}>
+        <a target="_blank" href={txUrl(chainInfo.chain, tx)}>
           {tx}
         </a>,
       );
@@ -346,7 +355,7 @@ export function SizeProvider({ children }: Props) {
     creditPositionWithDebtToRepayId: string,
     creditPositionToCompensateId: string,
   ) => {
-    if (!chain) return;
+    if (!chainInfo) return;
 
     const arg = {
       creditPositionWithDebtToRepayId,
@@ -362,11 +371,12 @@ export function SizeProvider({ children }: Props) {
     console.log(data);
     try {
       const tx = await sendTransaction(config, {
+        chainId: chainInfo.chain.id,
         to: market!.address,
         data,
       });
       toast.success(
-        <a target="_blank" href={txUrl(chain.chain, tx)}>
+        <a target="_blank" href={txUrl(chainInfo.chain, tx)}>
           {tx}
         </a>,
       );
@@ -377,7 +387,7 @@ export function SizeProvider({ children }: Props) {
   };
 
   const claim = async (creditPositionId: string) => {
-    if (!chain) return;
+    if (!chainInfo) return;
 
     const arg = {
       creditPositionId,
@@ -391,11 +401,12 @@ export function SizeProvider({ children }: Props) {
     console.log(data);
     try {
       const tx = await sendTransaction(config, {
+        chainId: chainInfo.chain.id,
         to: market!.address,
         data,
       });
       toast.success(
-        <a target="_blank" href={txUrl(chain.chain, tx)}>
+        <a target="_blank" href={txUrl(chainInfo.chain, tx)}>
           {tx}
         </a>,
       );
@@ -406,7 +417,7 @@ export function SizeProvider({ children }: Props) {
   };
 
   const liquidate = async (debtPositionId: string) => {
-    if (!chain) return;
+    if (!chainInfo) return;
 
     const debtPosition = debtPositions.find(
       (e) => e.debtPositionId === debtPositionId,
@@ -432,11 +443,12 @@ export function SizeProvider({ children }: Props) {
     console.log(data);
     try {
       const tx = await sendTransaction(config, {
+        chainId: chainInfo.chain.id,
         to: market!.address,
         data,
       });
       toast.success(
-        <a target="_blank" href={txUrl(chain.chain, tx)}>
+        <a target="_blank" href={txUrl(chainInfo.chain, tx)}>
           {tx}
         </a>,
       );
@@ -451,7 +463,7 @@ export function SizeProvider({ children }: Props) {
     loanOffsetAPR: bigint,
     borrowOffsetAPR: bigint,
   ) => {
-    if (!chain) return;
+    if (!chainInfo) return;
 
     const arg = {
       copyAddress,
@@ -479,11 +491,12 @@ export function SizeProvider({ children }: Props) {
     console.log(data);
     try {
       const tx = await sendTransaction(config, {
+        chainId: chainInfo.chain.id,
         to: market!.address,
         data,
       });
       toast.success(
-        <a target="_blank" href={txUrl(chain.chain, tx)}>
+        <a target="_blank" href={txUrl(chainInfo.chain, tx)}>
           {tx}
         </a>,
       );
@@ -493,7 +506,7 @@ export function SizeProvider({ children }: Props) {
   };
 
   const pause = async () => {
-    if (!chain) return;
+    if (!chainInfo) return;
 
     const data = encodeFunctionData({
       abi: [Size.abi.find((e) => e.name === "pause")],
@@ -503,11 +516,12 @@ export function SizeProvider({ children }: Props) {
     console.log(data);
     try {
       const tx = await sendTransaction(config, {
+        chainId: chainInfo.chain.id,
         to: market!.address,
         data,
       });
       toast.success(
-        <a target="_blank" href={txUrl(chain.chain, tx)}>
+        <a target="_blank" href={txUrl(chainInfo.chain, tx)}>
           {tx}
         </a>,
       );

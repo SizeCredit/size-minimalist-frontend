@@ -104,6 +104,7 @@ export function LimitOrdersProvider({ children }: Props) {
         senders.map(
           (sender) =>
             readContract(config, {
+              chainId: market.chainInfo.chain.id,
               abi: Size.abi,
               address: market.address,
               functionName: "getUserView",

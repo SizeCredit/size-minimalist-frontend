@@ -3,12 +3,16 @@ import { RegistryContext } from "../contexts/RegistryContext";
 import { format } from "../services/format";
 import { ConfigContext } from "../contexts/ConfigContext";
 import PauseButton from "../components/PauseButton";
+import { addressUrl } from "../services/addressUrl";
+import { tokenUrl } from "../services/tokenUrl";
 
 const Registry = () => {
-  const { chain } = useContext(ConfigContext);
+  const { chainInfo } = useContext(ConfigContext);
   const { markets } = useContext(RegistryContext);
 
-  if (!chain) return <div>Loading...</div>;
+  console.log(markets);
+
+  if (!chainInfo) return <div>Loading...</div>;
 
   return (
     <>
@@ -22,7 +26,7 @@ const Registry = () => {
               <div>
                 <b>Address:</b>{" "}
                 <a
-                  href={`${chain.chain.blockExplorers?.default?.url}/address/${market.address}`}
+                  href={addressUrl(chainInfo.chain, market.address)}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -32,7 +36,10 @@ const Registry = () => {
               <div>
                 <b>Collateral Token:</b>{" "}
                 <a
-                  href={`${chain.chain.blockExplorers?.default?.url}/token/${market.data.collateralToken.toString()}`}
+                  href={tokenUrl(
+                    chainInfo.chain,
+                    market.data.collateralToken.toString(),
+                  )}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -52,7 +59,10 @@ const Registry = () => {
               <div>
                 <b>Borrow AToken:</b>{" "}
                 <a
-                  href={`${chain.chain.blockExplorers?.default?.url}/token/${market.data.borrowAToken.toString()}`}
+                  href={tokenUrl(
+                    chainInfo.chain,
+                    market.data.borrowAToken.toString(),
+                  )}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -72,7 +82,10 @@ const Registry = () => {
               <div>
                 <b>Debt Token:</b>{" "}
                 <a
-                  href={`${chain.chain.blockExplorers?.default?.url}/token/${market.data.debtToken.toString()}`}
+                  href={tokenUrl(
+                    chainInfo.chain,
+                    market.data.debtToken.toString(),
+                  )}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -92,7 +105,10 @@ const Registry = () => {
               <div>
                 <b>Underlying Collateral Token:</b>{" "}
                 <a
-                  href={`${chain.chain.blockExplorers?.default?.url}/token/${market.data.underlyingCollateralToken.toString()}`}
+                  href={tokenUrl(
+                    chainInfo.chain,
+                    market.data.underlyingCollateralToken.toString(),
+                  )}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -104,7 +120,10 @@ const Registry = () => {
               <div>
                 <b>Underlying Borrow Token:</b>{" "}
                 <a
-                  href={`${chain.chain.blockExplorers?.default?.url}/token/${market.data.underlyingBorrowToken.toString()}`}
+                  href={tokenUrl(
+                    chainInfo.chain,
+                    market.data.underlyingBorrowToken.toString(),
+                  )}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -139,7 +158,10 @@ const Registry = () => {
               <div>
                 <b>Fee Recipient:</b>{" "}
                 <a
-                  href={`${chain.chain.blockExplorers?.default?.url}/address/${market.feeConfig.feeRecipient.toString()}`}
+                  href={addressUrl(
+                    chainInfo.chain,
+                    market.feeConfig.feeRecipient.toString(),
+                  )}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -198,7 +220,10 @@ const Registry = () => {
               <div>
                 <b>Price Feed:</b>{" "}
                 <a
-                  href={`${chain.chain.blockExplorers?.default?.url}/address/${market.oracle.priceFeed.toString()}`}
+                  href={addressUrl(
+                    chainInfo.chain,
+                    market.oracle.priceFeed.toString(),
+                  )}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -221,7 +246,7 @@ const Registry = () => {
               <div>
                 <b>Admin:</b>{" "}
                 <a
-                  href={`${chain.chain.blockExplorers?.default?.url}/address/${market.admin.toString()}`}
+                  href={addressUrl(chainInfo.chain, market.admin.toString())}
                   target="_blank"
                   rel="noreferrer"
                 >

@@ -66,6 +66,7 @@ export function PositionsProvider({ children }: Props) {
 
     setProgress(0);
     const positionsCount = (await readContract(config, {
+      chainId: market.chainInfo.chain.id,
       abi: Size.abi,
       address: market?.address,
       functionName: "getPositionsCount",
@@ -78,6 +79,7 @@ export function PositionsProvider({ children }: Props) {
       .map(
         (_, i) => () =>
           readContract(config, {
+            chainId: market.chainInfo.chain.id,
             abi: Size.abi,
             address: market.address,
             functionName: "getDebtPosition",
@@ -113,6 +115,7 @@ export function PositionsProvider({ children }: Props) {
       .map(
         (_, i) => () =>
           readContract(config, {
+            chainId: market.chainInfo.chain.id,
             abi: Size.abi,
             address: market.address,
             functionName: "getCreditPosition",

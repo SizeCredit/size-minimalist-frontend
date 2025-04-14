@@ -7,11 +7,14 @@ import mainnet from "../markets/mainnet";
 import { useAccount, useBlockNumber } from "wagmi";
 import { CustomWagmiContext } from "./CustomWagmiContext";
 
+export interface ChainInfo {
+  chain: Chain;
+  addresses: Record<string, Address>;
+}
+
 interface ConfigContext {
-  chain?: {
-    chain: Chain;
-    addresses: Record<string, Address>;
-  };
+  chainInfo?: ChainInfo;
+  chainInfos: ChainInfo[];
   blockNumber?: bigint;
   pastBlocks: bigint;
   setPastBlocks: (value: bigint) => void;
@@ -29,7 +32,7 @@ export function ConfigProvider({ children }: Props) {
     config,
   });
 
-  const chainsWithAddresses = chains.map((chain) => {
+  const chainInfos = chains.map((chain) => {
     const addresses =
       chain.id === baseSepolia.chainId
         ? baseSepolia.addresses
@@ -44,16 +47,16 @@ export function ConfigProvider({ children }: Props) {
     };
   });
 
-  const chain =
-    chainsWithAddresses.find((c) => c.chain.id === account.chain?.id) ||
-    chainsWithAddresses[0];
+  const chainInfo =
+    chainInfos.find((c) => c.chain.id === account.chain?.id) || chainInfos[0];
   const blockNumber = useBlockNumber({ config }).data;
   const [pastBlocks, setPastBlocks] = useState<bigint>(10_000n);
 
   return (
     <ConfigContext.Provider
       value={{
-        chain,
+        chainInfo,
+        chainInfos,
         blockNumber,
         pastBlocks,
         setPastBlocks,

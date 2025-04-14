@@ -31,6 +31,7 @@ export function PriceProvider({ children }: Props) {
 
     (async () => {
       const p = await readContract(config, {
+        chainId: market.chainInfo.chain.id,
         abi: IPriceFeed.abi,
         address: market.oracle.priceFeed as Address,
         functionName: "getPrice",

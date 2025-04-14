@@ -18,8 +18,8 @@ const HOURS = 60 * 60;
 const YEARS = 365 * 24 * HOURS;
 
 const Factory = () => {
-  const { chain } = useContext(ConfigContext);
-  if (!chain) return <div>Loading...</div>;
+  const { chainInfo } = useContext(ConfigContext);
+  if (!chainInfo) return <div>Loading...</div>;
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const actions = [
@@ -42,12 +42,12 @@ const Factory = () => {
       quoteAggregator: "",
       baseStalePriceInterval: 0,
       quoteStalePriceInterval: 0,
-      sequencerUptimeFeed: chain.addresses.ChainlinkSequencerUptimeFeed,
+      sequencerUptimeFeed: chainInfo.addresses.ChainlinkSequencerUptimeFeed,
     } as PriceFeedParamsStruct,
   );
   const [createBorrowATokenV1_5Params, setCreateBorrowATokenV1_5Params] =
     useState<CreateBorrowATokenV1_5Params>({
-      variablePool: chain.addresses.AaveV3Pool as Address,
+      variablePool: chainInfo.addresses.AaveV3Pool as Address,
       underlyingBorrowToken: "" as Address,
     });
   const [createMarketFeeConfigParams, setCreateMarketFeeConfigParams] =
@@ -57,7 +57,7 @@ const Factory = () => {
       liquidationRewardPercent: "0.05e18",
       overdueCollateralProtocolPercent: "0.01e18",
       collateralProtocolPercent: "0.10e18",
-      feeRecipient: chain.addresses.feeRecipient as Address,
+      feeRecipient: chainInfo.addresses.feeRecipient as Address,
     } as InitializeFeeConfigParamsStruct);
   const [createMarketRiskConfigParams, setCreateMarketRiskConfigParams] =
     useState<InitializeRiskConfigParamsStruct>({
@@ -75,10 +75,10 @@ const Factory = () => {
     } as InitializeOracleParamsStruct);
   const [createMarketDataParams, setCreateMarketDataParams] =
     useState<InitializeDataParamsStruct>({
-      weth: chain.addresses.WETH,
+      weth: chainInfo.addresses.WETH,
       underlyingCollateralToken: "" as Address,
       underlyingBorrowToken: "" as Address,
-      variablePool: chain.addresses.AaveV3Pool as Address,
+      variablePool: chainInfo.addresses.AaveV3Pool as Address,
       borrowATokenV1_5: "" as Address,
     } as InitializeDataParamsStruct);
   const actionParams = {

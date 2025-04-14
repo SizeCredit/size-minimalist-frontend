@@ -38,11 +38,12 @@ type Props = {
 
 export function UserProvider({ children }: Props) {
   const { config } = useContext(CustomWagmiContext);
-  const { chain } = useContext(ConfigContext);
+  const { chainInfo: chain } = useContext(ConfigContext);
   const account = useAccount();
   const { creditPositions, debtPositions } = useContext(PositionsContext);
   const { market } = useContext(RegistryContext);
   const getUserView = useReadContract({
+    chainId: chain?.chain.id,
     abi: Size.abi,
     address: market?.address,
     functionName: "getUserView",
@@ -52,6 +53,7 @@ export function UserProvider({ children }: Props) {
   const userView = (getUserView?.data || {}) as UserViewStruct;
 
   const getUserCopyLimitOrders = useReadContract({
+    chainId: chain?.chain.id,
     abi: Size.abi,
     address: market?.address,
     functionName: "getUserCopyLimitOrders",
@@ -63,6 +65,7 @@ export function UserProvider({ children }: Props) {
     {}) as CopyLimitOrdersParamsStruct;
 
   const underlyingBorrowTokenBalance = useReadContract({
+    chainId: chain?.chain.id,
     abi: erc20Abi,
     address: market?.data.underlyingBorrowToken as Address,
     functionName: "balanceOf",
@@ -71,6 +74,7 @@ export function UserProvider({ children }: Props) {
   });
 
   const underlyingCollateralTokenBalance = useReadContract({
+    chainId: chain?.chain.id,
     abi: erc20Abi,
     address: market?.data.underlyingCollateralToken as Address,
     functionName: "balanceOf",
@@ -79,6 +83,7 @@ export function UserProvider({ children }: Props) {
   });
 
   const pauser = useReadContract({
+    chainId: chain?.chain.id,
     abi: SizeFactory.abi,
     address: chain?.addresses.SizeFactory,
     functionName: "hasRole",
