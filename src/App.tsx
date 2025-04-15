@@ -18,6 +18,7 @@ import Charts from "./pages/Charts";
 import Positions from "./pages/Positions";
 import Sidebar from "./components/Sidebar";
 import Orderbook from "./pages/Orderbook";
+import Authorization from "./pages/Authorization";
 
 export const pages = [
   {
@@ -33,6 +34,11 @@ export const pages = [
   { path: "/charts", label: "Charts", component: <Charts /> },
   { path: "/positions", label: "Positions", component: <Positions /> },
   { path: "/orderbook", label: "Orderbook", component: <Orderbook /> },
+  {
+    path: "/authorization",
+    label: "Authorization",
+    component: <Authorization />,
+  },
   { path: "/factory", label: "Factory", component: <Factory /> },
 ];
 

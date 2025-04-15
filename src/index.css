@@ -621,3 +621,114 @@ a:hover {
 }
 
 /* /NEW REGISTRY */
+
+/* Authorization */
+
+/* Authorization.css */
+
+/* Main container */
+.authorization-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    sans-serif;
+}
+
+/* Header styling */
+.authorization-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.authorization-header h2 {
+  color: #1a202c;
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.authorization-header p {
+  color: #4a5568;
+  font-size: 1rem;
+}
+
+/* Input container */
+.input-container {
+  margin-bottom: 2rem;
+  background-color: #f7fafc;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.set-authorization {
+  display: grid;
+  gap: 1rem;
+}
+
+/* Label styling */
+.set-authorization label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #2d3748;
+  font-size: 0.875rem;
+}
+
+/* Select dropdown styling */
+.set-authorization select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  background-color: white;
+  font-size: 0.875rem;
+  color: #1a202c;
+  min-height: 150px;
+  transition: border-color 0.2s ease;
+}
+
+.set-authorization select:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+}
+
+.set-authorization select option {
+  padding: 0.5rem;
+}
+
+/* Input styling */
+.set-authorization input[type="text"] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  background-color: white;
+  font-size: 0.875rem;
+  color: #1a202c;
+  transition: border-color 0.2s ease;
+}
+
+.set-authorization input[type="text"]:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+}
+
+.set-authorization input[type="text"]::placeholder {
+  color: #a0aec0;
+}
+
+/* /Authorization */
