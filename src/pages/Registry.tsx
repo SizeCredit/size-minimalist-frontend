@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import { RegistryContext } from "../contexts/RegistryContext";
 import { format } from "../services/format";
-import PauseButton from "../components/PauseButton";
 import { addressUrl } from "../services/addressUrl";
 import { tokenUrl } from "../services/tokenUrl";
 
@@ -17,9 +16,7 @@ const Registry = () => {
               <tr>
                 <th>Configuration</th>
                 {markets.map((market) => (
-                  <th key={market.address}>
-                    {market.description} <PauseButton />
-                  </th>
+                  <th key={market.address}>{market.description}</th>
                 ))}
               </tr>
             </thead>

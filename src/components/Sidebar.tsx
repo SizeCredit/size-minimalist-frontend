@@ -17,6 +17,7 @@ import { RegistryContext } from "../contexts/RegistryContext";
 import { ConfigContext } from "../contexts/ConfigContext";
 import { pages } from "../App";
 import { CustomWagmiContext } from "../contexts/CustomWagmiContext";
+import PauseButton from "./PauseButton";
 const CONNECTION_TIMEOUT = 5000;
 
 const Sidebar = () => {
@@ -143,6 +144,9 @@ const Sidebar = () => {
             onChange={(e) => setPastBlocks(BigInt(e.target.value))}
           />
         </div>
+      </div>
+      <div className="pause">
+        <PauseButton />
       </div>
       <div className="tabs">
         <div>Price</div>
