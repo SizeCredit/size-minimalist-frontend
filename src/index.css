@@ -732,3 +732,7 @@ a:hover {
 }
 
 /* /Authorization */
+
+.select-box {
+  min-height: 40px !important;
+}

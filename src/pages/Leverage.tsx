@@ -3,14 +3,22 @@ import { LeverageContext } from "../contexts/LeverageContext";
 import { ConfigContext } from "../contexts/ConfigContext";
 import { Action } from "../services/Authorization";
 import { AuthorizationContext } from "../contexts/AuthorizationContext";
-import { Address, parseUnits } from "viem";
+import { Address, formatUnits, parseUnits } from "viem";
 import { RegistryContext, TokenInformation } from "../contexts/RegistryContext";
+import { useAccount } from "wagmi";
+import { format } from "../services/format";
 
 const Leverage = () => {
   const { chainInfo } = useContext(ConfigContext);
   const { market } = useContext(RegistryContext);
+  const { address } = useAccount();
 
-  const { approve, leverageUpWithSwap } = useContext(LeverageContext);
+  const {
+    approve,
+    leverageUpWithSwap,
+    currentLeveragePercent,
+    maxLeveragePercent,
+  } = useContext(LeverageContext);
   const { setAuthorization } = useContext(AuthorizationContext);
   const [amount, setAmount] = useState<string>("1000");
   const [token, setToken] = useState<TokenInformation | undefined>();
@@ -19,6 +27,8 @@ const Leverage = () => {
   );
   const [leveragePercent, setLeveragePercent] = useState<number>(600);
   const [borrowPercent, setBorrowPercent] = useState<number>(97);
+  const [currentLeverage, setCurrentLeverage] = useState<bigint | undefined>();
+  const [maxLeverage, setMaxLeverage] = useState<bigint | undefined>();
 
   const tokens = [
     market?.tokens.underlyingCollateralToken,
@@ -29,10 +39,25 @@ const Leverage = () => {
     setToken(market?.tokens.underlyingCollateralToken);
   }, [market]);
 
+  useEffect(() => {
+    const fetchCurrentLeverage = async () => {
+      const leverage = await currentLeveragePercent();
+      setCurrentLeverage(leverage);
+    };
+    fetchCurrentLeverage();
+  }, [currentLeveragePercent, chainInfo, market, address]);
+
+  useEffect(() => {
+    const fetchMaxLeverage = async () => {
+      const maxLeverage = await maxLeveragePercent();
+      setMaxLeverage(maxLeverage);
+    };
+    fetchMaxLeverage();
+  }, [maxLeveragePercent, chainInfo, market]);
+
   if (!chainInfo || !market || !token) {
     return <div>Loading...</div>;
   }
-
 
   return (
     <div className="leverage-container">
@@ -67,6 +92,7 @@ const Leverage = () => {
           <div>
             <label>Token</label>
             <select
+              className="select-box"
               onChange={(e) =>
                 setToken(
                   tokens.find((token) => token!.symbol === e.target.value)!,
@@ -107,7 +133,11 @@ const Leverage = () => {
             />
           </div>
           <div>
-            <label>Leverage Percent</label>
+            <label>
+              Leverage Percent (current:{" "}
+              {currentLeverage ? formatUnits(currentLeverage, 16) + "%" : "?"},
+              max: {maxLeverage ? format(maxLeverage, 16, 0) + "%" : "?"})
+            </label>
             <div>
               <input
                 type="number"
@@ -145,6 +175,8 @@ const Leverage = () => {
             </button>
           </div>
         </div>
+      </div>
+      <div className="input-container">
         <div className="set-authorization">
           <label>4. Revoke Authorization</label>
           <div>

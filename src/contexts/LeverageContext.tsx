@@ -1,9 +1,5 @@
 import { createContext, ReactNode, useContext } from "react";
-import {
-  Address,
-  encodeAbiParameters,
-  erc20Abi,
-} from "viem";
+import { Address, encodeAbiParameters, erc20Abi } from "viem";
 import { readContract, writeContract } from "wagmi/actions";
 import { CustomWagmiContext } from "./CustomWagmiContext";
 import { ConfigContext } from "./ConfigContext";
@@ -14,6 +10,7 @@ import Size from "../abi/Size.json";
 import IPMarket from "../abi/IPMarket.json";
 import { RegistryContext } from "./RegistryContext";
 import { ethers } from "ethers";
+import { useAccount } from "wagmi";
 
 enum SwapMethod {
   OneInch,
@@ -34,6 +31,8 @@ interface LeverageContext {
     leveragePercent: bigint,
     borrowPercent: bigint,
   ) => Promise<void>;
+  currentLeveragePercent: () => Promise<bigint | undefined>;
+  maxLeveragePercent: () => Promise<bigint | undefined>;
 }
 
 export const LeverageContext = createContext<LeverageContext>(
@@ -48,6 +47,7 @@ export function LeverageProvider({ children }: Props) {
   const { config } = useContext(CustomWagmiContext);
   const { chainInfo } = useContext(ConfigContext);
   const { market } = useContext(RegistryContext);
+  const { address } = useAccount();
 
   const approve = async (token: Address, amount: bigint) => {
     if (!chainInfo) return;
@@ -215,8 +215,43 @@ export function LeverageProvider({ children }: Props) {
     }
   };
 
+  const currentLeveragePercent = async () => {
+    if (!chainInfo || !market || !address) return;
+
+    const leveragePercent = await readContract(config, {
+      chainId: chainInfo.chain.id,
+      abi: LeverageUp.abi,
+      address: chainInfo.addresses.LeverageUp,
+      functionName: "currentLeveragePercent",
+      args: [market.address, address],
+    });
+
+    return leveragePercent as bigint;
+  };
+
+  const maxLeveragePercent = async () => {
+    if (!chainInfo || !market) return;
+
+    const maxLeveragePercent = await readContract(config, {
+      chainId: chainInfo.chain.id,
+      abi: LeverageUp.abi,
+      address: chainInfo.addresses.LeverageUp,
+      functionName: "maxLeveragePercent",
+      args: [market.address],
+    });
+
+    return maxLeveragePercent as bigint;
+  };
+
   return (
-    <LeverageContext.Provider value={{ approve, leverageUpWithSwap }}>
+    <LeverageContext.Provider
+      value={{
+        approve,
+        leverageUpWithSwap,
+        currentLeveragePercent,
+        maxLeveragePercent,
+      }}
+    >
       {children}
     </LeverageContext.Provider>
   );
