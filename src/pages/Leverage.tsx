@@ -145,6 +145,19 @@ const Leverage = () => {
             </button>
           </div>
         </div>
+        <div className="set-authorization">
+          <label>4. Revoke Authorization</label>
+          <div>
+            <button
+              className="action-button"
+              onClick={() =>
+                setAuthorization(chainInfo.addresses.LeverageUp as Address, [])
+              }
+            >
+              Revoke Authorization
+            </button>
+          </div>
+        </div>
       </div>
       <div className="disclaimers">
         <small>*Unofficial Size application</small>
