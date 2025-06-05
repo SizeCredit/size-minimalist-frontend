@@ -43,7 +43,7 @@ const Leverage = () => {
             <button
               className="action-button"
               onClick={() =>
-                setAuthorization(chainInfo.addresses.leverageUp as Address, [
+                setAuthorization(chainInfo.addresses.LeverageUp as Address, [
                   Action.SELL_CREDIT_MARKET,
                 ])
               }
