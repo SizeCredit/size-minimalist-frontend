@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { LeverageContext } from "../contexts/LeverageContext";
 import { ConfigContext } from "../contexts/ConfigContext";
 import { Action } from "../services/Authorization";
@@ -9,12 +9,11 @@ import { RegistryContext, TokenInformation } from "../contexts/RegistryContext";
 const Leverage = () => {
   const { chainInfo } = useContext(ConfigContext);
   const { market } = useContext(RegistryContext);
+
   const { approve, leverageUpWithSwap } = useContext(LeverageContext);
   const { setAuthorization } = useContext(AuthorizationContext);
   const [amount, setAmount] = useState<string>("1000");
-  const [token, setToken] = useState<TokenInformation>(
-    market?.tokens.underlyingCollateralToken as TokenInformation,
-  );
+  const [token, setToken] = useState<TokenInformation | undefined>();
   const [lender, setLender] = useState<Address>(
     "0x04B4c8281B5d2D7aBee794bf3Ab3c95a02FF246f",
   );
@@ -26,6 +25,15 @@ const Leverage = () => {
     market?.tokens.underlyingBorrowToken,
   ];
 
+  useEffect(() => {
+    setToken(market?.tokens.underlyingCollateralToken);
+  }, [market]);
+
+  if (!chainInfo || !market || !token) {
+    return <div>Loading...</div>;
+  }
+
+
   return (
     <div className="leverage-container">
       <div className="input-container">
@@ -35,7 +43,7 @@ const Leverage = () => {
             <button
               className="action-button"
               onClick={() =>
-                setAuthorization(chainInfo?.addresses.leverageUp as Address, [
+                setAuthorization(chainInfo.addresses.leverageUp as Address, [
                   Action.SELL_CREDIT_MARKET,
                 ])
               }
@@ -61,13 +69,13 @@ const Leverage = () => {
             <select
               onChange={(e) =>
                 setToken(
-                  tokens.find((token) => token?.symbol === e.target.value)!,
+                  tokens.find((token) => token!.symbol === e.target.value)!,
                 )
               }
             >
-              {tokens.map((token) => (
-                <option key={token?.symbol} value={token?.symbol}>
-                  {token?.symbol}
+              {tokens.map((token, index) => (
+                <option key={token!.symbol || index} value={token!.symbol}>
+                  {token!.symbol}
                 </option>
               ))}
             </select>
@@ -128,8 +136,8 @@ const Leverage = () => {
                   token.address,
                   parseUnits(amount.toString(), token.decimals),
                   lender,
-                  leveragePercent,
-                  borrowPercent,
+                  parseUnits(leveragePercent.toString(), 16),
+                  parseUnits(borrowPercent.toString(), 16),
                 )
               }
             >

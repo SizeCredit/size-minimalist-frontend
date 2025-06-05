@@ -6,7 +6,7 @@ export default {
   addresses: {
     admin: "0x462B545e8BBb6f9E5860928748Bfe9eCC712c3a7" as Address,
     feeRecipient: "0x12328eA44AB6D7B18aa9Cc030714763734b625dB" as Address,
-    LeverageUp: "0x0000000000000000000000000000000000000000" as Address,
+    LeverageUp: "0xF4a21Ac7e51d17A0e1C8B59f7a98bb7A97806f14" as Address,
     "PendleMarket_PT-wstUSR-25SEP2025":
       "0x09fA04Aac9c6d1c6131352EE950CD67ecC6d4fB9" as Address,
     "PendleMarket_PT-sUSDE-31JUL2025":

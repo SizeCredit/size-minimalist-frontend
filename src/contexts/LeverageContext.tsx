@@ -31,8 +31,8 @@ interface LeverageContext {
     token: Address,
     amount: bigint,
     lender: Address,
-    leveragePercent: number,
-    borrowPercent: number,
+    leveragePercent: bigint,
+    borrowPercent: bigint,
   ) => Promise<void>;
 }
 
@@ -57,7 +57,7 @@ export function LeverageProvider({ children }: Props) {
         chainId: chainInfo.chain.id,
         abi: erc20Abi,
         functionName: "approve",
-        args: [chainInfo.addresses.leverageUp, amount],
+        args: [chainInfo.addresses.LeverageUp, amount],
         address: token as Address,
       });
 
@@ -68,6 +68,7 @@ export function LeverageProvider({ children }: Props) {
       );
     } catch (e: any) {
       toast.error(e.shortMessage);
+      console.error(e);
     }
   };
 
@@ -75,8 +76,8 @@ export function LeverageProvider({ children }: Props) {
     token: Address,
     amount: bigint,
     lender: Address,
-    leveragePercent: number,
-    borrowPercent: number,
+    leveragePercent: bigint,
+    borrowPercent: bigint,
   ) => {
     if (!chainInfo || !market) return;
 
@@ -200,7 +201,7 @@ export function LeverageProvider({ children }: Props) {
           borrowPercent,
           swapParamsArray,
         ],
-        address: chainInfo.addresses.leverageUp,
+        address: chainInfo.addresses.LeverageUp,
       });
 
       toast.success(
@@ -210,6 +211,7 @@ export function LeverageProvider({ children }: Props) {
       );
     } catch (e: any) {
       toast.error(e.shortMessage);
+      console.error(e);
     }
   };
 
