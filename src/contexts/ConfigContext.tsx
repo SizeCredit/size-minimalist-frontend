@@ -47,7 +47,7 @@ export function ConfigProvider({ children }: Props) {
   const chainInfo =
     chainInfos.find((c) => c.chain.id === account.chain?.id) || chainInfos[0];
   const blockNumber = useBlockNumber({ config }).data;
-  const [pastBlocks, setPastBlocks] = useState<bigint>(500n);
+  const [pastBlocks, setPastBlocks] = useState<bigint>(100n);
 
   return (
     <ConfigContext.Provider

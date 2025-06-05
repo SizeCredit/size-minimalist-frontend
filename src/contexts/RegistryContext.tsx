@@ -28,11 +28,12 @@ export type Token =
   | "borrowAToken"
   | "debtToken";
 
-interface TokenInformation {
+export interface TokenInformation {
   symbol: string;
   decimals: number;
   totalSupply: bigint;
   feeRecipientBalance: bigint;
+  address: Address;
 }
 
 interface PriceFeedInformation {
@@ -197,28 +198,29 @@ export function RegistryProvider({ children }: Props) {
                 "borrowAToken",
                 "debtToken",
               ].map(async (tokenName) => {
+                const address = (datas[i] as any)[tokenName];
                 const symbol = await readContract(config, {
                   chainId: chainInfo.chain.id,
                   abi: erc20Abi,
-                  address: (datas[i] as any)[tokenName],
+                  address,
                   functionName: "symbol",
                 });
                 const decimals = await readContract(config, {
                   chainId: chainInfo.chain.id,
                   abi: erc20Abi,
-                  address: (datas[i] as any)[tokenName],
+                  address,
                   functionName: "decimals",
                 });
                 const totalSupply = await readContract(config, {
                   chainId: chainInfo.chain.id,
                   abi: erc20Abi,
-                  address: (datas[i] as any)[tokenName],
+                  address,
                   functionName: "totalSupply",
                 });
                 const feeRecipientBalance = await readContract(config, {
                   chainId: chainInfo.chain.id,
                   abi: erc20Abi,
-                  address: (datas[i] as any)[tokenName],
+                  address,
                   functionName: "balanceOf",
                   args: [feeConfigs[i].feeRecipient as Address],
                 });
@@ -228,6 +230,7 @@ export function RegistryProvider({ children }: Props) {
                   totalSupply,
                   feeRecipientBalance,
                   tokenName,
+                  address,
                 };
               }),
             );

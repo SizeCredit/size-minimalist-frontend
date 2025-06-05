@@ -19,6 +19,7 @@ import { SizeProvider } from "./contexts/SizeContext.tsx";
 import { FactoryProvider } from "./contexts/FactoryContext.tsx";
 import { RegistryProvider } from "./contexts/RegistryContext.tsx";
 import { AuthorizationProvider } from "./contexts/AuthorizationContext.tsx";
+import { LeverageProvider } from "./contexts/LeverageContext.tsx";
 
 globalThis.Buffer = Buffer;
 
@@ -40,7 +41,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                           <SwapProvider>
                             <SidebarProvider>
                               <SizeProvider>
-                                <App />
+                                <LeverageProvider>
+                                  <App />
+                                </LeverageProvider>
                               </SizeProvider>
                             </SidebarProvider>
                           </SwapProvider>
